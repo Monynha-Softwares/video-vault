@@ -1,4 +1,5 @@
 import { Github, Twitter, Heart } from "lucide-react";
+import { Link } from "react-router-dom"; // Import Link
 
 export const Footer = () => {
   return (
@@ -7,14 +8,14 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="md:col-span-2 space-y-4">
-            <div className="flex items-center gap-2">
+            <Link to="/" className="flex items-center gap-2">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-md">
                 <span className="text-lg font-bold">M</span>
               </div>
               <span className="font-bold text-xl tracking-tight">
                 Monynha<span className="text-primary">Fun</span>
               </span>
-            </div>
+            </Link>
             <p className="text-muted-foreground text-sm max-w-sm">
               Uma plataforma de curadoria coletiva de vídeos do YouTube. 
               Preservando e descobrindo conteúdos valiosos juntos.
@@ -25,10 +26,10 @@ export const Footer = () => {
           <div className="space-y-4">
             <h4 className="font-semibold text-sm">Navegação</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><a href="#" className="hover:text-primary transition-colors">Categorias</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Recentes</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Destaques</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Enviar Vídeo</a></li>
+              <li><Link to="/videos" className="hover:text-primary transition-colors">Categorias</Link></li>
+              <li><Link to="/videos?recent=true" className="hover:text-primary transition-colors">Recentes</Link></li>
+              <li><Link to="/videos?featured=true" className="hover:text-primary transition-colors">Destaques</Link></li>
+              <li><Link to="/submit" className="hover:text-primary transition-colors">Enviar Vídeo</Link></li>
             </ul>
           </div>
 
@@ -36,10 +37,10 @@ export const Footer = () => {
           <div className="space-y-4">
             <h4 className="font-semibold text-sm">Comunidade</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><a href="#" className="hover:text-primary transition-colors">Sobre</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Regras</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Contato</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">FAQ</a></li>
+              <li><Link to="#" className="hover:text-primary transition-colors">Sobre</Link></li>
+              <li><Link to="#" className="hover:text-primary transition-colors">Regras</Link></li>
+              <li><Link to="#" className="hover:text-primary transition-colors">Contato</Link></li>
+              <li><Link to="#" className="hover:text-primary transition-colors">FAQ</Link></li>
             </ul>
           </div>
         </div>
