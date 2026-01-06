@@ -8,8 +8,10 @@ import { useFavorites } from '@/hooks/useFavorites';
 import { Skeleton } from '@/components/ui/skeleton';
 import { HeartCrack, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const Favorites = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   const { user, loading: authLoading } = useAuth();
   const { data: favorites, isLoading: favoritesLoading, isError: favoritesError } = useFavorites();
   const navigate = useNavigate();
@@ -37,11 +39,11 @@ const Favorites = () => {
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-1 container py-16 text-center">
-          <h1 className="text-3xl font-bold mb-4">Erro ao carregar favoritos</h1>
+          <h1 className="text-3xl font-bold mb-4">{t('favorites.loadingErrorTitle')}</h1>
           <p className="text-muted-foreground mb-8">
-            Não foi possível carregar seus vídeos favoritos. Por favor, tente novamente mais tarde.
+            {t('favorites.loadingErrorDescription')}
           </p>
-          <Button onClick={() => navigate('/')}>Voltar para a página inicial</Button>
+          <Button onClick={() => navigate('/')}>{t('videoDetails.backToHome')}</Button>
         </main>
         <Footer />
       </div>
@@ -53,9 +55,9 @@ const Favorites = () => {
       <Header />
       <main className="flex-1 container py-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold">Meus Favoritos</h1>
+          <h1 className="text-3xl font-bold">{t('favorites.title')}</h1>
           <p className="text-muted-foreground mt-2">
-            Todos os vídeos que você salvou para assistir depois.
+            {t('favorites.description')}
           </p>
         </div>
 
@@ -76,9 +78,9 @@ const Favorites = () => {
         ) : (
           <div className="text-center py-12 text-muted-foreground flex flex-col items-center justify-center">
             <HeartCrack className="w-16 h-16 mb-4 opacity-50" />
-            <p className="text-lg font-medium mb-2">Nenhum vídeo favoritado ainda.</p>
-            <p className="mb-6">Comece a explorar e salve seus vídeos preferidos!</p>
-            <Button onClick={() => navigate('/videos')}>Explorar Vídeos</Button>
+            <p className="text-lg font-medium mb-2">{t('favorites.noFavoritesTitle')}</p>
+            <p className="mb-6">{t('favorites.noFavoritesDescription')}</p>
+            <Button onClick={() => navigate('/videos')}>{t('favorites.exploreVideos')}</Button>
           </div>
         )}
       </main>

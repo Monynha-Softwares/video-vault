@@ -14,6 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_enrichments: {
+        Row: {
+          created_at: string
+          cultural_relevance: string | null
+          id: string
+          language: string | null
+          optimized_title: string | null
+          reprocessed_at: string | null
+          semantic_tags: string[] | null
+          short_summary: string | null
+          suggested_category_id: string | null
+          summary_description: string | null
+          video_id: string
+        }
+        Insert: {
+          created_at?: string
+          cultural_relevance?: string | null
+          id?: string
+          language?: string | null
+          optimized_title?: string | null
+          reprocessed_at?: string | null
+          semantic_tags?: string[] | null
+          short_summary?: string | null
+          suggested_category_id?: string | null
+          summary_description?: string | null
+          video_id: string
+        }
+        Update: {
+          created_at?: string
+          cultural_relevance?: string | null
+          id?: string
+          language?: string | null
+          optimized_title?: string | null
+          reprocessed_at?: string | null
+          semantic_tags?: string[] | null
+          short_summary?: string | null
+          suggested_category_id?: string | null
+          summary_description?: string | null
+          video_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_enrichments_suggested_category_id_fkey"
+            columns: ["suggested_category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_enrichments_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "videos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       categories: {
         Row: {
           color: string

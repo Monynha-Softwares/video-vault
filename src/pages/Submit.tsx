@@ -9,9 +9,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { toast } from 'sonner'; // Changed import
+import { toast } from 'sonner';
 import { ArrowLeft, Link as LinkIcon, Loader2, Play, CheckCircle, AlertCircle } from 'lucide-react';
 import { z } from 'zod';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const urlSchema = z.string().url('URL inválida').refine(
   (url) => url.includes('youtube.com') || url.includes('youtu.be'),
@@ -19,6 +20,7 @@ const urlSchema = z.string().url('URL inválida').refine(
 );
 
 export default function Submit() {
+  const { t } = useTranslation(); // Initialize useTranslation
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [description, setDescription] = useState('');
   const [language, setLanguage] = useState('pt');
@@ -40,15 +42,15 @@ export default function Submit() {
     e.preventDefault();
 
     if (!metadata) {
-      toast.error('Erro', { // Changed toast call
-        description: 'Por favor, insira uma URL válida do YouTube',
+      toast.error(t('submit.error.invalidUrlTitle'), {
+        description: t('submit.error.invalidUrlDescription'),
       });
       return;
     }
 
     if (!user) {
-      toast.error('Erro', { // Changed toast call
-        description: 'Você precisa estar logado para enviar vídeos',
+      toast.error(t('submit.error.notLoggedInTitle'), {
+        description: t('submit.error.notLoggedInDescription'),
       });
       return;
     }
@@ -64,15 +66,15 @@ export default function Submit() {
         .maybeSingle();
 
       if (existingVideo) {
-        toast.error('Vídeo já existe', { // Changed toast call
-          description: 'Este vídeo já foi enviado por outro usuário',
+        toast.error(t('submit.error.videoExistsTitle'), {
+          description: t('submit.error.videoExistsDescription'),
         });
         setIsSubmitting(false);
         return;
       }
 
       // Insert new video
-      const { error } = await supabase
+      const { data: newVideo, error } = await supabase
         .from('videos')
         .insert({
           youtube_id: metadata.videoId,
@@ -83,19 +85,48 @@ export default function Submit() {
           language,
           category_id: categoryId || null,
           submitted_by: user.id
-        });
+        })
+        .select()
+        .single();
 
       if (error) throw error;
 
-      toast.success('Vídeo enviado!', { // Changed toast call
-        description: 'Seu vídeo foi adicionado com sucesso ao acervo',
+      toast.success(t('submit.success.videoSubmittedTitle'), {
+        description: t('submit.success.videoSubmittedDescription'),
       });
+
+      // Trigger AI enrichment Edge Function
+      if (newVideo) {
+        toast.info(t('submit.info.aiEnrichmentStartedTitle'), {
+          description: t('submit.info.aiEnrichmentStartedDescription'),
+        });
+        try {
+          const { data: edgeFunctionData, error: edgeFunctionError } = await supabase.functions.invoke('enrich-video', {
+            body: { videoId: newVideo.id, youtubeUrl: youtubeUrl },
+            headers: { 'Content-Type': 'application/json' },
+          });
+
+          if (edgeFunctionError) {
+            console.error('Error invoking AI enrichment function:', edgeFunctionError);
+            toast.error(t('submit.error.aiEnrichmentFailedTitle'), {
+              description: t('submit.error.aiEnrichmentFailedDescription'),
+            });
+          } else {
+            console.log('AI enrichment function invoked successfully:', edgeFunctionData);
+          }
+        } catch (edgeErr) {
+          console.error('Unexpected error invoking AI enrichment function:', edgeErr);
+          toast.error(t('submit.error.aiEnrichmentFailedTitle'), {
+            description: t('submit.error.aiEnrichmentFailedDescription'),
+          });
+        }
+      }
 
       navigate('/');
     } catch (err) {
       console.error('Error submitting video:', err);
-      toast.error('Erro ao enviar', { // Changed toast call
-        description: 'Ocorreu um erro ao enviar o vídeo. Tente novamente.',
+      toast.error(t('submit.error.genericSubmitTitle'), {
+        description: t('submit.error.genericSubmitDescription'),
       });
     } finally {
       setIsSubmitting(false);
@@ -121,7 +152,7 @@ export default function Submit() {
             className="text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Voltar
+            {t('common.back')}
           </Button>
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
@@ -138,9 +169,9 @@ export default function Submit() {
       <main className="flex-1 py-8">
         <div className="container max-w-4xl">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold">Enviar Vídeo</h1>
+            <h1 className="text-3xl font-bold">{t('submit.title')}</h1>
             <p className="text-muted-foreground mt-2">
-              Compartilhe um vídeo interessante do YouTube com a comunidade
+              {t('submit.description')}
             </p>
           </div>
 
@@ -150,13 +181,13 @@ export default function Submit() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* YouTube URL */}
                 <div className="space-y-2">
-                  <Label htmlFor="youtube-url">URL do YouTube *</Label>
+                  <Label htmlFor="youtube-url">{t('submit.form.youtubeUrlLabel')} *</Label>
                   <div className="relative">
                     <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <Input
                       id="youtube-url"
                       type="url"
-                      placeholder="https://www.youtube.com/watch?v=..."
+                      placeholder={t('submit.form.youtubeUrlPlaceholder')}
                       value={youtubeUrl}
                       onChange={(e) => setYoutubeUrl(e.target.value)}
                       className="pl-10"
@@ -179,10 +210,10 @@ export default function Submit() {
 
                 {/* Description */}
                 <div className="space-y-2">
-                  <Label htmlFor="description">Descrição (opcional)</Label>
+                  <Label htmlFor="description">{t('submit.form.descriptionLabel')}</Label>
                   <Textarea
                     id="description"
-                    placeholder="Por que este vídeo é interessante?"
+                    placeholder={t('submit.form.descriptionPlaceholder')}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={3}
@@ -195,27 +226,27 @@ export default function Submit() {
 
                 {/* Language */}
                 <div className="space-y-2">
-                  <Label htmlFor="language">Idioma do vídeo</Label>
+                  <Label htmlFor="language">{t('submit.form.languageLabel')}</Label>
                   <Select value={language} onValueChange={setLanguage}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Selecione o idioma" />
+                      <SelectValue placeholder={t('submit.form.languagePlaceholder')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="pt">Português</SelectItem>
-                      <SelectItem value="en">English</SelectItem>
-                      <SelectItem value="es">Español</SelectItem>
-                      <SelectItem value="fr">Français</SelectItem>
-                      <SelectItem value="other">Outro</SelectItem>
+                      <SelectItem value="pt">{t('common.language.pt')}</SelectItem>
+                      <SelectItem value="en">{t('common.language.en')}</SelectItem>
+                      <SelectItem value="es">{t('common.language.es')}</SelectItem>
+                      <SelectItem value="fr">{t('common.language.fr')}</SelectItem>
+                      <SelectItem value="other">{t('common.language.other')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 {/* Category */}
                 <div className="space-y-2">
-                  <Label htmlFor="category">Categoria (opcional)</Label>
+                  <Label htmlFor="category">{t('submit.form.categoryLabel')}</Label>
                   <Select value={categoryId} onValueChange={setCategoryId}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Selecione uma categoria" />
+                      <SelectValue placeholder={t('submit.form.categoryPlaceholder')} />
                     </SelectTrigger>
                     <SelectContent>
                       {categories?.map((cat) => (
@@ -237,10 +268,10 @@ export default function Submit() {
                   {isSubmitting ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Enviando...
+                      {t('submit.form.submittingButton')}
                     </>
                   ) : (
-                    'Enviar Vídeo'
+                    t('submit.form.submitButton')
                   )}
                 </Button>
               </form>
@@ -248,7 +279,7 @@ export default function Submit() {
 
             {/* Preview */}
             <div className="space-y-4">
-              <h2 className="font-semibold text-lg">Preview</h2>
+              <h2 className="font-semibold text-lg">{t('submit.previewTitle')}</h2>
               
               {metadata ? (
                 <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm animate-fade-in">
@@ -282,17 +313,17 @@ export default function Submit() {
               ) : (
                 <div className="bg-muted/50 border border-dashed border-border rounded-2xl aspect-video flex flex-col items-center justify-center text-muted-foreground">
                   <Play className="w-12 h-12 mb-3 opacity-30" />
-                  <p className="text-sm">Cole uma URL do YouTube para ver o preview</p>
+                  <p className="text-sm">{t('submit.previewPlaceholder')}</p>
                 </div>
               )}
 
               {/* Tips */}
               <div className="bg-muted/30 rounded-xl p-4 space-y-2">
-                <h3 className="font-medium text-sm">Dicas</h3>
+                <h3 className="font-medium text-sm">{t('submit.tipsTitle')}</h3>
                 <ul className="text-xs text-muted-foreground space-y-1">
-                  <li>• Vídeos únicos e interessantes são mais valorizados</li>
-                  <li>• Escolha a categoria correta para facilitar a descoberta</li>
-                  <li>• Adicione uma descrição explicando por que o vídeo é especial</li>
+                  <li>• {t('submit.tip1')}</li>
+                  <li>• {t('submit.tip2')}</li>
+                  <li>• {t('submit.tip3')}</li>
                 </ul>
               </div>
             </div>

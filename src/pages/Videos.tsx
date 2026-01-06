@@ -10,8 +10,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { Search, X, Loader2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const Videos = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -46,11 +48,11 @@ const Videos = () => {
   };
 
   const availableLanguages = [
-    { value: 'pt', label: 'Português' },
-    { value: 'en', label: 'English' },
-    { value: 'es', label: 'Español' },
-    { value: 'fr', label: 'Français' },
-    { value: 'other', label: 'Outro' },
+    { value: 'pt', label: t('common.language.pt') },
+    { value: 'en', label: t('common.language.en') },
+    { value: 'es', label: t('common.language.es') },
+    { value: 'fr', label: t('common.language.fr') },
+    { value: 'other', label: t('common.language.other') },
   ];
 
   return (
@@ -58,9 +60,9 @@ const Videos = () => {
       <Header />
       <main className="flex-1 container py-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold">Explorar Vídeos</h1>
+          <h1 className="text-3xl font-bold">{t('videos.title')}</h1>
           <p className="text-muted-foreground mt-2">
-            Encontre vídeos por busca, categoria ou idioma.
+            {t('videos.description')}
           </p>
         </div>
 
@@ -70,7 +72,7 @@ const Videos = () => {
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Buscar vídeos, canais..."
+              placeholder={t('videos.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 h-10 bg-muted/50 border-0 focus-visible:ring-primary/30"
@@ -79,12 +81,12 @@ const Videos = () => {
 
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
             <SelectTrigger className="w-full md:w-[200px] bg-muted/50 border-0 focus:ring-primary/30">
-              <SelectValue placeholder="Todas as Categorias" />
+              <SelectValue placeholder={t('videos.allCategories')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todas as Categorias</SelectItem>
+              <SelectItem value="">{t('videos.allCategories')}</SelectItem>
               {categoriesLoading ? (
-                <div className="p-2 text-muted-foreground">Carregando categorias...</div>
+                <div className="p-2 text-muted-foreground">{t('videos.loadingCategories')}</div>
               ) : (
                 categories?.map((category) => (
                   <SelectItem key={category.id} value={category.id}>
@@ -97,10 +99,10 @@ const Videos = () => {
 
           <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
             <SelectTrigger className="w-full md:w-[150px] bg-muted/50 border-0 focus:ring-primary/30">
-              <SelectValue placeholder="Idioma" />
+              <SelectValue placeholder={t('videos.allLanguages')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos os Idiomas</SelectItem>
+              <SelectItem value="">{t('videos.allLanguages')}</SelectItem>
               {availableLanguages.map((lang) => (
                 <SelectItem key={lang.value} value={lang.value}>
                   {lang.label}
@@ -112,7 +114,7 @@ const Videos = () => {
           {(searchQuery || selectedCategory || selectedLanguage) && (
             <Button variant="outline" onClick={handleClearFilters} className="gap-2">
               <X className="w-4 h-4" />
-              Limpar Filtros
+              {t('videos.clearFilters')}
             </Button>
           )}
         </div>
@@ -142,7 +144,7 @@ const Videos = () => {
           </div>
         ) : (
           <div className="text-center py-12 text-muted-foreground">
-            Nenhum vídeo encontrado com os critérios de busca.
+            {t('videos.noVideosFound')}
           </div>
         )}
       </main>

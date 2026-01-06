@@ -1,7 +1,10 @@
 import { Github, Twitter, Heart } from "lucide-react";
-import { Link } from "react-router-dom"; // Import Link
+import { Link } from "react-router-dom";
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 export const Footer = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
+
   return (
     <footer className="border-t border-border/50 bg-muted/30">
       <div className="container py-12">
@@ -17,30 +20,29 @@ export const Footer = () => {
               </span>
             </Link>
             <p className="text-muted-foreground text-sm max-w-sm">
-              Uma plataforma de curadoria coletiva de vídeos do YouTube. 
-              Preservando e descobrindo conteúdos valiosos juntos.
+              {t('footer.description')}
             </p>
           </div>
 
           {/* Links */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-sm">Navegação</h4>
+            <h4 className="font-semibold text-sm">{t('footer.navigation')}</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link to="/videos" className="hover:text-primary transition-colors">Categorias</Link></li>
-              <li><Link to="/videos?recent=true" className="hover:text-primary transition-colors">Recentes</Link></li>
-              <li><Link to="/videos?featured=true" className="hover:text-primary transition-colors">Destaques</Link></li>
-              <li><Link to="/submit" className="hover:text-primary transition-colors">Enviar Vídeo</Link></li>
+              <li><Link to="/videos" className="hover:text-primary transition-colors">{t('footer.categories')}</Link></li>
+              <li><Link to="/videos?recent=true" className="hover:text-primary transition-colors">{t('footer.recent')}</Link></li>
+              <li><Link to="/videos?featured=true" className="hover:text-primary transition-colors">{t('footer.featured')}</Link></li>
+              <li><Link to="/submit" className="hover:text-primary transition-colors">{t('footer.submitVideo')}</Link></li>
             </ul>
           </div>
 
           {/* Community */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-sm">Comunidade</h4>
+            <h4 className="font-semibold text-sm">{t('footer.community')}</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link to="#" className="hover:text-primary transition-colors">Sobre</Link></li>
-              <li><Link to="#" className="hover:text-primary transition-colors">Regras</Link></li>
-              <li><Link to="#" className="hover:text-primary transition-colors">Contato</Link></li>
-              <li><Link to="#" className="hover:text-primary transition-colors">FAQ</Link></li>
+              <li><Link to="#" className="hover:text-primary transition-colors">{t('footer.about')}</Link></li>
+              <li><Link to="#" className="hover:text-primary transition-colors">{t('footer.rules')}</Link></li>
+              <li><Link to="#" className="hover:text-primary transition-colors">{t('footer.contact')}</Link></li>
+              <li><Link to="#" className="hover:text-primary transition-colors">{t('footer.faq')}</Link></li>
             </ul>
           </div>
         </div>
@@ -48,7 +50,7 @@ export const Footer = () => {
         {/* Bottom */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-8 mt-8 border-t border-border/50">
           <p className="text-sm text-muted-foreground flex items-center gap-1">
-            Feito com <Heart className="w-4 h-4 text-primary fill-primary" /> pela comunidade
+            {t('footer.madeWithLove', { heartIcon: <Heart className="w-4 h-4 text-primary fill-primary inline-block" /> })}
           </p>
           <div className="flex items-center gap-4">
             <a href="#" className="text-muted-foreground hover:text-primary transition-colors">

@@ -12,8 +12,10 @@ import { Badge } from '@/components/ui/badge';
 import { Eye, Clock, Folder, ArrowLeft, Heart as HeartIcon, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const VideoDetails = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   const { videoId } = useParams<{ videoId: string }>();
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
@@ -29,9 +31,9 @@ const VideoDetails = () => {
 
   const handleFavoriteToggle = async () => {
     if (!user) {
-      toast.info('Você precisa estar logado para favoritar vídeos.', {
+      toast.info(t('videoDetails.favoriteInfo'), {
         action: {
-          label: 'Entrar',
+          label: t('videoDetails.loginAction'),
           onClick: () => navigate('/auth'),
         },
       });
@@ -62,7 +64,7 @@ const VideoDetails = () => {
               <Skeleton className="h-4 w-2/3" />
             </div>
             <div className="lg:col-span-1 space-y-6">
-              <h2 className="text-xl font-bold">Vídeos Relacionados</h2>
+              <h2 className="text-xl font-bold">{t('videoDetails.relatedVideosTitle')}</h2>
               {Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="flex items-center space-x-4">
                   <Skeleton className="w-24 h-16 rounded-md" />
@@ -85,13 +87,13 @@ const VideoDetails = () => {
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-1 container py-16 text-center">
-          <h1 className="text-3xl font-bold mb-4">Vídeo não encontrado</h1>
+          <h1 className="text-3xl font-bold mb-4">{t('videoDetails.videoNotFoundTitle')}</h1>
           <p className="text-muted-foreground mb-8">
-            O vídeo que você está procurando pode não existir ou ter sido removido.
+            {t('videoDetails.videoNotFoundDescription')}
           </p>
           <Button onClick={() => navigate('/')}>
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Voltar para a página inicial
+            {t('videoDetails.backToHome')}
           </Button>
         </main>
         <Footer />
@@ -139,7 +141,7 @@ const VideoDetails = () => {
               <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
                   <Eye className="w-4 h-4" />
-                  <span>{formatViewCount(video.view_count)} visualizações</span>
+                  <span>{t('videoDetails.views', { count: formatViewCount(video.view_count) })}</span>
                 </div>
                 {video.duration_seconds && (
                   <div className="flex items-center gap-1">
@@ -162,16 +164,16 @@ const VideoDetails = () => {
 
             {/* Description */}
             <div className="border-t border-border/50 pt-6 mt-6">
-              <h2 className="text-xl font-bold mb-3">Descrição</h2>
+              <h2 className="text-xl font-bold mb-3">{t('videoDetails.descriptionTitle')}</h2>
               <p className="text-muted-foreground whitespace-pre-wrap">
-                {video.description || 'Nenhuma descrição fornecida para este vídeo.'}
+                {video.description || t('videoDetails.noDescription')}
               </p>
             </div>
           </div>
 
           {/* Related Videos Sidebar */}
           <div className="lg:col-span-1 space-y-4">
-            <h2 className="text-xl font-bold">Vídeos Relacionados</h2>
+            <h2 className="text-xl font-bold">{t('videoDetails.relatedVideosTitle')}</h2>
             {relatedLoading ? (
               <div className="space-y-4">
                 {Array.from({ length: 4 }).map((_, i) => (
@@ -196,7 +198,7 @@ const VideoDetails = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-muted-foreground text-sm">Nenhum vídeo relacionado encontrado.</p>
+              <p className="text-muted-foreground text-sm">{t('videoDetails.noRelatedVideos')}</p>
             )}
           </div>
         </div>

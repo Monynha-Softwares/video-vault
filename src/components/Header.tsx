@@ -1,11 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Plus, Menu, X, LogOut, User, Heart } from "lucide-react"; // Import Heart icon
+import { Search, Plus, Menu, X, LogOut, Heart, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { useTranslation } from 'react-i18next'; // Import useTranslation
+import i18n from 'i18next'; // Import i18next instance
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Header = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { user, signOut } = useAuth();
@@ -22,6 +26,10 @@ export const Header = () => {
       navigate(`/videos?query=${encodeURIComponent(searchQuery.trim())}`);
       setIsMenuOpen(false); // Close mobile menu after search
     }
+  };
+
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
   };
 
   return (
@@ -43,7 +51,7 @@ export const Header = () => {
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Buscar vídeos, canais..."
+              placeholder={t('header.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 h-10 bg-muted/50 border-0 focus-visible:ring-primary/30"
@@ -62,7 +70,7 @@ export const Header = () => {
                 onClick={() => navigate('/favorites')}
               >
                 <Heart className="h-4 w-4" />
-                Favoritos
+                {t('header.favorites')}
               </Button>
               <Button 
                 variant="hero" 
@@ -71,7 +79,7 @@ export const Header = () => {
                 onClick={() => navigate('/submit')}
               >
                 <Plus className="h-4 w-4" />
-                Enviar Vídeo
+                {t('header.submitVideo')}
               </Button>
               <Button 
                 variant="ghost"
@@ -80,7 +88,7 @@ export const Header = () => {
                 className="hidden sm:flex gap-2 text-muted-foreground hover:text-foreground"
               >
                 <LogOut className="h-4 w-4" />
-                Sair
+                {t('header.logout')}
               </Button>
             </>
           ) : (
@@ -92,7 +100,7 @@ export const Header = () => {
                 onClick={() => navigate('/auth')}
               >
                 <Plus className="h-4 w-4" />
-                Enviar Vídeo
+                {t('header.submitVideo')}
               </Button>
               <Button 
                 variant="outline" 
@@ -100,12 +108,26 @@ export const Header = () => {
                 className="hidden sm:flex"
                 onClick={() => navigate('/auth')}
               >
-                Entrar
+                {t('header.login')}
               </Button>
             </>
           )}
+
+          {/* Language Switcher */}
+          <Select value={i18n.language} onValueChange={changeLanguage}>
+            <SelectTrigger className="w-[100px] h-9 bg-muted/50 border-0 focus:ring-primary/30 hidden sm:flex">
+              <Globe className="w-4 h-4 mr-2 text-muted-foreground" />
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="pt">{t('common.language.pt')}</SelectItem>
+              <SelectItem value="en">{t('common.language.en')}</SelectItem>
+              <SelectItem value="es">{t('common.language.es')}</SelectItem>
+              <SelectItem value="fr">{t('common.language.fr')}</SelectItem>
+            </SelectContent>
+          </Select>
+
           <Button variant="ghost" size="icon" className="md:hidden" onClick={() => {
-            // Toggle search input visibility in mobile menu
             setIsMenuOpen(!isMenuOpen);
           }}>
             <Search className="h-5 w-5" />
@@ -129,7 +151,7 @@ export const Header = () => {
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type="search"
-                placeholder="Buscar vídeos, canais..."
+                placeholder={t('header.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 bg-muted/50 border-0"
@@ -144,7 +166,7 @@ export const Header = () => {
                     onClick={() => { navigate('/favorites'); setIsMenuOpen(false); }}
                   >
                     <Heart className="h-4 w-4" />
-                    Favoritos
+                    {t('header.favorites')}
                   </Button>
                   <Button 
                     variant="hero" 
@@ -152,7 +174,7 @@ export const Header = () => {
                     onClick={() => { navigate('/submit'); setIsMenuOpen(false); }}
                   >
                     <Plus className="h-4 w-4" />
-                    Enviar Vídeo
+                    {t('header.submitVideo')}
                   </Button>
                   <Button 
                     variant="outline" 
@@ -160,7 +182,7 @@ export const Header = () => {
                     onClick={handleSignOut}
                   >
                     <LogOut className="h-4 w-4" />
-                    Sair
+                    {t('header.logout')}
                   </Button>
                 </>
               ) : (
@@ -171,17 +193,30 @@ export const Header = () => {
                     onClick={() => navigate('/auth')}
                   >
                     <Plus className="h-4 w-4" />
-                    Enviar Vídeo
+                    {t('header.submitVideo')}
                   </Button>
                   <Button 
                     variant="outline" 
                     className="w-full"
                     onClick={() => navigate('/auth')}
                   >
-                    Entrar
+                    {t('header.login')}
                   </Button>
                 </>
               )}
+              {/* Mobile Language Switcher */}
+              <Select value={i18n.language} onValueChange={changeLanguage}>
+                <SelectTrigger className="w-full h-9 bg-muted/50 border-0 focus:ring-primary/30 flex sm:hidden">
+                  <Globe className="w-4 h-4 mr-2 text-muted-foreground" />
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pt">{t('common.language.pt')}</SelectItem>
+                  <SelectItem value="en">{t('common.language.en')}</SelectItem>
+                  <SelectItem value="es">{t('common.language.es')}</SelectItem>
+                  <SelectItem value="fr">{t('common.language.fr')}</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </div>

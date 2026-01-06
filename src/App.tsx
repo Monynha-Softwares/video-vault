@@ -8,8 +8,9 @@ import Auth from "./pages/Auth";
 import Submit from "./pages/Submit";
 import VideoDetails from "./pages/VideoDetails";
 import Videos from "./pages/Videos";
-import Favorites from "./pages/Favorites"; // Import the new Favorites page
+import Favorites from "./pages/Favorites";
 import NotFound from "./pages/NotFound";
+import './i18n/config'; // Import i18n configuration to initialize it
 
 const queryClient = new QueryClient();
 
@@ -25,7 +26,7 @@ const App = () => (
             <Route path="/submit" element={<Submit />} />
             <Route path="/videos/:videoId" element={<VideoDetails />} />
             <Route path="/videos" element={<Videos />} />
-            <Route path="/favorites" element={<Favorites />} /> {/* New route for favorites */}
+            <Route path="/favorites" element={<Favorites />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -8,13 +8,15 @@ import { useFeaturedVideos, useRecentVideos } from "@/hooks/useVideos";
 import { ArrowRight, TrendingUp, Clock, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const Index = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   const { data: categories, isLoading: categoriesLoading } = useCategories();
   const { data: featuredVideos, isLoading: featuredLoading } = useFeaturedVideos(4);
   const { data: recentVideos, isLoading: recentLoading } = useRecentVideos(4);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -29,15 +31,15 @@ const Index = () => {
           <div className="container">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h2 className="text-2xl md:text-3xl font-bold">Categorias</h2>
-                <p className="text-muted-foreground mt-1">Explore por tema</p>
+                <h2 className="text-2xl md:text-3xl font-bold">{t('index.categoriesTitle')}</h2>
+                <p className="text-muted-foreground mt-1">{t('index.categoriesDescription')}</p>
               </div>
               <Button 
                 variant="ghost" 
                 className="gap-2 group"
-                onClick={() => navigate('/videos')} // Navigate to videos page
+                onClick={() => navigate('/videos')}
               >
-                Ver todas
+                {t('index.viewAll')}
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </div>
@@ -58,7 +60,7 @@ const Index = () => {
                   >
                     <CategoryCard 
                       category={category} 
-                      onClick={() => navigate(`/videos?category=${category.id}`)} // Filter by category
+                      onClick={() => navigate(`/videos?category=${category.id}`)}
                     />
                   </div>
                 ))}
@@ -76,16 +78,16 @@ const Index = () => {
                   <TrendingUp className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h2 className="text-2xl md:text-3xl font-bold">Em Destaque</h2>
-                  <p className="text-muted-foreground mt-1">Selecionados pela curadoria</p>
+                  <h2 className="text-2xl md:text-3xl font-bold">{t('index.featuredTitle')}</h2>
+                  <p className="text-muted-foreground mt-1">{t('index.featuredDescription')}</p>
                 </div>
               </div>
               <Button 
                 variant="ghost" 
                 className="gap-2 group"
-                onClick={() => navigate('/videos?featured=true')} // Filter by featured
+                onClick={() => navigate('/videos?featured=true')}
               >
-                Ver todos
+                {t('index.viewAll')}
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </div>
@@ -114,7 +116,7 @@ const Index = () => {
               </div>
             ) : (
               <div className="text-center py-12 text-muted-foreground">
-                Nenhum vídeo em destaque ainda.
+                {t('index.noFeaturedVideos')}
               </div>
             )}
           </div>
@@ -129,16 +131,16 @@ const Index = () => {
                   <Clock className="w-5 h-5 text-accent" />
                 </div>
                 <div>
-                  <h2 className="text-2xl md:text-3xl font-bold">Recentes</h2>
-                  <p className="text-muted-foreground mt-1">Últimos vídeos enviados</p>
+                  <h2 className="text-2xl md:text-3xl font-bold">{t('index.recentTitle')}</h2>
+                  <p className="text-muted-foreground mt-1">{t('index.recentDescription')}</p>
                 </div>
               </div>
               <Button 
                 variant="ghost" 
                 className="gap-2 group"
-                onClick={() => navigate('/videos?recent=true')} // Filter by recent
+                onClick={() => navigate('/videos?recent=true')}
               >
-                Ver todos
+                {t('index.viewAll')}
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </div>
@@ -167,7 +169,7 @@ const Index = () => {
               </div>
             ) : (
               <div className="text-center py-12 text-muted-foreground">
-                Nenhum vídeo recente ainda. Seja o primeiro a enviar!
+                {t('index.noRecentVideos')}
               </div>
             )}
           </div>
@@ -178,13 +180,13 @@ const Index = () => {
           <div className="container">
             <div className="max-w-2xl mx-auto text-center space-y-6">
               <h2 className="text-3xl md:text-4xl font-bold">
-                Conhece um vídeo que merece ser preservado?
+                {t('index.ctaTitle')}
               </h2>
               <p className="text-lg text-muted-foreground">
-                Compartilhe com a comunidade e ajude a construir o maior acervo de vídeos valiosos da internet.
+                {t('index.ctaDescription')}
               </p>
               <Button variant="hero" size="xl" className="gap-2" onClick={() => navigate('/submit')}>
-                Enviar Vídeo
+                {t('index.ctaButton')}
                 <ArrowRight className="w-5 h-5" />
               </Button>
             </div>

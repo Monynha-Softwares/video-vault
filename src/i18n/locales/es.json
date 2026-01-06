@@ -1,0 +1,168 @@
+{
+  "common": {
+    "back": "Volver",
+    "language": {
+      "pt": "Portugués",
+      "en": "Inglés",
+      "es": "Español",
+      "fr": "Francés",
+      "other": "Otro"
+    },
+    "allCategories": "Todas las Categorías",
+    "allLanguages": "Todos los Idiomas"
+  },
+  "header": {
+    "searchPlaceholder": "Buscar videos, canales...",
+    "favorites": "Favoritos",
+    "submitVideo": "Enviar Video",
+    "logout": "Cerrar Sesión",
+    "login": "Iniciar Sesión"
+  },
+  "footer": {
+    "description": "Una plataforma de curación colectiva de videos de YouTube. Preservando y descubriendo contenido valioso juntos.",
+    "navigation": "Navegación",
+    "categories": "Categorías",
+    "recent": "Recientes",
+    "featured": "Destacados",
+    "submitVideo": "Enviar Video",
+    "community": "Comunidad",
+    "about": "Acerca de",
+    "rules": "Reglas",
+    "contact": "Contacto",
+    "faq": "Preguntas Frecuentes",
+    "madeWithLove": "Hecho con {{heartIcon}} por la comunidad"
+  },
+  "hero": {
+    "badge": "Curación colectiva de videos",
+    "headingPart1": "Descubre videos que",
+    "headingPart2": "merecen ser recordados",
+    "description": "Una comunidad dedicada a preservar y compartir los mejores videos de YouTube. Tutoriales antiguos, recetas tradicionales, memes icónicos y mucho más.",
+    "submitVideoButton": "Enviar un Video",
+    "exploreCategoriesButton": "Explorar Categorías",
+    "videosCount": "{{count}} videos",
+    "contributorsCount": "{{count}} contribuidores"
+  },
+  "auth": {
+    "loginTitle": "Inicia sesión en tu cuenta",
+    "signupTitle": "Crea tu cuenta",
+    "usernameLabel": "Nombre de usuario (opcional)",
+    "usernamePlaceholder": "tu_nombre_de_usuario",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "tu@correo.com",
+    "passwordLabel": "Contraseña",
+    "passwordPlaceholder": "••••••••",
+    "loginButton": "Iniciar Sesión",
+    "signupButton": "Crear cuenta",
+    "submittingButton": "Cargando...",
+    "noAccount": "¿No tienes una cuenta? Regístrate",
+    "hasAccount": "¿Ya tienes una cuenta? Inicia sesión",
+    "termsAgreement": "Al continuar, aceptas los términos de uso y la política de privacidad.",
+    "loading": "Cargando...",
+    "error": {
+      "validationTitle": "Error de Validación",
+      "loginGeneric": "Error al iniciar sesión",
+      "invalidCredentials": "Correo electrónico o contraseña incorrectos",
+      "emailNotConfirmed": "Por favor, confirma tu correo electrónico antes de iniciar sesión",
+      "signupGeneric": "Error al crear cuenta",
+      "emailRegistered": "Este correo electrónico ya está registrado"
+    },
+    "success": {
+      "welcomeBack": "¡Bienvenido de nuevo!",
+      "loginSuccess": "Inicio de sesión exitoso",
+      "accountCreated": "¡Cuenta creada!",
+      "confirmEmail": "Verifica tu correo electrónico para confirmar el registro"
+    }
+  },
+  "submit": {
+    "title": "Enviar Video",
+    "description": "Comparte un video interesante de YouTube con la comunidad",
+    "form": {
+      "youtubeUrlLabel": "URL de YouTube",
+      "youtubeUrlPlaceholder": "https://www.youtube.com/watch?v=...",
+      "descriptionLabel": "Descripción (opcional)",
+      "descriptionPlaceholder": "¿Por qué es interesante este video?",
+      "languageLabel": "Idioma del Video",
+      "languagePlaceholder": "Seleccionar idioma",
+      "categoryLabel": "Categoría (opcional)",
+      "categoryPlaceholder": "Seleccionar una categoría",
+      "submitButton": "Enviar Video",
+      "submittingButton": "Enviando..."
+    },
+    "previewTitle": "Vista Previa",
+    "previewPlaceholder": "Pega una URL de YouTube para ver la vista previa",
+    "tipsTitle": "Consejos",
+    "tip1": "Los videos únicos e interesantes son más valorados",
+    "tip2": "Elige la categoría correcta para facilitar el descubrimiento",
+    "tip3": "Añade una descripción explicando por qué el video es especial",
+    "error": {
+      "invalidUrlTitle": "Error",
+      "invalidUrlDescription": "Por favor, introduce una URL de YouTube válida",
+      "notLoggedInTitle": "Error",
+      "notLoggedInDescription": "Debes iniciar sesión para enviar videos",
+      "videoExistsTitle": "El video ya existe",
+      "videoExistsDescription": "Este video ya ha sido enviado por otro usuario",
+      "genericSubmitTitle": "Error de Envío",
+      "genericSubmitDescription": "Ocurrió un error al enviar el video. Por favor, inténtalo de nuevo.",
+      "aiEnrichmentFailedTitle": "Error de Enriquecimiento de IA",
+      "aiEnrichmentFailedDescription": "No se pudo iniciar el enriquecimiento de IA para el video."
+    },
+    "success": {
+      "videoSubmittedTitle": "¡Video Enviado!",
+      "videoSubmittedDescription": "Tu video ha sido añadido exitosamente a la colección"
+    },
+    "info": {
+      "aiEnrichmentStartedTitle": "Enriquecimiento de IA Iniciado",
+      "aiEnrichmentStartedDescription": "La IA está procesando los metadatos del video para su enriquecimiento."
+    }
+  },
+  "videos": {
+    "title": "Explorar Videos",
+    "description": "Encuentra videos por búsqueda, categoría o idioma.",
+    "searchPlaceholder": "Buscar videos, canales...",
+    "allCategories": "Todas las Categorías",
+    "allLanguages": "Todos los Idiomas",
+    "loadingCategories": "Cargando categorías...",
+    "clearFilters": "Limpiar Filtros",
+    "noVideosFound": "No se encontraron videos con los criterios de búsqueda."
+  },
+  "videoDetails": {
+    "videoNotFoundTitle": "Video no encontrado",
+    "videoNotFoundDescription": "El video que buscas puede no existir o haber sido eliminado.",
+    "backToHome": "Volver a la página de inicio",
+    "views": "{{count}} visualizaciones",
+    "descriptionTitle": "Descripción",
+    "noDescription": "No se proporcionó ninguna descripción para este video.",
+    "relatedVideosTitle": "Videos Relacionados",
+    "noRelatedVideos": "No se encontraron videos relacionados.",
+    "favoriteInfo": "Debes iniciar sesión para añadir videos a favoritos.",
+    "loginAction": "Iniciar Sesión"
+  },
+  "favorites": {
+    "title": "Mis Favoritos",
+    "description": "Todos los videos que has guardado para ver más tarde.",
+    "loadingErrorTitle": "Error al cargar favoritos",
+    "loadingErrorDescription": "No se pudieron cargar tus videos favoritos. Por favor, inténtalo de nuevo más tarde.",
+    "noFavoritesTitle": "Aún no tienes videos favoritos.",
+    "noFavoritesDescription": "¡Empieza a explorar y guarda tus videos preferidos!",
+    "exploreVideos": "Explorar Videos"
+  },
+  "index": {
+    "categoriesTitle": "Categorías",
+    "categoriesDescription": "Explorar por tema",
+    "viewAll": "Ver todos",
+    "featuredTitle": "Destacados",
+    "featuredDescription": "Seleccionados por curación",
+    "noFeaturedVideos": "Aún no hay videos destacados.",
+    "recentTitle": "Recientes",
+    "recentDescription": "Últimos videos enviados",
+    "noRecentVideos": "Aún no hay videos recientes. ¡Sé el primero en enviar uno!",
+    "ctaTitle": "¿Conoces un video que merece ser preservado?",
+    "ctaDescription": "Comparte con la comunidad y ayuda a construir el archivo más grande de videos valiosos en internet.",
+    "ctaButton": "Enviar Video"
+  },
+  "notFound": {
+    "title": "404",
+    "description": "¡Ups! Página no encontrada",
+    "returnHome": "Volver a Inicio"
+  }
+}
