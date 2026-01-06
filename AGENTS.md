@@ -1,32 +1,34 @@
-# Project Guidelines for AI Agents
+# Monynha Fun: Diretrizes de Projeto para Agentes de IA
 
-This document outlines the core technologies and specific library usage rules for this project. Adhering to these guidelines ensures consistency, maintainability, and optimal performance.
+Este documento descreve as tecnologias centrais e as regras específicas de uso de bibliotecas para o projeto **Monynha Fun**, da **Monynha Softwares**. A adesão a estas diretrizes garante consistência, manutenibilidade e desempenho ideal, alinhando-se à nossa filosofia de democratizar a tecnologia e valorizar a curadoria humana assistida por IA.
 
-## Tech Stack Overview
+## Visão Geral da Pilha Tecnológica
 
-*   **Frontend Framework**: React.js
-*   **Language**: TypeScript
-*   **Build Tool**: Vite
-*   **Styling**: Tailwind CSS
-*   **UI Component Library**: shadcn/ui (built on Radix UI)
-*   **Backend-as-a-Service**: Supabase (for authentication, database, and edge functions)
-*   **Routing**: React Router DOM
-*   **Data Fetching & Caching**: TanStack Query
-*   **Icons**: Lucide React
-*   **Form Management & Validation**: React Hook Form with Zod
+*   **Framework Frontend**: React.js
+*   **Linguagem**: TypeScript
+*   **Ferramenta de Build**: Vite
+*   **Estilização**: Tailwind CSS
+*   **Biblioteca de Componentes UI**: shadcn/ui (construída sobre Radix UI)
+*   **Backend-as-a-Service**: Supabase (para autenticação, banco de dados e Edge Functions)
+*   **Roteamento**: React Router DOM
+*   **Busca e Cache de Dados**: TanStack Query
+*   **Ícones**: Lucide React
+*   **Gerenciamento e Validação de Formulários**: React Hook Form com Zod
+*   **Notificações Toast**: Sonner
+*   **Manipulação de Datas**: date-fns
 
-## Library Usage Rules
+## Regras de Uso de Bibliotecas (Monynha Fun)
 
-To maintain a consistent and efficient codebase, please follow these rules when implementing new features or modifying existing ones:
+Para manter uma base de código consistente e eficiente, siga estas regras ao implementar novos recursos ou modificar os existentes:
 
-*   **UI Components**: Always prioritize `shadcn/ui` components. If a specific component is not available in `shadcn/ui`, create a new, small component following `shadcn/ui`'s styling and accessibility patterns. Do not modify existing `shadcn/ui` component files directly.
-*   **Styling**: Use `Tailwind CSS` exclusively for all styling. Avoid inline styles or separate CSS modules unless absolutely necessary for a very specific, isolated case (and justify its use).
-*   **Icons**: Use icons from the `lucide-react` library.
-*   **State Management & Data Fetching**: For server state (data fetching, caching, synchronization), use `TanStack Query`. For simple client-side state, use React's `useState` and `useContext`.
-*   **Routing**: All navigation within the application should be handled using `react-router-dom`. Keep route definitions in `src/App.tsx`.
-*   **Authentication & Database Interactions**: All authentication flows (sign-up, sign-in, sign-out) and database operations must use the `Supabase` client (`@supabase/supabase-js`) imported from `src/integrations/supabase/client.ts`.
-*   **Form Handling**: For forms, use `react-hook-form` for managing form state and submissions, combined with `Zod` for schema validation.
-*   **Toast Notifications**: For displaying transient messages to the user (success, error, info), use the `sonner` library.
-*   **Utility Functions**: For combining Tailwind CSS classes, use the `cn` utility function from `src/lib/utils.ts`.
-*   **Date Manipulation**: Use `date-fns` for any date formatting or manipulation tasks.
-*   **Responsive Design**: All components and layouts must be responsive and adapt gracefully to different screen sizes, utilizing Tailwind's responsive utilities.
+*   **Componentes UI**: Sempre priorize os componentes `shadcn/ui`. Se um componente específico não estiver disponível no `shadcn/ui`, crie um novo componente pequeno seguindo os padrões de estilo e acessibilidade do `shadcn/ui`. Não modifique diretamente os arquivos de componentes `shadcn/ui` existentes.
+*   **Estilização**: Use `Tailwind CSS` exclusivamente para toda a estilização. Evite estilos inline ou módulos CSS separados, a menos que seja absolutamente necessário para um caso muito específico e isolado (e justifique seu uso).
+*   **Ícones**: Use ícones da biblioteca `lucide-react`.
+*   **Gerenciamento de Estado e Busca de Dados**: Para estado do servidor (busca de dados, cache, sincronização), use `TanStack Query`. Para estado simples do lado do cliente, use `useState` e `useContext` do React.
+*   **Roteamento**: Toda a navegação dentro do aplicativo deve ser tratada usando `react-router-dom`. Mantenha as definições de rota em `src/App.tsx`.
+*   **Autenticação e Interações com o Banco de Dados**: Todos os fluxos de autenticação (cadastro, login, logout) e operações de banco de dados devem usar o cliente `Supabase` (`@supabase/supabase-js`) importado de `src/integrations/supabase/client.ts`.
+*   **Manipulação de Formulários**: Para formulários, use `react-hook-form` para gerenciar o estado e as submissões do formulário, combinado com `Zod` para validação de esquema.
+*   **Notificações Toast**: Para exibir mensagens transitórias ao usuário (sucesso, erro, informação), use a biblioteca `sonner`.
+*   **Funções Utilitárias**: Para combinar classes Tailwind CSS, use a função utilitária `cn` de `src/lib/utils.ts`.
+*   **Manipulação de Datas**: Use `date-fns` para quaisquer tarefas de formatação ou manipulação de datas.
+*   **Design Responsivo**: Todos os componentes e layouts devem ser responsivos e se adaptar graciosamente a diferentes tamanhos de tela, utilizando as utilidades responsivas do Tailwind.
