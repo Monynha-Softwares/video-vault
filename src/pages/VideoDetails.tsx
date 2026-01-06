@@ -1,5 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useVideoById, useRelatedVideos, formatDuration, formatViewCount } from '@/hooks/useVideos';
+import { useAuth } from '@/hooks/useAuth';
+import { useIsFavorited, useAddFavorite, useRemoveFavorite } from '@/hooks/useFavorites';
 import { getYouTubeEmbedUrl } from '@/lib/youtube';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
@@ -7,19 +9,45 @@ import { VideoCard } from '@/components/VideoCard';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
-import { Eye, Clock, Folder, ArrowLeft } from 'lucide-react';
+import { Eye, Clock, Folder, ArrowLeft, Heart as HeartIcon, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 const VideoDetails = () => {
   const { videoId } = useParams<{ videoId: string }>();
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const { data: video, isLoading, isError } = useVideoById(videoId);
   const { data: relatedVideos, isLoading: relatedLoading } = useRelatedVideos(
     video?.id || '', 
     video?.category_id || null
   );
 
-  if (isLoading) {
+  const { data: isFavorited, isLoading: isFavoritedLoading } = useIsFavorited(video?.id);
+  const addFavoriteMutation = useAddFavorite();
+  const removeFavoriteMutation = useRemoveFavorite();
+
+  const handleFavoriteToggle = async () => {
+    if (!user) {
+      toast.info('Você precisa estar logado para favoritar vídeos.', {
+        action: {
+          label: 'Entrar',
+          onClick: () => navigate('/auth'),
+        },
+      });
+      return;
+    }
+
+    if (!video?.id) return;
+
+    if (isFavorited) {
+      await removeFavoriteMutation.mutateAsync(video.id);
+    } else {
+      await addFavoriteMutation.mutateAsync(video.id);
+    }
+  };
+
+  if (isLoading || authLoading) {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
@@ -84,14 +112,29 @@ const VideoDetails = () => {
                 className="w-full h-full"
                 src={getYouTubeEmbedUrl(video.youtube_id)}
                 title={video.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-m edia; gyroscope; picture-in-picture"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               ></iframe>
             </AspectRatio>
 
             {/* Video Info */}
             <div className="space-y-3">
-              <h1 className="text-2xl md:text-3xl font-bold leading-tight">{video.title}</h1>
+              <div className="flex items-center justify-between">
+                <h1 className="text-2xl md:text-3xl font-bold leading-tight">{video.title}</h1>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleFavoriteToggle}
+                  disabled={isFavoritedLoading || addFavoriteMutation.isPending || removeFavoriteMutation.isPending}
+                  className="text-muted-foreground hover:text-primary"
+                >
+                  {isFavoritedLoading || addFavoriteMutation.isPending || removeFavoriteMutation.isPending ? (
+                    <Loader2 className="w-6 h-6 animate-spin" />
+                  ) : (
+                    <HeartIcon className={`w-6 h-6 ${isFavorited ? 'fill-primary text-primary' : ''}`} />
+                  )}
+                </Button>
+              </div>
               <p className="text-lg text-muted-foreground">{video.channel_name}</p>
               <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
@@ -127,7 +170,7 @@ const VideoDetails = () => {
           </div>
 
           {/* Related Videos Sidebar */}
-          <div className="lg:col-span-1 space-y-4"> {/* Changed gap to space-y-4 for better spacing */}
+          <div className="lg:col-span-1 space-y-4">
             <h2 className="text-xl font-bold">Vídeos Relacionados</h2>
             {relatedLoading ? (
               <div className="space-y-4">
@@ -147,7 +190,7 @@ const VideoDetails = () => {
                   <VideoCard 
                     key={relatedVideo.id} 
                     video={relatedVideo} 
-                    variant="compact" // Use the compact variant here
+                    variant="compact" 
                     onClick={() => navigate(`/videos/${relatedVideo.id}`)}
                   />
                 ))}
