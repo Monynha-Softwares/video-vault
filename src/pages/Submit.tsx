@@ -294,6 +294,9 @@ export default function Submit() {
                         const target = e.target as HTMLImageElement;
                         if (target.src.includes('maxresdefault')) {
                           target.src = target.src.replace('maxresdefault', 'hqdefault');
+                        } else {
+                          target.src = '/placeholder.svg'; // Fallback to placeholder if hqdefault also fails
+                          target.onerror = null; // Prevent infinite loop
                         }
                       }}
                     />

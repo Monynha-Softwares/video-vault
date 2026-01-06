@@ -38,6 +38,11 @@ export const VideoCard = ({ video, onClick, variant = 'default' }: VideoCardProp
           src={video.thumbnail_url}
           alt={video.title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = '/placeholder.svg'; // Use the new placeholder SVG
+            target.onerror = null; // Prevent infinite loop if placeholder also fails
+          }}
         />
         
         {/* Overlay on hover */}
