@@ -16,6 +16,14 @@ export const Header = () => {
     navigate('/');
   };
 
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/videos?query=${encodeURIComponent(searchQuery.trim())}`);
+      setIsMenuOpen(false); // Close mobile menu after search
+    }
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-xl">
       <div className="container flex h-16 items-center justify-between gap-4">
@@ -30,7 +38,7 @@ export const Header = () => {
         </Link>
 
         {/* Search Bar - Desktop */}
-        <div className="hidden md:flex flex-1 max-w-xl mx-8">
+        <form onSubmit={handleSearchSubmit} className="hidden md:flex flex-1 max-w-xl mx-8">
           <div className="relative w-full">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -41,7 +49,7 @@ export const Header = () => {
               className="w-full pl-10 pr-4 h-10 bg-muted/50 border-0 focus-visible:ring-primary/30"
             />
           </div>
-        </div>
+        </form>
 
         {/* Actions */}
         <div className="flex items-center gap-2">
@@ -87,7 +95,10 @@ export const Header = () => {
               </Button>
             </>
           )}
-          <Button variant="ghost" size="icon" className="md:hidden">
+          <Button variant="ghost" size="icon" className="md:hidden" onClick={() => {
+            // Toggle search input visibility in mobile menu
+            setIsMenuOpen(!isMenuOpen);
+          }}>
             <Search className="h-5 w-5" />
           </Button>
           <Button
@@ -105,14 +116,16 @@ export const Header = () => {
       {isMenuOpen && (
         <div className="md:hidden border-t border-border/50 bg-background animate-fade-in">
           <div className="container py-4 space-y-4">
-            <div className="relative">
+            <form onSubmit={handleSearchSubmit} className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type="search"
                 placeholder="Buscar vídeos, canais..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 bg-muted/50 border-0"
               />
-            </div>
+            </form>
             <div className="flex flex-col gap-2">
               {user ? (
               <>

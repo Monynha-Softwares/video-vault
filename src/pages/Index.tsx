@@ -8,11 +8,13 @@ import { useFeaturedVideos, useRecentVideos } from "@/hooks/useVideos";
 import { ArrowRight, TrendingUp, Clock, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Index = () => {
   const { data: categories, isLoading: categoriesLoading } = useCategories();
   const { data: featuredVideos, isLoading: featuredLoading } = useFeaturedVideos(4);
   const { data: recentVideos, isLoading: recentLoading } = useRecentVideos(4);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -30,7 +32,11 @@ const Index = () => {
                 <h2 className="text-2xl md:text-3xl font-bold">Categorias</h2>
                 <p className="text-muted-foreground mt-1">Explore por tema</p>
               </div>
-              <Button variant="ghost" className="gap-2 group">
+              <Button 
+                variant="ghost" 
+                className="gap-2 group"
+                onClick={() => navigate('/videos')} // Navigate to videos page
+              >
                 Ver todas
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Button>
@@ -50,7 +56,10 @@ const Index = () => {
                     className="animate-fade-up"
                     style={{ animationDelay: `${index * 0.05}s` }}
                   >
-                    <CategoryCard category={category} />
+                    <CategoryCard 
+                      category={category} 
+                      onClick={() => navigate(`/videos?category=${category.id}`)} // Filter by category
+                    />
                   </div>
                 ))}
               </div>
@@ -71,7 +80,11 @@ const Index = () => {
                   <p className="text-muted-foreground mt-1">Selecionados pela curadoria</p>
                 </div>
               </div>
-              <Button variant="ghost" className="gap-2 group">
+              <Button 
+                variant="ghost" 
+                className="gap-2 group"
+                onClick={() => navigate('/videos?featured=true')} // Filter by featured
+              >
                 Ver todos
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Button>
@@ -95,7 +108,7 @@ const Index = () => {
                     className="animate-fade-up"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <VideoCard video={video} variant="default" /> {/* Explicitly set default variant */}
+                    <VideoCard video={video} variant="default" />
                   </div>
                 ))}
               </div>
@@ -120,7 +133,11 @@ const Index = () => {
                   <p className="text-muted-foreground mt-1">Últimos vídeos enviados</p>
                 </div>
               </div>
-              <Button variant="ghost" className="gap-2 group">
+              <Button 
+                variant="ghost" 
+                className="gap-2 group"
+                onClick={() => navigate('/videos?recent=true')} // Filter by recent
+              >
                 Ver todos
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Button>
@@ -144,7 +161,7 @@ const Index = () => {
                     className="animate-fade-up"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <VideoCard video={video} variant="default" /> {/* Explicitly set default variant */}
+                    <VideoCard video={video} variant="default" />
                   </div>
                 ))}
               </div>
@@ -166,7 +183,7 @@ const Index = () => {
               <p className="text-lg text-muted-foreground">
                 Compartilhe com a comunidade e ajude a construir o maior acervo de vídeos valiosos da internet.
               </p>
-              <Button variant="hero" size="xl" className="gap-2">
+              <Button variant="hero" size="xl" className="gap-2" onClick={() => navigate('/submit')}>
                 Enviar Vídeo
                 <ArrowRight className="w-5 h-5" />
               </Button>

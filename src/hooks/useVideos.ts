@@ -24,7 +24,14 @@ export interface Video {
   };
 }
 
-export function useVideos(options?: { featured?: boolean; limit?: number; categorySlug?: string }) {
+export function useVideos(options?: { 
+  featured?: boolean; 
+  limit?: number; 
+  categorySlug?: string; 
+  searchQuery?: string; 
+  categoryId?: string; 
+  language?: string;
+}) {
   return useQuery({
     queryKey: ['videos', options],
     queryFn: async () => {
@@ -42,6 +49,20 @@ export function useVideos(options?: { featured?: boolean; limit?: number; catego
       
       if (options?.limit) {
         query = query.limit(options.limit);
+      }
+
+      if (options?.searchQuery) {
+        query = query.or(
+          `title.ilike.%${options.searchQuery}%,channel_name.ilike.%${options.searchQuery}%`
+        );
+      }
+
+      if (options?.categoryId) {
+        query = query.eq('category_id', options.categoryId);
+      }
+
+      if (options?.language) {
+        query = query.eq('language', options.language);
       }
       
       const { data, error } = await query;
