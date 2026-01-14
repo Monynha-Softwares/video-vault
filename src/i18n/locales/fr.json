@@ -167,7 +167,9 @@
   },
   "community": {
     "title": "Communauté",
-    "description": "Connectez-vous avec d'autres curateurs et passionnés de vidéo."
+    "description": "Connectez-vous avec d'autres curateurs et passionnés de vidéo.",
+    "totalContributors": "Total des Contributeurs",
+    "contributorsCount": "{{count}} utilisateurs"
   },
   "about": {
     "title": "À Propos de Nous",
