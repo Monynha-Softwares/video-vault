@@ -1,9 +1,9 @@
-import { Github, Globe, Heart } from "lucide-react"; // Changed Twitter to Globe
+import { Github, Globe, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
 
 export const Footer = () => {
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
 
   return (
     <footer className="border-t border-border/50 bg-muted/30">
@@ -50,7 +50,7 @@ export const Footer = () => {
         {/* Bottom */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-8 mt-8 border-t border-border/50">
           <p className="text-sm text-muted-foreground flex items-center gap-1">
-            {t('footer.madeWithLove', { heartIcon: <Heart className="w-4 h-4 text-primary fill-primary inline-block" /> })}
+            {t('footer.madeWithLove')} <Heart className="w-4 h-4 text-primary fill-primary inline-block" /> {t('footer.byMonynhaSoftwares')}
           </p>
           <div className="flex items-center gap-4">
             <a href="https://monynha.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">

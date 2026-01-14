@@ -35,7 +35,8 @@
     "rules": "Reglas",
     "contact": "Contacto",
     "faq": "Preguntas Frecuentes",
-    "madeWithLove": "Hecho con {{heartIcon}} por Monynha Softwares"
+    "madeWithLove": "Hecho con",
+    "byMonynhaSoftwares": "por Monynha Softwares"
   },
   "hero": {
     "badge": "Curación colectiva de videos",
