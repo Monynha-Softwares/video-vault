@@ -30,6 +30,7 @@ export const Header = () => {
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
+    localStorage.setItem('i18nextLng', lng);
   };
 
   return (
@@ -63,27 +64,27 @@ export const Header = () => {
         <div className="flex items-center gap-2">
           {user ? (
             <>
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 className="hidden sm:flex gap-2 text-muted-foreground hover:text-foreground"
                 onClick={() => navigate('/favorites')}
               >
                 <Heart className="h-4 w-4" />
                 {t('header.favorites')}
               </Button>
-              <Button 
-                variant="hero" 
-                size="sm" 
+              <Button
+                variant="hero"
+                size="sm"
                 className="hidden sm:flex gap-2"
                 onClick={() => navigate('/submit')}
               >
                 <Plus className="h-4 w-4" />
                 {t('header.submitVideo')}
               </Button>
-              <Button 
+              <Button
                 variant="ghost"
-                size="sm" 
+                size="sm"
                 onClick={handleSignOut}
                 className="hidden sm:flex gap-2 text-muted-foreground hover:text-foreground"
               >
@@ -93,18 +94,18 @@ export const Header = () => {
             </>
           ) : (
             <>
-              <Button 
-                variant="hero" 
-                size="sm" 
+              <Button
+                variant="hero"
+                size="sm"
                 className="hidden sm:flex gap-2"
                 onClick={() => navigate('/auth')}
               >
                 <Plus className="h-4 w-4" />
                 {t('header.submitVideo')}
               </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 className="hidden sm:flex"
                 onClick={() => navigate('/auth')}
               >
@@ -120,10 +121,10 @@ export const Header = () => {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="pt">{t('common.language.pt')}</SelectItem>
-              <SelectItem value="en">{t('common.language.en')}</SelectItem>
-              <SelectItem value="es">{t('common.language.es')}</SelectItem>
-              <SelectItem value="fr">{t('common.language.fr')}</SelectItem>
+              <SelectItem value="pt">PT</SelectItem>
+              <SelectItem value="en">EN</SelectItem>
+              <SelectItem value="es">ES</SelectItem>
+              <SelectItem value="fr">FR</SelectItem>
             </SelectContent>
           </Select>
 
@@ -159,25 +160,25 @@ export const Header = () => {
             </form>
             <div className="flex flex-col gap-2">
               {user ? (
-              <>
-                  <Button 
-                    variant="ghost" 
+                <>
+                  <Button
+                    variant="ghost"
                     className="w-full justify-center gap-2 text-muted-foreground hover:text-foreground"
                     onClick={() => { navigate('/favorites'); setIsMenuOpen(false); }}
                   >
                     <Heart className="h-4 w-4" />
                     {t('header.favorites')}
                   </Button>
-                  <Button 
-                    variant="hero" 
+                  <Button
+                    variant="hero"
                     className="w-full justify-center gap-2"
                     onClick={() => { navigate('/submit'); setIsMenuOpen(false); }}
                   >
                     <Plus className="h-4 w-4" />
                     {t('header.submitVideo')}
                   </Button>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="w-full gap-2"
                     onClick={handleSignOut}
                   >
@@ -187,16 +188,16 @@ export const Header = () => {
                 </>
               ) : (
                 <>
-                  <Button 
-                    variant="hero" 
+                  <Button
+                    variant="hero"
                     className="w-full justify-center gap-2"
                     onClick={() => navigate('/auth')}
                   >
                     <Plus className="h-4 w-4" />
                     {t('header.submitVideo')}
                   </Button>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="w-full"
                     onClick={() => navigate('/auth')}
                   >
@@ -211,10 +212,10 @@ export const Header = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="pt">{t('common.language.pt')}</SelectItem>
-                  <SelectItem value="en">{t('common.language.en')}</SelectItem>
-                  <SelectItem value="es">{t('common.language.es')}</SelectItem>
-                  <SelectItem value="fr">{t('common.language.fr')}</SelectItem>
+                  <SelectItem value="pt">PT</SelectItem>
+                  <SelectItem value="en">EN</SelectItem>
+                  <SelectItem value="es">ES</SelectItem>
+                  <SelectItem value="fr">FR</SelectItem>
                 </SelectContent>
               </Select>
             </div>
