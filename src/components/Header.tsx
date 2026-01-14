@@ -1,18 +1,22 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Plus, Menu, X, LogOut, Heart, Globe, ListVideo } from "lucide-react"; // Import ListVideo icon
+import { Search, Plus, Menu, X, LogOut, Heart, Globe, ListVideo, User as UserIcon, Settings } from "lucide-react"; // Import UserIcon and Settings
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { useTranslation } from 'react-i18next'; // Import useTranslation
-import i18n from 'i18next'; // Import i18next instance
+import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useProfileById } from "@/hooks/useProfile"; // Import useProfileById
 
 export const Header = () => {
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { user, signOut } = useAuth();
+  const { data: profile } = useProfileById(user?.id); // Fetch user profile
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -24,7 +28,7 @@ export const Header = () => {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/videos?query=${encodeURIComponent(searchQuery.trim())}`);
-      setIsMenuOpen(false); // Close mobile menu after search
+      setIsMenuOpen(false);
     }
   };
 
@@ -91,15 +95,44 @@ export const Header = () => {
                 <Plus className="h-4 w-4" />
                 {t('header.submitVideo')}
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleSignOut}
-                className="hidden sm:flex gap-2 text-muted-foreground hover:text-foreground"
-              >
-                <LogOut className="h-4 w-4" />
-                {t('header.logout')}
-              </Button>
+
+              {/* User Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage src={profile?.avatar_url || undefined} alt={profile?.display_name || profile?.username || 'User'} />
+                      <AvatarFallback className="bg-primary/20 text-primary">
+                        {profile?.display_name ? profile.display_name[0].toUpperCase() : (profile?.username ? profile.username[0].toUpperCase() : <UserIcon className="h-5 w-5" />)}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">{profile?.display_name || profile?.username}</p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {user.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate(`/profile/${profile?.username}`)}>
+                    <UserIcon className="mr-2 h-4 w-4" />
+                    <span>{t('header.myProfile')}</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/profile/edit')}>
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>{t('header.editProfile')}</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>{t('header.logout')}</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </>
           ) : (
             <>
@@ -170,6 +203,22 @@ export const Header = () => {
             <div className="flex flex-col gap-2">
               {user ? (
                 <>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-center gap-2 text-muted-foreground hover:text-foreground"
+                    onClick={() => { navigate(`/profile/${profile?.username}`); setIsMenuOpen(false); }}
+                  >
+                    <UserIcon className="h-4 w-4" />
+                    {t('header.myProfile')}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-center gap-2 text-muted-foreground hover:text-foreground"
+                    onClick={() => { navigate('/profile/edit'); setIsMenuOpen(false); }}
+                  >
+                    <Settings className="h-4 w-4" />
+                    {t('header.editProfile')}
+                  </Button>
                   <Button
                     variant="ghost"
                     className="w-full justify-center gap-2 text-muted-foreground hover:text-foreground"

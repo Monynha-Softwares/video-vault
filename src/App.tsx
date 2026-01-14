@@ -14,12 +14,14 @@ import About from "./pages/About";
 import Rules from "./pages/Rules";
 import Contact from "./pages/Contact";
 import FAQ from "./pages/FAQ";
-import Playlists from "./pages/Playlists"; // Import new Playlists page
-import PlaylistDetails from "./pages/PlaylistDetails"; // Import new PlaylistDetails page
-import CreateEditPlaylist from "./pages/CreateEditPlaylist"; // Import new CreateEditPlaylist page
+import Playlists from "./pages/Playlists";
+import PlaylistDetails from "./pages/PlaylistDetails";
+import CreateEditPlaylist from "./pages/CreateEditPlaylist";
+import Profile from "./pages/Profile"; // Import new Profile page
+import EditProfile from "./pages/EditProfile"; // Import new EditProfile page
 import NotFound from "./pages/NotFound";
-import ScrollToTop from "./components/ScrollToTop"; // Import the new ScrollToTop component
-import './i18n/config'; // Import i18n configuration to initialize it
+import ScrollToTop from "./components/ScrollToTop";
+import './i18n/config';
 
 const queryClient = new QueryClient();
 
@@ -29,7 +31,7 @@ const App = () => (
       <TooltipProvider>
         <Sonner />
         <BrowserRouter>
-          <ScrollToTop /> {/* Place ScrollToTop inside BrowserRouter */}
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
@@ -42,10 +44,12 @@ const App = () => (
             <Route path="/rules" element={<Rules />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/faq" element={<FAQ />} />
-            <Route path="/playlists" element={<Playlists />} /> {/* New route */}
-            <Route path="/playlists/new" element={<CreateEditPlaylist />} /> {/* New route */}
-            <Route path="/playlists/:playlistId" element={<PlaylistDetails />} /> {/* New route */}
-            <Route path="/playlists/:playlistId/edit" element={<CreateEditPlaylist />} /> {/* New route */}
+            <Route path="/playlists" element={<Playlists />} />
+            <Route path="/playlists/new" element={<CreateEditPlaylist />} />
+            <Route path="/playlists/:playlistId" element={<PlaylistDetails />} />
+            <Route path="/playlists/:playlistId/edit" element={<CreateEditPlaylist />} />
+            <Route path="/profile/:username" element={<Profile />} /> {/* New public profile route */}
+            <Route path="/profile/edit" element={<EditProfile />} /> {/* New edit profile route */}
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -21,7 +21,9 @@
     "submitVideo": "Soumettre une Vidéo",
     "logout": "Déconnexion",
     "login": "Connexion",
-    "playlists": "Playlists"
+    "playlists": "Playlists",
+    "myProfile": "Mon Profil",
+    "editProfile": "Modifier le Profil"
   },
   "footer": {
     "description": "Une plateforme de curation collective de vidéos YouTube. Préserver et découvrir du contenu précieux ensemble.",
@@ -35,8 +37,7 @@
     "rules": "Règles",
     "contact": "Contact",
     "faq": "FAQ",
-    "madeWithLove": "Fait avec",
-    "byMonynhaSoftwares": "par Monynha Softwares"
+    "madeWithLove": "Fait avec {{heartIcon}} par Monynha Softwares"
   },
   "hero": {
     "badge": "Curation collective de vidéos",
@@ -75,11 +76,7 @@
       "emailNotConfirmed": "Veuillez confirmer votre email avant de vous connecter",
       "signupGeneric": "Erreur lors de la création du compte",
       "emailRegistered": "Cet email est déjà enregistré",
-      "forgotPasswordGeneric": "Erreur lors de l'envoi du lien de réinitialisation",
-      "invalidEmail": "Adresse e-mail invalide",
-      "passwordMinLength": "Le mot de passe doit contenir au moins 6 caractères",
-      "usernameMinLength": "Le nom d'utilisateur doit contenir au moins 3 caractères",
-      "genericAuthError": "Une erreur d'authentification est survenue. Veuillez réessayer."
+      "forgotPasswordGeneric": "Erreur lors de l'envoi du lien de réinitialisation"
     },
     "success": {
       "welcomeBack": "Bienvenue de retour !",
@@ -145,7 +142,7 @@
   "videoDetails": {
     "videoNotFoundTitle": "Vidéo introuvable",
     "videoNotFoundDescription": "La vidéo que vous recherchez n'existe peut-être pas ou a été supprimée.",
-    "backToHome": "Retour à l'accueil",
+    "backToHome": "Retour à la page d'accueil",
     "views": "{{count}} vues",
     "descriptionTitle": "Description",
     "noDescription": "Aucune description fournie pour cette vidéo.",
@@ -247,6 +244,44 @@
       "submittingButton": "Enregistrement...",
       "saveButton": "Enregistrer la Playlist",
       "createButton": "Créer la Playlist"
+    }
+  },
+  "profile": {
+    "notFoundTitle": "Profil introuvable",
+    "notFoundDescription": "Le profil que vous recherchez n'existe peut-être pas.",
+    "joinedOn": "Membre depuis le {{date}}",
+    "editProfile": "Modifier le Profil",
+    "uploadedVideos": "Vidéos Téléchargées",
+    "noVideosTitle": "Aucune vidéo téléchargée pour l'instant.",
+    "noVideosDescription": "Cet utilisateur n'a pas encore téléchargé de vidéos.",
+    "uploadFirstVideo": "Téléchargez votre première vidéo",
+    "createdPlaylists": "Playlists Créées",
+    "noPlaylistsTitle": "Aucune playlist créée pour l'instant.",
+    "noPlaylistsDescription": "Cet utilisateur n'a pas encore créé de playlists.",
+    "createFirstPlaylist": "Créez votre première playlist",
+    "edit": {
+      "title": "Modifier le Profil",
+      "description": "Mettez à jour vos informations publiques.",
+      "loadErrorTitle": "Erreur de chargement du profil",
+      "loadErrorDescription": "Impossible de charger les détails de votre profil. Veuillez réessayer plus tard.",
+      "avatarPreview": "Aperçu de l'Avatar",
+      "form": {
+        "displayNameLabel": "Nom d'Affichage",
+        "displayNamePlaceholder": "Votre nom ou surnom",
+        "avatarUrlLabel": "URL de l'Avatar",
+        "avatarUrlPlaceholder": "https://exemple.com/votre-photo.jpg",
+        "avatarUrlHint": "Lien direct vers votre image de profil.",
+        "bioLabel": "Bio",
+        "bioPlaceholder": "Parlez un peu de vous...",
+        "savingButton": "Enregistrement...",
+        "saveButton": "Enregistrer les Modifications"
+      },
+      "error": {
+        "displayNameMinLength": "Le nom d'affichage doit contenir au moins 3 caractères",
+        "displayNameMaxLength": "Le nom d'affichage ne peut pas dépasser 50 caractères",
+        "invalidAvatarUrl": "URL d'avatar invalide",
+        "bioMaxLength": "La bio ne peut pas dépasser 300 caractères"
+      }
     }
   },
   "about": {

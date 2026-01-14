@@ -21,7 +21,9 @@
     "submitVideo": "Enviar Video",
     "logout": "Cerrar Sesión",
     "login": "Iniciar Sesión",
-    "playlists": "Listas de Reproducción"
+    "playlists": "Listas de Reproducción",
+    "myProfile": "Mi Perfil",
+    "editProfile": "Editar Perfil"
   },
   "footer": {
     "description": "Una plataforma de curación colectiva de videos de YouTube. Preservando y descubriendo contenido valioso juntos.",
@@ -35,8 +37,7 @@
     "rules": "Reglas",
     "contact": "Contacto",
     "faq": "Preguntas Frecuentes",
-    "madeWithLove": "Hecho con",
-    "byMonynhaSoftwares": "por Monynha Softwares"
+    "madeWithLove": "Hecho con {{heartIcon}} por Monynha Softwares"
   },
   "hero": {
     "badge": "Curación colectiva de videos",
@@ -75,11 +76,7 @@
       "emailNotConfirmed": "Por favor, confirma tu correo electrónico antes de iniciar sesión",
       "signupGeneric": "Error al crear cuenta",
       "emailRegistered": "Este correo electrónico ya está registrado",
-      "forgotPasswordGeneric": "Error al enviar enlace de restablecimiento",
-      "invalidEmail": "Dirección de correo electrónico inválida",
-      "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
-      "usernameMinLength": "El nombre de usuario debe tener al menos 3 caracteres",
-      "genericAuthError": "Ocurrió un error de autenticación. Por favor, inténtalo de nuevo."
+      "forgotPasswordGeneric": "Error al enviar enlace de restablecimiento"
     },
     "success": {
       "welcomeBack": "¡Bienvenido de nuevo!",
@@ -247,6 +244,44 @@
       "submittingButton": "Guardando...",
       "saveButton": "Guardar Lista de Reproducción",
       "createButton": "Crear Lista de Reproducción"
+    }
+  },
+  "profile": {
+    "notFoundTitle": "Perfil no encontrado",
+    "notFoundDescription": "El perfil que buscas puede no existir.",
+    "joinedOn": "Miembro desde {{date}}",
+    "editProfile": "Editar Perfil",
+    "uploadedVideos": "Videos Subidos",
+    "noVideosTitle": "Aún no hay videos subidos.",
+    "noVideosDescription": "Este usuario aún no ha subido ningún video.",
+    "uploadFirstVideo": "Sube tu primer video",
+    "createdPlaylists": "Listas de Reproducción Creadas",
+    "noPlaylistsTitle": "Aún no hay listas de reproducción creadas.",
+    "noPlaylistsDescription": "Este usuario aún no ha creado ninguna lista de reproducción.",
+    "createFirstPlaylist": "Crea tu primera lista de reproducción",
+    "edit": {
+      "title": "Editar Perfil",
+      "description": "Actualiza tu información pública.",
+      "loadErrorTitle": "Error al cargar perfil",
+      "loadErrorDescription": "No se pudieron cargar los detalles de tu perfil. Por favor, inténtalo de nuevo más tarde.",
+      "avatarPreview": "Vista Previa del Avatar",
+      "form": {
+        "displayNameLabel": "Nombre a Mostrar",
+        "displayNamePlaceholder": "Tu nombre o apodo",
+        "avatarUrlLabel": "URL del Avatar",
+        "avatarUrlPlaceholder": "https://ejemplo.com/tu-foto.jpg",
+        "avatarUrlHint": "Enlace directo a tu imagen de perfil.",
+        "bioLabel": "Biografía",
+        "bioPlaceholder": "Cuéntanos un poco sobre ti...",
+        "savingButton": "Guardando...",
+        "saveButton": "Guardar Cambios"
+      },
+      "error": {
+        "displayNameMinLength": "El nombre a mostrar debe tener al menos 3 caracteres",
+        "displayNameMaxLength": "El nombre a mostrar no puede exceder los 50 caracteres",
+        "invalidAvatarUrl": "URL de avatar inválida",
+        "bioMaxLength": "La biografía no puede exceder los 300 caracteres"
+      }
     }
   },
   "about": {

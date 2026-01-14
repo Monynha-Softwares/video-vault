@@ -21,7 +21,9 @@
     "submitVideo": "Submit Video",
     "logout": "Logout",
     "login": "Login",
-    "playlists": "Playlists"
+    "playlists": "Playlists",
+    "myProfile": "My Profile",
+    "editProfile": "Edit Profile"
   },
   "footer": {
     "description": "A collective curation platform for YouTube videos. Preserving and discovering valuable content together.",
@@ -35,8 +37,7 @@
     "rules": "Rules",
     "contact": "Contact",
     "faq": "FAQ",
-    "madeWithLove": "Made with",
-    "byMonynhaSoftwares": "by Monynha Softwares"
+    "madeWithLove": "Made with {{heartIcon}} by Monynha Softwares"
   },
   "hero": {
     "badge": "Collective video curation",
@@ -75,11 +76,7 @@
       "emailNotConfirmed": "Please confirm your email before logging in",
       "signupGeneric": "Error creating account",
       "emailRegistered": "This email is already registered",
-      "forgotPasswordGeneric": "Error sending reset link",
-      "invalidEmail": "Invalid email address",
-      "passwordMinLength": "Password must be at least 6 characters",
-      "usernameMinLength": "Username must be at least 3 characters",
-      "genericAuthError": "An authentication error occurred. Please try again."
+      "forgotPasswordGeneric": "Error sending reset link"
     },
     "success": {
       "welcomeBack": "Welcome back!",
@@ -247,6 +244,44 @@
       "submittingButton": "Saving...",
       "saveButton": "Save Playlist",
       "createButton": "Create Playlist"
+    }
+  },
+  "profile": {
+    "notFoundTitle": "Profile not found",
+    "notFoundDescription": "The profile you are looking for may not exist.",
+    "joinedOn": "Member since {{date}}",
+    "editProfile": "Edit Profile",
+    "uploadedVideos": "Uploaded Videos",
+    "noVideosTitle": "No videos uploaded yet.",
+    "noVideosDescription": "This user has not uploaded any videos yet.",
+    "uploadFirstVideo": "Upload your first video",
+    "createdPlaylists": "Created Playlists",
+    "noPlaylistsTitle": "No playlists created yet.",
+    "noPlaylistsDescription": "This user has not created any playlists yet.",
+    "createFirstPlaylist": "Create your first playlist",
+    "edit": {
+      "title": "Edit Profile",
+      "description": "Update your public information.",
+      "loadErrorTitle": "Error loading profile",
+      "loadErrorDescription": "Could not load your profile details. Please try again later.",
+      "avatarPreview": "Avatar Preview",
+      "form": {
+        "displayNameLabel": "Display Name",
+        "displayNamePlaceholder": "Your name or nickname",
+        "avatarUrlLabel": "Avatar URL",
+        "avatarUrlPlaceholder": "https://example.com/your-photo.jpg",
+        "avatarUrlHint": "Direct link to your profile image.",
+        "bioLabel": "Bio",
+        "bioPlaceholder": "Tell us a little about yourself...",
+        "savingButton": "Saving...",
+        "saveButton": "Save Changes"
+      },
+      "error": {
+        "displayNameMinLength": "Display name must be at least 3 characters",
+        "displayNameMaxLength": "Display name cannot exceed 50 characters",
+        "invalidAvatarUrl": "Invalid avatar URL",
+        "bioMaxLength": "Bio cannot exceed 300 characters"
+      }
     }
   },
   "about": {

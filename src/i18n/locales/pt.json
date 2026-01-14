@@ -21,7 +21,9 @@
     "submitVideo": "Enviar Vídeo",
     "logout": "Sair",
     "login": "Entrar",
-    "playlists": "Playlists"
+    "playlists": "Playlists",
+    "myProfile": "Meu Perfil",
+    "editProfile": "Editar Perfil"
   },
   "footer": {
     "description": "Uma plataforma de curadoria coletiva de vídeos do YouTube. Preservando e descobrindo conteúdos valiosos juntos.",
@@ -35,8 +37,7 @@
     "rules": "Regras",
     "contact": "Contato",
     "faq": "FAQ",
-    "madeWithLove": "Feito com",
-    "byMonynhaSoftwares": "pela Monynha Softwares"
+    "madeWithLove": "Feito com {{heartIcon}} pela Monynha Softwares"
   },
   "hero": {
     "badge": "Curadoria coletiva de vídeos",
@@ -75,11 +76,7 @@
       "emailNotConfirmed": "Por favor, confirme seu email antes de fazer login",
       "signupGeneric": "Erro ao criar conta",
       "emailRegistered": "Este email já está cadastrado",
-      "forgotPasswordGeneric": "Erro ao enviar link de redefinição",
-      "invalidEmail": "Email inválido",
-      "passwordMinLength": "Senha deve ter pelo menos 6 caracteres",
-      "usernameMinLength": "Username deve ter pelo menos 3 caracteres",
-      "genericAuthError": "Ocorreu um erro de autenticação. Tente novamente."
+      "forgotPasswordGeneric": "Erro ao enviar link de redefinição"
     },
     "success": {
       "welcomeBack": "Bem-vindo de volta!",
@@ -247,6 +244,44 @@
       "submittingButton": "Salvando...",
       "saveButton": "Salvar Playlist",
       "createButton": "Criar Playlist"
+    }
+  },
+  "profile": {
+    "notFoundTitle": "Perfil não encontrado",
+    "notFoundDescription": "O perfil que você está procurando pode não existir.",
+    "joinedOn": "Membro desde {{date}}",
+    "editProfile": "Editar Perfil",
+    "uploadedVideos": "Vídeos Enviados",
+    "noVideosTitle": "Nenhum vídeo enviado ainda.",
+    "noVideosDescription": "Este usuário ainda não enviou nenhum vídeo.",
+    "uploadFirstVideo": "Enviar seu primeiro vídeo",
+    "createdPlaylists": "Playlists Criadas",
+    "noPlaylistsTitle": "Nenhuma playlist criada ainda.",
+    "noPlaylistsDescription": "Este usuário ainda não criou nenhuma playlist.",
+    "createFirstPlaylist": "Criar sua primeira playlist",
+    "edit": {
+      "title": "Editar Perfil",
+      "description": "Atualize suas informações públicas.",
+      "loadErrorTitle": "Erro ao carregar perfil",
+      "loadErrorDescription": "Não foi possível carregar os detalhes do seu perfil. Por favor, tente novamente mais tarde.",
+      "avatarPreview": "Prévia do Avatar",
+      "form": {
+        "displayNameLabel": "Nome de Exibição",
+        "displayNamePlaceholder": "Seu nome ou apelido",
+        "avatarUrlLabel": "URL do Avatar",
+        "avatarUrlPlaceholder": "https://exemplo.com/sua-foto.jpg",
+        "avatarUrlHint": "Link direto para sua imagem de perfil.",
+        "bioLabel": "Bio",
+        "bioPlaceholder": "Fale um pouco sobre você...",
+        "savingButton": "Salvando...",
+        "saveButton": "Salvar Alterações"
+      },
+      "error": {
+        "displayNameMinLength": "Nome de exibição deve ter pelo menos 3 caracteres",
+        "displayNameMaxLength": "Nome de exibição não pode exceder 50 caracteres",
+        "invalidAvatarUrl": "URL do avatar inválida",
+        "bioMaxLength": "Bio não pode exceder 300 caracteres"
+      }
     }
   },
   "about": {
