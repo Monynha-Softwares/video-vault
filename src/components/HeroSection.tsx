@@ -1,11 +1,16 @@
 import { ArrowRight, Sparkles, Youtube, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
+import { useVideoCount } from "@/hooks/useVideoCount"; // Import the new hook
+import { useContributorCount } from "@/hooks/useContributorCount"; // Import the new hook
+import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton for loading state
 
 export const HeroSection = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
+  const { data: videoCount, isLoading: videoCountLoading } = useVideoCount(); // Use the hook
+  const { data: contributorCount, isLoading: contributorCountLoading } = useContributorCount(); // Use the hook
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 md:py-24">
@@ -40,7 +45,7 @@ export const HeroSection = () => {
               variant="hero" 
               size="xl" 
               className="gap-2 group"
-              onClick={() => navigate('/submit')} // Updated link
+              onClick={() => navigate('/submit')}
             >
               <Youtube className="w-5 h-5" />
               {t('hero.submitVideoButton')}
@@ -49,7 +54,7 @@ export const HeroSection = () => {
             <Button 
               variant="outline" 
               size="lg"
-              onClick={() => navigate('/videos')} // Updated link
+              onClick={() => navigate('/videos')}
             >
               {t('hero.exploreCategoriesButton')}
             </Button>
@@ -59,13 +64,21 @@ export const HeroSection = () => {
           <div className="flex flex-wrap items-center justify-center gap-8 pt-8 animate-fade-up" style={{ animationDelay: "0.4s" }}>
             <div className="flex items-center gap-2 text-muted-foreground">
               <Youtube className="w-5 h-5 text-primary" />
-              <span className="font-semibold text-foreground">2,659</span>
-              <span>{t('hero.videosCount', { count: 2659 })}</span>
+              {videoCountLoading ? (
+                <Skeleton className="h-5 w-12" />
+              ) : (
+                <span className="font-semibold text-foreground">{videoCount?.toLocaleString()}</span>
+              )}
+              <span>{t('hero.videosCount', { count: videoCount || 0 })}</span>
             </div>
             <div className="flex items-center gap-2 text-muted-foreground">
               <Users className="w-5 h-5 text-accent" />
-              <span className="font-semibold text-foreground">1,247</span>
-              <span>{t('hero.contributorsCount', { count: 1247 })}</span>
+              {contributorCountLoading ? (
+                <Skeleton className="h-5 w-12" />
+              ) : (
+                <span className="font-semibold text-foreground">{contributorCount?.toLocaleString()}</span>
+              )}
+              <span>{t('hero.contributorsCount', { count: contributorCount || 0 })}</span>
             </div>
           </div>
         </div>
