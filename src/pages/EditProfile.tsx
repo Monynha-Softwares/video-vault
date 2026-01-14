@@ -11,6 +11,8 @@ import { ArrowLeft, User, Image, Info, Loader2, Save } from 'lucide-react';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer'; // Import Footer
 
 const editProfileSchema = z.object({
   display_name: z.string().min(3, 'profile.edit.error.displayNameMinLength').max(50, 'profile.edit.error.displayNameMaxLength'),
