@@ -8,6 +8,8 @@ import { useFeaturedVideos, useRecentVideos } from "@/hooks/useVideos";
 import { ArrowRight, TrendingUp, Clock, Loader2 } from "lucide-react";
 import { FeaturedHero } from "@/components/FeaturedHero";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { useQueryClient } from '@tanstack/react-query';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next'; // Import useTranslation
@@ -18,6 +20,7 @@ const Index = () => {
   const { data: featuredVideos, isLoading: featuredLoading } = useFeaturedVideos(4);
   const { data: recentVideos, isLoading: recentLoading } = useRecentVideos(4);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -83,16 +86,34 @@ const Index = () => {
                   <p className="text-muted-foreground mt-1">{t('index.featuredDescription')}</p>
                 </div>
               </div>
-              <Button 
-                variant="ghost" 
-                className="gap-2 group"
-                onClick={() => navigate('/videos?featured=true')}
-              >
-                {t('index.viewAll')}
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant="ghost" 
+                  className="gap-2 group"
+                  onClick={() => navigate('/videos?featured=true')}
+                >
+                  {t('index.viewAll')}
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+                {import.meta.env.DEV && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={async () => {
+                      try {
+                        await supabase.rpc('mark_top_videos_as_featured', { p_limit: 4 });
+                        // Invalidate featured videos query
+                        queryClient.invalidateQueries(['videos','featured']);
+                      } catch (e) {
+                        console.error(e);
+                      }
+                    }}
+                  >
+                    Mark top
+                  </Button>
+                )}
+              </div>
             </div>
-
             {featuredLoading ? (
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 <div className="lg:col-span-2">

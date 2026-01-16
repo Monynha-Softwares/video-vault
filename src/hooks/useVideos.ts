@@ -125,7 +125,38 @@ export function useRelatedVideos(currentVideoId: string, categoryId: string | nu
 }
 
 export function useFeaturedVideos(limit = 4) {
-  return useVideos({ featured: true, limit });
+  // Featured videos should be ordered by popularity (view_count desc).
+  // If no videos are explicitly marked as `is_featured`, fall back to the top videos by view_count.
+  return useQuery({
+    queryKey: ['videos', 'featured', limit],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('videos')
+        .select(`
+          *,
+          category:categories(id, name, slug, color)
+        `)
+        .eq('is_featured', true)
+        .order('view_count', { ascending: false })
+        .limit(limit);
+
+      if (error) throw error;
+      if (data && data.length > 0) return data as Video[];
+
+      // Fallback: return top videos by view_count regardless of is_featured
+      const { data: fallbackData, error: fallbackError } = await supabase
+        .from('videos')
+        .select(`
+          *,
+          category:categories(id, name, slug, color)
+        `)
+        .order('view_count', { ascending: false })
+        .limit(limit);
+
+      if (fallbackError) throw fallbackError;
+      return fallbackData as Video[];
+    },
+  });
 }
 
 export function useRecentVideos(limit = 4) {
