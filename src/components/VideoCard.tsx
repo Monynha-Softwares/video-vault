@@ -133,7 +133,7 @@ export const VideoCard = ({ video, onClick, variant = 'default' }: VideoCardProp
             <Eye className="w-3.5 h-3.5" />
             <span>{formatViewCount(viewCount)}</span>
             {showPlus && (
-              <span className="absolute -right-6 -top-1 text-xs text-green-400 font-semibold transition-all duration-700 ease-out transform">+1</span>
+              <span className="absolute -right-6 -top-1 text-xs text-green-400 font-semibold animate-pop">+1</span>
             )}
           </div>
           {video.category && (

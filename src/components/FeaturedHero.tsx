@@ -71,7 +71,7 @@ export const FeaturedHero = ({ video }: FeaturedHeroProps) => {
               <div className="relative text-sm text-white/90">
                 <span className="font-semibold">{formatViewCount(viewCount)}</span>
                 {showPlus && (
-                  <span className="absolute -right-8 -top-1 text-sm text-green-300 font-semibold transition-all duration-700 ease-out transform">
+                  <span className="absolute -right-8 -top-1 text-sm text-green-300 font-semibold animate-pop">
                     +1
                   </span>
                 )}
