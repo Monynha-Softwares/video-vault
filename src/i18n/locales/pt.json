@@ -52,6 +52,9 @@
     "description": "Uma comunidade dedicada a preservar e compartilhar os melhores vídeos do YouTube. Tutoriais antigos, receitas tradicionais, memes icônicos e muito mais.",
     "submitVideoButton": "Enviar um Vídeo",
     "exploreCategoriesButton": "Explorar Categorias",
+    "searchPlaceholder": "Buscar vídeos, canais ou temas...",
+    "searchButton": "Buscar",
+    "trendingLabel": "Tendências:",
     "videosCount": "{{count}} vídeos",
     "contributorsCount": "{{count}} contribuidores"
   },

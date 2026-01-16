@@ -1,16 +1,21 @@
 import { ArrowRight, Sparkles, Youtube, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useVideoCount } from "@/hooks/useVideoCount"; // Import the new hook
 import { useContributorCount } from "@/hooks/useContributorCount"; // Import the new hook
+import { useCategories } from "@/hooks/useCategories";
 import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton for loading state
 
 export const HeroSection = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [query, setQuery] = useState("");
   const { data: videoCount, isLoading: videoCountLoading } = useVideoCount(); // Use the hook
   const { data: contributorCount, isLoading: contributorCountLoading } = useContributorCount(); // Use the hook
+  const { data: categories, isLoading: categoriesLoading } = useCategories();
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 md:py-24">
@@ -59,6 +64,48 @@ export const HeroSection = () => {
               {t('hero.exploreCategoriesButton')}
             </Button>
           </div>
+
+          {/* Search (prominent) */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (query.trim()) navigate(`/videos?query=${encodeURIComponent(query.trim())}`);
+            }}
+            className="w-full max-w-xl mx-auto mt-4"
+          >
+            <div className="flex gap-2">
+              <Input
+                type="search"
+                placeholder={t('hero.searchPlaceholder')}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="h-12"
+              />
+              <Button type="submit" className="px-4" variant="hero">
+                {t('hero.searchButton')}
+              </Button>
+            </div>
+
+            {/* Trending categories */}
+            <div className="flex flex-wrap items-center justify-center gap-2 mt-3 text-sm text-muted-foreground">
+              <span className="mr-2 font-medium text-muted-foreground">{t('hero.trendingLabel')}</span>
+              {categoriesLoading ? (
+                <Skeleton className="h-6 w-24" />
+              ) : (
+                categories?.slice(0, 6).map((c) => (
+                  <Button
+                    key={c.id}
+                    variant="ghost"
+                    size="sm"
+                    className="px-3 py-1"
+                    onClick={() => navigate(`/videos?category=${c.id}`)}
+                  >
+                    {c.name}
+                  </Button>
+                ))
+              )}
+            </div>
+          </form>
 
           {/* Stats */}
           <div className="flex flex-wrap items-center justify-center gap-8 pt-8 animate-fade-up" style={{ animationDelay: "0.4s" }}>
