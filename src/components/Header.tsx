@@ -154,6 +154,15 @@ export const Header = () => {
           ) : (
             <>
               <Button
+                variant="ghost"
+                size="sm"
+                className="hidden sm:flex gap-2 text-muted-foreground hover:text-foreground"
+                onClick={() => navigate('/playlists')}
+              >
+                <ListVideo className="h-4 w-4" />
+                <span className="hidden lg:inline">{t('header.playlists')}</span>
+              </Button>
+              <Button
                 variant="hero"
                 size="sm"
                 className="hidden sm:flex gap-2"
@@ -298,6 +307,14 @@ export const Header = () => {
                     </div>
                   ) : (
                     <div className="space-y-2">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start gap-2 text-muted-foreground hover:text-foreground"
+                        onClick={() => { navigate('/playlists'); setIsSheetOpen(false); }}
+                      >
+                        <ListVideo className="h-4 w-4" />
+                        {t('header.playlists')}
+                      </Button>
                       <Button
                         variant="hero"
                         className="w-full justify-center gap-2"
