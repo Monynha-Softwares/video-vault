@@ -134,10 +134,108 @@ export type Database = {
           },
         ]
       }
+      playlist_collaborators: {
+        Row: {
+          id: string
+          invited_at: string | null
+          playlist_id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          invited_at?: string | null
+          playlist_id: string
+          role?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          invited_at?: string | null
+          playlist_id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "playlist_collaborators_playlist_id_fkey"
+            columns: ["playlist_id"]
+            isOneToOne: false
+            referencedRelation: "playlists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "playlist_collaborators_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      playlist_progress: {
+        Row: {
+          created_at: string | null
+          id: string
+          last_position_seconds: number | null
+          playlist_id: string
+          updated_at: string | null
+          user_id: string
+          video_id: string
+          watched: boolean
+          watched_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          last_position_seconds?: number | null
+          playlist_id: string
+          updated_at?: string | null
+          user_id: string
+          video_id: string
+          watched?: boolean
+          watched_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          last_position_seconds?: number | null
+          playlist_id?: string
+          updated_at?: string | null
+          user_id?: string
+          video_id?: string
+          watched?: boolean
+          watched_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "playlist_progress_playlist_id_fkey"
+            columns: ["playlist_id"]
+            isOneToOne: false
+            referencedRelation: "playlists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "playlist_progress_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "playlist_progress_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "videos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       playlist_videos: {
         Row: {
           added_by: string | null
           created_at: string | null
+          id: string
           notes: string | null
           playlist_id: string
           position: number
@@ -146,20 +244,29 @@ export type Database = {
         Insert: {
           added_by?: string | null
           created_at?: string | null
+          id?: string
           notes?: string | null
           playlist_id: string
-          position: number
+          position?: number
           video_id: string
         }
         Update: {
           added_by?: string | null
           created_at?: string | null
+          id?: string
           notes?: string | null
           playlist_id?: string
           position?: number
           video_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "playlist_videos_added_by_fkey"
+            columns: ["added_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "playlist_videos_playlist_id_fkey"
             columns: ["playlist_id"]
@@ -178,45 +285,59 @@ export type Database = {
       }
       playlists: {
         Row: {
-          author_id: string | null
+          author_id: string
           course_code: string | null
           created_at: string | null
           description: string | null
           id: string
+          is_ordered: boolean
           is_public: boolean
           language: string
           name: string
           slug: string
+          thumbnail_url: string | null
           unit_code: string | null
           updated_at: string | null
         }
         Insert: {
-          author_id?: string | null
+          author_id: string
           course_code?: string | null
           created_at?: string | null
           description?: string | null
           id?: string
+          is_ordered?: boolean
           is_public?: boolean
           language?: string
           name: string
           slug: string
+          thumbnail_url?: string | null
           unit_code?: string | null
           updated_at?: string | null
         }
         Update: {
-          author_id?: string | null
+          author_id?: string
           course_code?: string | null
           created_at?: string | null
           description?: string | null
           id?: string
+          is_ordered?: boolean
           is_public?: boolean
           language?: string
           name?: string
           slug?: string
+          thumbnail_url?: string | null
           unit_code?: string | null
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "playlists_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
