@@ -21,7 +21,7 @@ export function usePlaylistVideos(playlistId: string | undefined) {
 
       if (error) throw error;
 
-      return (data || []).map((pv: any) => ({
+      return (data || []).map((pv: PlaylistVideo) => ({
         ...pv,
         video: pv.video,
       })) as PlaylistVideo[];

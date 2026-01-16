@@ -19,7 +19,7 @@ export function usePlaylistCollaborators(playlistId: string | undefined) {
 
       if (error) throw error;
 
-      return (data || []).map((c: any) => ({
+      return (data || []).map((c: PlaylistCollaborator) => ({
         ...c,
         profile: c.profile,
       })) as PlaylistCollaborator[];
