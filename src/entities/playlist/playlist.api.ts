@@ -80,29 +80,35 @@ export async function listPlaylists(params: ListPlaylistsParams = {}) {
 export async function getPlaylistById(id: string) {
   const { data, error } = await supabase
     .from('playlists')
-    .select(
-      `
-        *,
-        author:profiles(id, username, display_name, avatar_url)
-      `,
-    )
+    .select('*')
     .eq('id', id)
     .single();
 
   if (error) throw error;
 
+  // Fetch author separately from profiles table
+  let author = null;
+  if (data.author_id) {
+    const { data: authorData } = await supabase
+      .from('profiles')
+      .select('id, username, display_name, avatar_url')
+      .eq('id', data.author_id)
+      .single();
+    author = authorData;
+  }
+
   try {
     const videoCount = await getPlaylistVideoCount(data.id);
     return {
       ...data,
-      author: data.author,
+      author,
       video_count: videoCount,
     } as Playlist;
   } catch (countError) {
     console.error(`Error fetching video count for playlist ${data.id}:`, countError);
     return {
       ...data,
-      author: data.author,
+      author,
       video_count: 0,
     } as Playlist;
   }
@@ -137,7 +143,7 @@ export async function listPlaylistVideos(playlistId: string) {
     .select(
       `
       *,
-      video:videos!playlist_videos_video_id_fkey(id, title, youtube_id, thumbnail_url, channel_name, duration_seconds)
+      video:video_id(id, title, youtube_id, thumbnail_url, channel_name, duration_seconds)
     `,
     )
     .eq('playlist_id', playlistId)
@@ -205,7 +211,7 @@ export async function listPlaylistCollaborators(playlistId: string) {
     .select(
       `
       *,
-      profile:profiles!playlist_collaborators_user_id_fkey(id, username, display_name, avatar_url)
+      profile:user_id(id, username, display_name, avatar_url)
     `,
     )
     .eq('playlist_id', playlistId);
