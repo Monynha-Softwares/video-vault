@@ -74,6 +74,12 @@ I chose a stack that's modern, scalable, and – honestly – a joy to work with
 - **date-fns** – Dates done right
 - **i18next** – Portuguese, English, and more
 
+### Code Quality & CI/CD 🔧
+- **ESLint** + **TypeScript** – Catch errors before they happen
+- **Vitest** – Fast, modern testing framework
+- **GitHub Actions** – Automated CI with intelligent caching
+- **Feature-Sliced Design** – Organized by domain (entities, features, shared)
+
 ---
 
 ## 🎯 What Can You Do Here?
@@ -164,13 +170,24 @@ src/
 │   ├── Community.tsx
 │   ├── Submit.tsx          # Add videos
 │   └── ...more pages
-├── hooks/                   # Data & logic hooks
-│   ├── useAuth.tsx         # Auth context
-│   ├── useVideos.ts        # Fetch videos (TanStack Query)
-│   ├── usePlaylists.ts     # Playlist CRUD
-│   ├── useFavorites.ts     # Manage favorites
-│   ├── useProfile.ts       # User profiles
+├── features/                # Feature modules (organized by domain)
+│   ├── auth/               # Authentication
+│   ├── videos/             # Video management
+│   ├── playlists/          # Playlist management
 │   └── ...
+├── entities/                # Domain entities
+│   ├── video/              # Video entity & API
+│   ├── playlist/           # Playlist entity & API
+│   └── ...
+├── shared/                  # Shared utilities and hooks
+│   ├── hooks/              # Reusable React hooks
+│   │   ├── use-mobile.tsx        # Mobile detection
+│   │   ├── useVideoViewIncrement.tsx  # Video view tracking
+│   │   └── useRequireAuth.tsx    # Authentication guard
+│   ├── lib/                # Helper functions
+│   │   ├── format.ts       # Data formatting utilities
+│   │   └── youtube.ts      # YouTube URL parsing
+│   └── test/               # Testing utilities
 ├── integrations/            # External services
 │   └── supabase/           # Supabase client setup
 ├── lib/                     # Utilities
@@ -181,6 +198,28 @@ src/
 │   └── locales/            # PT, EN, etc
 ├── App.tsx                  # Main app & routes
 └── main.tsx                 # Entry point
+```
+
+### Custom Hooks
+
+The codebase includes several custom hooks to promote code reuse and maintainability:
+
+#### `useVideoViewIncrement`
+Manages video view count increments with optimistic UI updates:
+```typescript
+const { viewCount, showPlus, handleViewIncrement } = useVideoViewIncrement(initialCount, animationDuration);
+```
+
+#### `useRequireAuth`
+Authentication guard for protected routes:
+```typescript
+const { user, loading } = useRequireAuth('/auth');
+```
+
+#### `use-mobile`
+Detects if the user is on a mobile device:
+```typescript
+const isMobile = useMobile();
 ```
 
 Every folder has a purpose. No random files lying around.
