@@ -83,7 +83,7 @@ export const Header = () => {
 
         {/* Actions */}
         <div className="flex items-center gap-2">
-          {user ? (
+          {user && profile ? (
             <>
               <Button
                 variant="ghost"
@@ -113,32 +113,33 @@ export const Header = () => {
                 <span className="hidden lg:inline">{t('header.submitVideo')}</span>
               </Button>
 
-              {/* User Dropdown */}
+              {/* Direct link to profile with Avatar */}
+              <Link to={`/profile/${profile.username}`} className="relative h-9 w-9 rounded-full hidden sm:flex items-center justify-center">
+                <Avatar className="h-9 w-9">
+                  <AvatarImage src={profile.avatar_url || undefined} alt={profile.display_name || profile.username || 'User'} />
+                  <AvatarFallback className="bg-primary/20 text-primary">
+                    {profile.display_name ? profile.display_name[0].toUpperCase() : (profile.username ? profile.username[0].toUpperCase() : <UserIcon className="h-5 w-5" />)}
+                  </AvatarFallback>
+                </Avatar>
+              </Link>
+
+              {/* Separate Dropdown for other actions */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-                    <Avatar className="h-9 w-9">
-                      <AvatarImage src={profile?.avatar_url || undefined} alt={profile?.display_name || profile?.username || 'User'} />
-                      <AvatarFallback className="bg-primary/20 text-primary">
-                        {profile?.display_name ? profile.display_name[0].toUpperCase() : (profile?.username ? profile.username[0].toUpperCase() : <UserIcon className="h-5 w-5" />)}
-                      </AvatarFallback>
-                    </Avatar>
+                  <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
+                    <Settings className="h-5 w-5" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{profile?.display_name || profile?.username}</p>
+                      <p className="text-sm font-medium leading-none">{profile.display_name || profile.username}</p>
                       <p className="text-xs leading-none text-muted-foreground">
                         {user.email}
                       </p>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => { navigate(`/profile/${profile?.username}`); setIsSheetOpen(false); }}>
-                    <UserIcon className="mr-2 h-4 w-4" />
-                    <span>{t('header.myProfile')}</span>
-                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => { navigate('/profile/edit'); setIsSheetOpen(false); }}>
                     <Settings className="mr-2 h-4 w-4" />
                     <span>{t('header.editProfile')}</span>
@@ -166,7 +167,7 @@ export const Header = () => {
                 variant="hero"
                 size="sm"
                 className="hidden sm:flex gap-2"
-                onClick={() => navigate('/auth')}
+                onClick={() => navigate('/submit')}
               >
                 <Plus className="h-4 w-4" />
                 <span className="hidden lg:inline">{t('header.submitVideo')}</span>
