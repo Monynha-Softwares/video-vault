@@ -1,14 +1,14 @@
-import { Video, formatDuration, formatViewCount } from "@/hooks/useVideos";
+import type { VideoWithCategory } from "@/entities/video/video.types";
+import { formatDuration, formatViewCount } from "@/shared/lib/format";
 import { Play, Eye } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { cn } from "@/lib/utils"; // Import cn for conditional class names
-import { supabase } from "@/integrations/supabase/client";
-import { useState } from "react";
+import { cn } from "@/lib/utils";
 import { useTranslation } from 'react-i18next';
+import { useVideoViewIncrement } from '@/shared/hooks/useVideoViewIncrement';
 
 interface VideoCardProps {
-  video: Video;
+  video: VideoWithCategory;
   onClick?: () => void;
   variant?: 'default' | 'compact'; // Add variant prop
 }
@@ -16,22 +16,10 @@ interface VideoCardProps {
 export const VideoCard = ({ video, onClick, variant = 'default' }: VideoCardProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [viewCount, setViewCount] = useState<number>(video.view_count || 0);
-  const [showPlus, setShowPlus] = useState(false);
+  const { viewCount, showPlus, handleViewIncrement } = useVideoViewIncrement(video.view_count || 0);
 
   const handleClick = () => {
-    // optimistic UI: increment local counter and show +1 briefly
-    setViewCount((v) => v + 1);
-    setShowPlus(true);
-    setTimeout(() => setShowPlus(false), 700);
-
-    try {
-      // fire-and-forget: increment on the server (atomic in DB function)
-      supabase.rpc('increment_video_view_count', { p_video_id: video.id });
-    } catch (e) {
-      // ignore errors — navigation should still happen
-      console.debug('increment view failed', e);
-    }
+    handleViewIncrement(video.id);
 
     if (onClick) {
       onClick();

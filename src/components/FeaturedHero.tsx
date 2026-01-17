@@ -1,35 +1,23 @@
-import { Video, formatDuration, formatViewCount } from "@/hooks/useVideos";
+import type { VideoWithCategory } from "@/entities/video/video.types";
+import { formatDuration, formatViewCount } from "@/shared/lib/format";
 import { Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { useTranslation } from 'react-i18next';
+import { useVideoViewIncrement } from '@/shared/hooks/useVideoViewIncrement';
 
 interface FeaturedHeroProps {
-  video: Video;
+  video: VideoWithCategory;
 }
 
 export const FeaturedHero = ({ video }: FeaturedHeroProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [viewCount, setViewCount] = useState<number>(video.view_count || 0);
-  const [showPlus, setShowPlus] = useState(false);
+  const { viewCount, showPlus, handleViewIncrement } = useVideoViewIncrement(video.view_count || 0, 900);
 
-  const handleClick = async () => {
-    // optimistic UI: increment local counter and show +1 animation
-    setViewCount((v) => v + 1);
-    setShowPlus(true);
-    setTimeout(() => setShowPlus(false), 900);
-
-    // increment views on the server
-    try {
-      await supabase.rpc('increment_video_view_count', { p_video_id: video.id });
-    } catch (e) {
-      console.debug('increment view failed', e);
-    }
-
+  const handleClick = () => {
+    handleViewIncrement(video.id);
     navigate(`/videos/${video.id}`);
   };
 
