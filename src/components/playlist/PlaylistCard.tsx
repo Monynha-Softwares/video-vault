@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ListVideo, BookOpen, Code, Globe, Lock, Users, GraduationCap } from 'lucide-react';
-import { Playlist, usePlaylistProgress, usePlaylistVideos } from '@/hooks/usePlaylists';
+import { Playlist, usePlaylistProgress, usePlaylistVideos } from '@/features/playlists';
 import { Progress } from '@/components/ui/progress';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/features/auth/useAuth';
 import { Skeleton } from '@/components/ui/skeleton'; // Import Skeleton for loading states
 
 interface PlaylistCardProps {
@@ -14,12 +14,16 @@ interface PlaylistCardProps {
 export function PlaylistCard({ playlist, index = 0 }: PlaylistCardProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { data: videos, isLoading: videosLoading } = usePlaylistVideos(playlist.id);
-  const { data: progress, isLoading: progressLoading } = usePlaylistProgress(playlist.id);
+  
+  // Only fetch videos and progress for authenticated users or public playlists
+  const shouldFetchData = user || playlist.is_public;
+  const { data: videos, isLoading: videosLoading } = usePlaylistVideos(shouldFetchData ? playlist.id : undefined);
+  const { data: progress, isLoading: progressLoading } = usePlaylistProgress(user ? playlist.id : undefined);
 
   // Calculate progress percentage
-  const totalVideos = videos?.length || 0;
-  const watchedVideos = progress?.filter(p => p.watched).length || 0;
+  // Use videos length if available, otherwise fall back to playlist video_count
+  const totalVideos = videos?.length ?? playlist.video_count ?? 0;
+  const watchedVideos = progress?.filter(p => p.watched).length ?? 0;
   const progressPercent = totalVideos > 0 ? (watchedVideos / totalVideos) * 100 : 0;
 
   // Get thumbnail from first video if no custom thumbnail
