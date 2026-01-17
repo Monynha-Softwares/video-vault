@@ -50,6 +50,7 @@ const App = () => (
             <Route path="/playlists/:playlistId/edit" element={<CreateEditPlaylist />} />
             <Route path="/profile/:username" element={<Profile />} /> {/* New public profile route */}
             <Route path="/profile/edit" element={<EditProfile />} /> {/* New edit profile route */}
+            <Route path="/:username" element={<Profile />} /> {/* Public user profile page (e.g., /marcelo) */}
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

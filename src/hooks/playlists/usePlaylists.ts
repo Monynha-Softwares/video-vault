@@ -21,10 +21,7 @@ export function usePlaylists(options: UsePlaylistsOptions = {}) {
     queryFn: async () => {
       let query = supabase
         .from('playlists')
-        .select(`
-          *,
-          author:profiles(id, username, display_name, avatar_url)
-        `)
+        .select('*')
         .order('created_at', { ascending: false });
 
       if (authorId) {
