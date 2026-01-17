@@ -53,9 +53,6 @@ export default function Auth() {
     },
   });
 
-  // Watch email field for forgot password to pre-fill if coming from login
-  const emailForForgotPassword = watch('email');
-
   useEffect(() => {
     if (!loading && user) {
       navigate('/');
