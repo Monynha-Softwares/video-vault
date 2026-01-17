@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
+        VITE_SUPABASE_PUBLISHABLE_KEY: ${VITE_SUPABASE_PUBLISHABLE_KEY}
+    image: monynha-fun:latest
+    container_name: monynha-fun-web
+    ports:
+      - "${PORT:-8080}:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/index.html"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    networks:
+      - monynha-network
+    labels:
+      - "com.monynha.app=video-vault"
+      - "com.monynha.version=0.1.5"
+
+networks:
+  monynha-network:
+    driver: bridge
