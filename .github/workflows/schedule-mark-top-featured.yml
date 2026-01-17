@@ -11,11 +11,12 @@ jobs:
     steps:
       - name: Call mark-top-featured function
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_SUPABASE_PROJECT_ID: ${{ vars.VITE_SUPABASE_PROJECT_ID }}
         run: |
-          echo "Triggering mark-top-featured on ${SUPABASE_URL}"
-          curl -s -X POST "${SUPABASE_URL}/functions/v1/mark-top-featured" \
-            -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" \
+          echo "Triggering mark-top-featured on ${VITE_SUPABASE_URL}"
+          curl -s -X POST "${VITE_SUPABASE_URL}/functions/v1/mark-top-featured" \
+            -H "Authorization: Bearer ${VITE_SUPABASE_PUBLISHABLE_KEY}" \
             -H "Content-Type: application/json" \
             -d '{"limit":4}'
