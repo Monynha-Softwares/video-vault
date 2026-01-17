@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { incrementVideoViewCount } from '@/entities/video/video.api';
 
 /**
@@ -10,12 +10,21 @@ import { incrementVideoViewCount } from '@/entities/video/video.api';
 export function useVideoViewIncrement(initialViewCount: number, animationDuration: number = 700) {
   const [viewCount, setViewCount] = useState<number>(initialViewCount);
   const [showPlus, setShowPlus] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleViewIncrement = async (videoId: string) => {
+  const handleViewIncrement = useCallback(async (videoId: string) => {
+    // Clear any existing timeout to prevent memory leaks
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
     // Optimistic UI: increment local counter and show +1 animation
     setViewCount((v) => v + 1);
     setShowPlus(true);
-    setTimeout(() => setShowPlus(false), animationDuration);
+    timeoutRef.current = setTimeout(() => {
+      setShowPlus(false);
+      timeoutRef.current = null;
+    }, animationDuration);
 
     try {
       // Fire-and-forget: increment on the server (atomic in DB function)
@@ -24,7 +33,7 @@ export function useVideoViewIncrement(initialViewCount: number, animationDuratio
       // Ignore errors - view count is not critical for UX
       console.debug('increment view failed', e);
     }
-  };
+  }, [animationDuration]);
 
   return { viewCount, showPlus, handleViewIncrement };
 }

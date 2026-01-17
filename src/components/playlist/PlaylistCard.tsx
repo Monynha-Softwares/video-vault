@@ -21,8 +21,9 @@ export function PlaylistCard({ playlist, index = 0 }: PlaylistCardProps) {
   const { data: progress, isLoading: progressLoading } = usePlaylistProgress(user ? playlist.id : undefined);
 
   // Calculate progress percentage
-  const totalVideos = videos?.length || playlist.video_count || 0;
-  const watchedVideos = progress?.filter(p => p.watched).length || 0;
+  // Use videos length if available, otherwise fall back to playlist video_count
+  const totalVideos = videos?.length ?? playlist.video_count ?? 0;
+  const watchedVideos = progress?.filter(p => p.watched).length ?? 0;
   const progressPercent = totalVideos > 0 ? (watchedVideos / totalVideos) * 100 : 0;
 
   // Get thumbnail from first video if no custom thumbnail
