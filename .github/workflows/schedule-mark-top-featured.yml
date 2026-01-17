@@ -11,12 +11,31 @@ jobs:
     steps:
       - name: Call mark-top-featured function
         env:
-          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
-          VITE_SUPABASE_PROJECT_ID: ${{ vars.VITE_SUPABASE_PROJECT_ID }}
+          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
-          echo "Triggering mark-top-featured on ${VITE_SUPABASE_URL}"
-          curl -s -X POST "${VITE_SUPABASE_URL}/functions/v1/mark-top-featured" \
-            -H "Authorization: Bearer ${VITE_SUPABASE_PUBLISHABLE_KEY}" \
+          echo "Triggering mark-top-featured on ${SUPABASE_URL}"
+          
+          # Make the request and capture response
+          response=$(curl -s -w "\n%{http_code}" -X POST "${SUPABASE_URL}/functions/v1/mark-top-featured" \
+            -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" \
             -H "Content-Type: application/json" \
-            -d '{"limit":4}'
+            -d '{"limit":4}')
+          
+          # Extract HTTP status code (last line)
+          http_code=$(echo "$response" | tail -n1)
+          
+          # Extract response body (all but last line)
+          body=$(echo "$response" | head -n-1)
+          
+          echo "Response: $body"
+          echo "HTTP Status: $http_code"
+          
+          # Check if the request was successful
+          if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 300 ]; then
+            echo "✅ Successfully marked top videos as featured"
+            exit 0
+          else
+            echo "❌ Failed to mark top videos as featured"
+            exit 1
+          fi
