@@ -1,12 +1,11 @@
 import type { VideoWithCategory } from "@/entities/video/video.types";
-import { incrementVideoViewCount } from "@/entities/video/video.api";
 import { formatDuration, formatViewCount } from "@/shared/lib/format";
 import { Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { useTranslation } from 'react-i18next';
+import { useVideoViewIncrement } from '@/shared/hooks/useVideoViewIncrement';
 
 interface FeaturedHeroProps {
   video: VideoWithCategory;
@@ -15,22 +14,10 @@ interface FeaturedHeroProps {
 export const FeaturedHero = ({ video }: FeaturedHeroProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [viewCount, setViewCount] = useState<number>(video.view_count || 0);
-  const [showPlus, setShowPlus] = useState(false);
+  const { viewCount, showPlus, handleViewIncrement } = useVideoViewIncrement(video.view_count || 0, 900);
 
   const handleClick = async () => {
-    // optimistic UI: increment local counter and show +1 animation
-    setViewCount((v) => v + 1);
-    setShowPlus(true);
-    setTimeout(() => setShowPlus(false), 900);
-
-    // increment views on the server
-    try {
-      await incrementVideoViewCount(video.id);
-    } catch (e) {
-      console.debug('increment view failed', e);
-    }
-
+    await handleViewIncrement(video.id);
     navigate(`/videos/${video.id}`);
   };
 

@@ -14,11 +14,14 @@ interface PlaylistCardProps {
 export function PlaylistCard({ playlist, index = 0 }: PlaylistCardProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { data: videos, isLoading: videosLoading } = usePlaylistVideos(playlist.id);
-  const { data: progress, isLoading: progressLoading } = usePlaylistProgress(playlist.id);
+  
+  // Only fetch videos and progress for authenticated users or public playlists
+  const shouldFetchData = user || playlist.is_public;
+  const { data: videos, isLoading: videosLoading } = usePlaylistVideos(shouldFetchData ? playlist.id : undefined);
+  const { data: progress, isLoading: progressLoading } = usePlaylistProgress(user ? playlist.id : undefined);
 
   // Calculate progress percentage
-  const totalVideos = videos?.length || 0;
+  const totalVideos = videos?.length || playlist.video_count || 0;
   const watchedVideos = progress?.filter(p => p.watched).length || 0;
   const progressPercent = totalVideos > 0 ? (watchedVideos / totalVideos) * 100 : 0;
 
