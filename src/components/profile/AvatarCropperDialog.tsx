@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label'; // Import Label
 import { getCroppedImg } from '@/lib/image';
 import { Crop, RotateCcw, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -27,12 +28,22 @@ export function AvatarCropperDialog({ imageSrc, open, onClose, onCropComplete }:
     setCrop(crop);
   }, []);
 
-  const onZoomChange = useCallback((zoom: number[]) => {
-    setZoom(zoom[0]);
+  // Callbacks for Cropper component (expects single number)
+  const handleCropperZoomChange = useCallback((newZoom: number) => {
+    setZoom(newZoom);
   }, []);
 
-  const onRotationChange = useCallback((rotation: number[]) => {
-    setRotation(rotation[0]);
+  const handleCropperRotationChange = useCallback((newRotation: number) => {
+    setRotation(newRotation);
+  }, []);
+
+  // Callbacks for Slider component (expects number array)
+  const handleSliderZoomChange = useCallback((value: number[]) => {
+    setZoom(value[0]);
+  }, []);
+
+  const handleSliderRotationChange = useCallback((value: number[]) => {
+    setRotation(value[0]);
   }, []);
 
   const onCropCompleteCallback = useCallback((
@@ -98,8 +109,8 @@ export function AvatarCropperDialog({ imageSrc, open, onClose, onCropComplete }:
             rotation={rotation}
             aspect={1} // Square aspect ratio for avatars
             onCropChange={onCropChange}
-            onZoomChange={onZoomChange}
-            onRotationChange={onRotationChange}
+            onZoomChange={handleCropperZoomChange}
+            onRotationChange={handleCropperRotationChange}
             onCropComplete={onCropCompleteCallback}
             cropShape="round" // Make it round for avatars
             showGrid={false}
@@ -115,7 +126,7 @@ export function AvatarCropperDialog({ imageSrc, open, onClose, onCropComplete }:
               max={3}
               step={0.1}
               value={[zoom]}
-              onValueChange={onZoomChange}
+              onValueChange={handleSliderZoomChange}
               className="flex-1"
             />
           </div>
@@ -126,7 +137,7 @@ export function AvatarCropperDialog({ imageSrc, open, onClose, onCropComplete }:
               max={360}
               step={1}
               value={[rotation]}
-              onValueChange={onRotationChange}
+              onValueChange={handleSliderRotationChange}
               className="flex-1"
             />
             <Button variant="outline" size="icon" onClick={() => setRotation(0)} className="shrink-0">
