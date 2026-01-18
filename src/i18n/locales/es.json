@@ -386,6 +386,36 @@
         "notLoggedInTitle": "Error",
         "notLoggedInDescription": "Debes iniciar sesión para modificar tu perfil."
       }
+    },
+    "social": {
+      "title": "Cuentas Sociales",
+      "addAccount": "Añadir Cuenta Social",
+      "editAccount": "Editar Cuenta Social",
+      "dialogDescription": "Añade o edita tus enlaces de redes sociales. Estos serán visibles en tu perfil público.",
+      "noAccounts": "Aún no se han añadido cuentas sociales.",
+      "form": {
+        "platformLabel": "Plataforma",
+        "platformPlaceholder": "Selecciona una plataforma",
+        "urlLabel": "URL",
+        "urlPlaceholder": "https://...",
+        "platformRequired": "La plataforma es obligatoria.",
+        "invalidUrl": "Por favor, introduce una URL válida.",
+        "saving": "Guardando...",
+        "saveChanges": "Guardar Cambios",
+        "add": "Añadir Cuenta"
+      },
+      "platform": {
+        "instagram": "Instagram",
+        "github": "GitHub",
+        "youtube": "Canal de YouTube",
+        "twitter": "Twitter (X)",
+        "linkedin": "LinkedIn",
+        "facebook": "Facebook",
+        "website": "Sitio Web Personal"
+      },
+      "error": {
+        "notLoggedIn": "Debes iniciar sesión para gestionar las cuentas sociales."
+      }
     }
   },
   "aboutPage": {

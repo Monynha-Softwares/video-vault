@@ -15,6 +15,7 @@ import { Footer } from '@/components/Footer';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AvatarUpload } from '@/components/profile/AvatarUpload';
+import { SocialAccountsManager } from '@/components/profile/SocialAccountsManager'; // Import the new component
 
 const editProfileSchema = z.object({
   display_name: z.string().min(3, 'profile.edit.error.displayNameMinLength').max(50, 'profile.edit.error.displayNameMaxLength'),
@@ -195,6 +196,13 @@ export default function EditProfile() {
                   <p role="alert" className="text-sm text-destructive">{t(errors.bio.message as string)}</p>
                 )}
               </div>
+
+              {/* Social Accounts Manager */}
+              {user && (
+                <div className="border-t border-border/50 pt-6 mt-6">
+                  <SocialAccountsManager userId={user.id} />
+                </div>
+              )}
 
               {/* Submit Button */}
               <Button

@@ -386,6 +386,36 @@
         "notLoggedInTitle": "Error",
         "notLoggedInDescription": "You need to be logged in to edit your profile."
       }
+    },
+    "social": {
+      "title": "Social Accounts",
+      "addAccount": "Add Social Account",
+      "editAccount": "Edit Social Account",
+      "dialogDescription": "Add or edit your social media links. These will be visible on your public profile.",
+      "noAccounts": "No social accounts added yet.",
+      "form": {
+        "platformLabel": "Platform",
+        "platformPlaceholder": "Select a platform",
+        "urlLabel": "URL",
+        "urlPlaceholder": "https://...",
+        "platformRequired": "Platform is required.",
+        "invalidUrl": "Please enter a valid URL.",
+        "saving": "Saving...",
+        "saveChanges": "Save Changes",
+        "add": "Add Account"
+      },
+      "platform": {
+        "instagram": "Instagram",
+        "github": "GitHub",
+        "youtube": "YouTube Channel",
+        "twitter": "Twitter (X)",
+        "linkedin": "LinkedIn",
+        "facebook": "Facebook",
+        "website": "Personal Website"
+      },
+      "error": {
+        "notLoggedIn": "You must be logged in to manage social accounts."
+      }
     }
   },
   "aboutPage": {
