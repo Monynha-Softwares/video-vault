@@ -193,7 +193,12 @@
     "noRecentVideos": "No recent videos yet. Be the first to submit!",
     "ctaTitle": "Know a video that deserves to be preserved?",
     "ctaDescription": "Share with the community and help build the largest archive of valuable videos on the internet.",
-    "ctaButton": "Submit Video"
+    "ctaButton": "Submit Video",
+    "playlistsTitle": "Recent Playlists",
+    "playlistsDescription": "Learning paths and collections created by the community",
+    "noPlaylistsTitle": "No public playlists found.",
+    "noPlaylistsDescription": "Be the first to create a playlist and organize knowledge!",
+    "createFirstPlaylist": "Create your first playlist"
   },
   "notFound": {
     "title": "404",

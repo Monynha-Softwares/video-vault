@@ -184,16 +184,21 @@
   "index": {
     "categoriesTitle": "Catégories",
     "categoriesDescription": "Explorer par thème",
-    "viewAll": "Voir tout",
+    "viewAll": "Ver tout",
     "featuredTitle": "En Vedette",
-    "featuredDescription": "Sélectionné par la curation",
+    "featuredDescription": "Sélectionnés par curation",
     "noFeaturedVideos": "Aucune vidéo en vedette pour l'instant.",
     "recentTitle": "Récents",
     "recentDescription": "Dernières vidéos soumises",
     "noRecentVideos": "Aucune vidéo récente pour l'instant. Soyez le premier à en soumettre une !",
     "ctaTitle": "Connaissez-vous une vidéo qui mérite d'être préservée ?",
     "ctaDescription": "Partagez avec la communauté et aidez à construire la plus grande archive de vidéos précieuses sur Internet.",
-    "ctaButton": "Soumettre une Vidéo"
+    "ctaButton": "Soumettre une Vidéo",
+    "playlistsTitle": "Playlists Récentes",
+    "playlistsDescription": "Parcours d'apprentissage et collections créés par la communauté",
+    "noPlaylistsTitle": "Aucune playlist publique trouvée.",
+    "noPlaylistsDescription": "Soyez le premier à créer une playlist et à organiser les connaissances !",
+    "createFirstPlaylist": "Créer votre première playlist"
   },
   "notFound": {
     "title": "404",

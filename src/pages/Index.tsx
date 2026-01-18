@@ -5,19 +5,22 @@ import { VideoCard } from "@/components/VideoCard";
 import { Footer } from "@/components/Footer";
 import { useCategories } from "@/features/categories/queries/useCategories";
 import { useFeaturedVideos, useRecentVideos } from "@/features/videos/queries/useVideos";
-import { ArrowRight, TrendingUp, Clock, Loader2 } from "lucide-react";
+import { usePlaylists } from "@/features/playlists/queries/usePlaylists"; // Import usePlaylists
+import { ArrowRight, TrendingUp, Clock, Loader2, ListVideo } from "lucide-react"; // Import ListVideo icon
 import { FeaturedHero } from "@/components/FeaturedHero";
 import { Button } from "@/components/ui/button";
 import { MarkFeaturedButton } from "@/features/admin-dev-tools/markFeatured";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { PlaylistCard } from "@/components/playlist/PlaylistCard"; // Import PlaylistCard
 
 const Index = () => {
   const { t } = useTranslation(); // Initialize useTranslation
   const { data: categories, isLoading: categoriesLoading } = useCategories();
   const { data: featuredVideos, isLoading: featuredLoading } = useFeaturedVideos(4);
   const { data: recentVideos, isLoading: recentLoading } = useRecentVideos(4);
+  const { data: recentPlaylists, isLoading: playlistsLoading } = usePlaylists({ isPublic: true, limit: 3 }); // Fetch recent public playlists
   const navigate = useNavigate();
 
   return (
@@ -142,13 +145,59 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Recent Videos Section */}
+        {/* Recent Playlists Section */}
         <section className="py-16 bg-background">
           <div className="container">
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-xl bg-accent/10">
-                  <Clock className="w-5 h-5 text-accent" />
+                  <ListVideo className="w-5 h-5 text-accent" />
+                </div>
+                <div>
+                  <h2 className="text-2xl md:text-3xl font-bold">{t('index.playlistsTitle')}</h2>
+                  <p className="text-muted-foreground mt-1">{t('index.playlistsDescription')}</p>
+                </div>
+              </div>
+              <Button 
+                variant="ghost" 
+                className="gap-2 group"
+                onClick={() => navigate('/playlists')}
+              >
+                {t('index.viewAll')}
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </div>
+
+            {playlistsLoading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <Skeleton key={i} className="h-64 rounded-2xl" />
+                ))}
+              </div>
+            ) : recentPlaylists && recentPlaylists.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {recentPlaylists.map((playlist, index) => (
+                  <PlaylistCard key={playlist.id} playlist={playlist} index={index} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 text-muted-foreground">
+                <ListVideo className="w-16 h-16 mb-4 opacity-50 mx-auto" />
+                <p className="text-lg font-medium mb-2">{t('index.noPlaylistsTitle')}</p>
+                <p className="mb-6">{t('index.noPlaylistsDescription')}</p>
+                <Button onClick={() => navigate('/playlists/new')}>{t('index.createFirstPlaylist')}</Button>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Recent Videos Section */}
+        <section className="py-16 bg-muted/30"> {/* Changed background to differentiate */}
+          <div className="container">
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-primary/10"> {/* Changed icon background to primary */}
+                  <Clock className="w-5 h-5 text-primary" /> {/* Changed icon color to primary */}
                 </div>
                 <div>
                   <h2 className="text-2xl md:text-3xl font-bold">{t('index.recentTitle')}</h2>

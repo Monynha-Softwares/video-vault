@@ -193,7 +193,12 @@
     "noRecentVideos": "Aún no hay videos recientes. ¡Sé el primero en enviar uno!",
     "ctaTitle": "¿Conoces un video que merece ser preservado?",
     "ctaDescription": "Comparte con la comunidad y ayuda a construir el archivo más grande de videos valiosos en internet.",
-    "ctaButton": "Enviar Video"
+    "ctaButton": "Enviar Video",
+    "playlistsTitle": "Listas de Reproducción Recientes",
+    "playlistsDescription": "Rutas de aprendizaje y colecciones creadas por la comunidad",
+    "noPlaylistsTitle": "No se encontraron listas de reproducción públicas.",
+    "noPlaylistsDescription": "¡Sé el primero en crear una lista de reproducción y organizar el conocimiento!",
+    "createFirstPlaylist": "Crear tu primera lista de reproducción"
   },
   "notFound": {
     "title": "404",

@@ -193,7 +193,12 @@
     "noRecentVideos": "Nenhum vídeo recente ainda. Seja o primeiro a enviar!",
     "ctaTitle": "Conhece um vídeo que merece ser preservado?",
     "ctaDescription": "Compartilhe com a comunidade e ajude a construir o maior acervo de vídeos valiosos da internet.",
-    "ctaButton": "Enviar Vídeo"
+    "ctaButton": "Enviar Vídeo",
+    "playlistsTitle": "Playlists Recentes",
+    "playlistsDescription": "Caminhos de aprendizado e coleções criadas pela comunidade",
+    "noPlaylistsTitle": "Nenhuma playlist pública encontrada.",
+    "noPlaylistsDescription": "Seja o primeiro a criar uma playlist e organizar o conhecimento!",
+    "createFirstPlaylist": "Criar sua primeira playlist"
   },
   "notFound": {
     "title": "404",
