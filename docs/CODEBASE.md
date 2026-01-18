@@ -44,7 +44,7 @@ video-vault/
 │   │   ├── PlaylistDetails.tsx
 │   │   ├── Profile.tsx
 │   │   ├── EditProfile.tsx
-│   │   ├── Auth.tsx
+│   │   ├── Auth.tsx          # Custom Login/Signup/Forgot Password forms
 │   │   └── ...other pages
 │   ├── integrations/
 │   │   └── supabase/
@@ -71,7 +71,7 @@ video-vault/
 
 ### Key Routes
 - `/` - Index/Home
-- `/auth` - Login/Signup
+- `/auth` - Login/Signup (Custom forms)
 - `/submit` - Video submission
 - `/videos` - Video listing
 - `/videos/:videoId` - Video details
@@ -93,7 +93,7 @@ video-vault/
 
 #### 1. **profiles** (User Profiles)
 - Extends auth.users with display metadata
-- Columns: id, username, avatar_url, display_name, bio, submissions_count, created_at, updated_at
+- Columns: id, username, avatar_url, display_name, bio, submissions_count, created_at, updated_at, **avatar_path** (for Supabase Storage management)
 - RLS Enabled: Yes
 - Relationships: Videos (submitted_by), Favorites (user_id), Playlists (author_id)
 
@@ -173,7 +173,7 @@ All tables have RLS enabled with policies following these patterns:
 
 5. **handle_new_user()**
    - Trigger on auth.users INSERT
-   - Creates corresponding profile record automatically
+   - Creates corresponding profile record automatically, initializing `avatar_path` to NULL.
 
 ---
 
@@ -199,6 +199,8 @@ All tables have RLS enabled with policies following these patterns:
 | 20260116230725 | Backfill Featured by View Count | Initialize featured status |
 | 20260116231035 | Mark Top Videos as Featured | Create feature-marking function |
 | 20260116232300 | Fix Mark Top Videos Function | Bug fix for feature logic |
+| 0015 | add_avatar_path_column_to_the_public_profiles_table | Add `avatar_path` column to `profiles` table |
+| 0016 | update_handle_new_user_function_to_initialize_avatar_path_for_new_profiles_ | Update `handle_new_user` to set `avatar_path` |
 
 ### Migration File Pattern Example
 ```sql
@@ -239,14 +241,6 @@ Apply new database schema or data migrations to a Supabase project. This tool ex
 - **Data Migrations with IDs**: Avoid hardcoding generated IDs in data migrations (let the database generate them)
 
 ### Tool Signature
-```
-mcp_supabase_apply_migration(
-  name: string      // Migration name (snake_case, e.g., "add_user_profiles_table")
-  query: string     // SQL DDL query to apply
-) → { success: boolean, migration_version?: string }
-```
-
-### Usage Example
 ```javascript
 await mcp_supabase_apply_migration({
   name: "create_videos_enrichment_index",
@@ -521,10 +515,10 @@ FOR UPDATE USING (auth.uid() = id);
 ```
 
 ### Authentication Flow
-1. User signs up/logs in via Supabase Auth (passwordless, OAuth, password)
-2. `handle_new_user()` trigger auto-creates profile record
-3. React context (`AuthProvider`) manages session state
-4. Protected routes check `user && !loading` from `useAuth()`
+1. User signs up/logs in via custom forms (`src/pages/Auth.tsx`) using `react-hook-form` and `zod`.
+2. `handle_new_user()` trigger auto-creates profile record.
+3. React context (`AuthProvider`) manages session state.
+4. Protected routes check `user && !loading` from `useAuth()`.
 
 ### API Keys
 - **Public key** (`VITE_SUPABASE_PUBLISHABLE_KEY`): Exposed in frontend, restricted by RLS
@@ -574,4 +568,3 @@ FOR UPDATE USING (auth.uid() = id);
 - **shadcn/ui**: https://ui.shadcn.com
 - **Tailwind CSS**: https://tailwindcss.com
 - **Vite**: https://vitejs.dev
-
