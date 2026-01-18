@@ -16,18 +16,16 @@ export interface ListPlaylistsParams {
   userId?: string;
 }
 
-async function getPlaylistVideoCount(playlistId: string) {
-  const { count, error } = await supabase
-    .from('playlist_videos')
-    .select('*', { count: 'exact', head: true })
-    .eq('playlist_id', playlistId);
-
-  if (error) throw error;
-  return count || 0;
-}
-
 export async function listPlaylists(params: ListPlaylistsParams = {}) {
-  let query = supabase.from('playlists').select('*').order('created_at', { ascending: false });
+  let query = supabase
+    .from('playlists')
+    .select(
+      `
+      *,
+      author:profiles(id, username, display_name, avatar_url)
+    `,
+    )
+    .order('created_at', { ascending: false });
 
   if (params.authorId) {
     query = query.eq('author_id', params.authorId);
@@ -43,27 +41,10 @@ export async function listPlaylists(params: ListPlaylistsParams = {}) {
 
   if (params.filter === 'my' && params.userId) {
     query = query.eq('author_id', params.userId);
-  }
-
-  const { data, error } = await query;
-
-  if (error) throw error;
-
-  const playlistsWithCounts = await Promise.all(
-    (data || []).map(async (playlist: Playlist) => {
-      try {
-        const videoCount = await getPlaylistVideoCount(playlist.id);
-        return { ...playlist, video_count: videoCount };
-      } catch (countError) {
-        console.error(`Error fetching video count for playlist ${playlist.id}:`, countError);
-        return { ...playlist, video_count: 0 } as Playlist;
-      }
-    }),
-  );
-
-  let result = playlistsWithCounts as Playlist[];
-
-  if (params.filter === 'collaborating' && params.userId) {
+  } else if (params.filter === 'collaborating' && params.userId) {
+    // For 'collaborating' filter, we need to join with playlist_collaborators
+    // This is a more complex query, so we'll fetch all and filter client-side for simplicity
+    // A more performant solution for large datasets would involve a database function or view.
     const { data: collabData, error: collabError } = await supabase
       .from('playlist_collaborators')
       .select('playlist_id')
@@ -71,10 +52,14 @@ export async function listPlaylists(params: ListPlaylistsParams = {}) {
 
     if (collabError) throw collabError;
     const collabPlaylistIds = (collabData || []).map((c) => c.playlist_id);
-    result = result.filter((p) => collabPlaylistIds.includes(p.id));
+    query = query.in('id', collabPlaylistIds);
   }
 
-  return result;
+  const { data, error } = await query;
+
+  if (error) throw error;
+
+  return data as Playlist[];
 }
 
 export async function getPlaylistById(id: string) {
@@ -91,21 +76,7 @@ export async function getPlaylistById(id: string) {
 
   if (error) throw error;
 
-  try {
-    const videoCount = await getPlaylistVideoCount(data.id);
-    return {
-      ...data,
-      author: data.author,
-      video_count: videoCount,
-    } as Playlist;
-  } catch (countError) {
-    console.error(`Error fetching video count for playlist ${data.id}:`, countError);
-    return {
-      ...data,
-      author: data.author,
-      video_count: 0,
-    } as Playlist;
-  }
+  return data as Playlist;
 }
 
 export async function createPlaylist(payload: PlaylistInsert) {
@@ -202,28 +173,17 @@ export async function reorderPlaylistVideos(payload: { playlistId: string; order
 export async function listPlaylistCollaborators(playlistId: string) {
   const { data, error } = await supabase
     .from('playlist_collaborators')
-    .select('*')
+    .select(
+      `
+      *,
+      profile:profiles(id, username, display_name, avatar_url)
+    `,
+    )
     .eq('playlist_id', playlistId);
 
   if (error) throw error;
 
-  // Fetch profiles separately since there's no direct foreign key relation
-  const collaboratorsWithProfiles = await Promise.all(
-    (data || []).map(async (c) => {
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('id, username, display_name, avatar_url')
-        .eq('id', c.user_id)
-        .single();
-
-      return {
-        ...c,
-        profile: profileData || null,
-      } as PlaylistCollaborator;
-    }),
-  );
-
-  return collaboratorsWithProfiles;
+  return data as PlaylistCollaborator[];
 }
 
 export async function addCollaborator(payload: { playlistId: string; userId: string; role?: 'editor' | 'viewer' }) {
