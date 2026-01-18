@@ -4,7 +4,6 @@ import { Footer } from '@/components/Footer';
 import { useProfileByUsername } from '@/features/profile/queries/useProfile';
 import { useVideos } from '@/features/videos/queries/useVideos';
 import { usePlaylists } from '@/features/playlists/queries/usePlaylists';
-import { useUserSocialAccounts } from '@/features/social_accounts/queries/useSocialAccounts'; // Import the new hook
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -12,7 +11,6 @@ import { CalendarDays, User as UserIcon, Video as VideoIcon, ListVideo, ArrowLef
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/features/auth/useAuth';
 import { VideoCard } from '@/components/VideoCard';
-import { SocialAccountsDisplay } from '@/components/profile/SocialAccountsDisplay'; // Import the new component
 
 const Profile = () => {
   const { t } = useTranslation();
@@ -31,7 +29,6 @@ const Profile = () => {
     isPublic: isCurrentUser ? undefined : true,
     enabled: !!profile?.id,
   });
-  const { data: socialAccounts, isLoading: socialAccountsLoading } = useUserSocialAccounts(profile?.id); // Fetch social accounts
 
   if (profileLoading || authLoading) {
     return (
@@ -119,17 +116,6 @@ const Profile = () => {
             )}
           </div>
         </div>
-
-        {/* Social Accounts */}
-        {!socialAccountsLoading && socialAccounts && socialAccounts.length > 0 && (
-          <div className="mb-8 p-6 bg-card border border-border rounded-2xl shadow-sm">
-            <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-              <LinkIcon className="w-6 h-6 text-accent" />
-              {t('profile.social.title')}
-            </h2>
-            <SocialAccountsDisplay socialAccounts={socialAccounts} />
-          </div>
-        )}
 
         {/* User Videos */}
         <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
