@@ -260,16 +260,17 @@ export const SocialAccountsManager: React.FC<SocialAccountsManagerProps> = ({ us
                   </a>
                 </div>
                 <div className="flex gap-2">
-                  <DialogTrigger asChild> {/* This DialogTrigger is for editing */}
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="w-8 h-8"
-                      onClick={() => setEditingAccount(account)} // Set account to be edited
-                    >
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                  </DialogTrigger>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="w-8 h-8"
+                    onClick={() => {
+                      setEditingAccount(account); // Set account to be edited
+                      setIsDialogOpen(true); // Manually open the dialog
+                    }}
+                  >
+                    <Edit className="w-4 h-4" />
+                  </Button>
                   <Button
                     variant="ghost"
                     size="icon"
