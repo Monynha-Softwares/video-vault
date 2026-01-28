@@ -1,6 +1,8 @@
 export function extractYouTubeId(url: string): string | null {
   const patterns = [
-    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/,
+    // New combined pattern to handle various YouTube URL formats
+    /(?:youtube\.com\/(?:watch(?:\?v=|\/)|live\/|embed\/|v\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+    // Existing pattern for just the ID
     /^([a-zA-Z0-9_-]{11})$/
   ];
 
