@@ -44,10 +44,11 @@ export function useRelatedVideos(currentVideoId: string, categoryId: string | nu
   });
 }
 
-export function useFeaturedVideos(limit = 4) {
+export function useFeaturedVideos(limit = 4, offset = 0, enabled = true) {
   return useQuery<VideoWithCategory[], Error>({
-    queryKey: videoKeys.featured(limit),
-    queryFn: () => listFeaturedVideos(limit),
+    queryKey: videoKeys.featured(limit, offset),
+    queryFn: () => listFeaturedVideos(limit, offset),
+    enabled,
   });
 }
 
