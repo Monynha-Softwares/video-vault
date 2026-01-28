@@ -39,6 +39,7 @@ export const Footer = () => {
           <div className="space-y-4">
             <h4 className="font-semibold text-sm">{t('footer.community')}</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><Link to="/community" className="hover:text-primary transition-colors">{t('footer.community')}</Link></li> {/* Added link to Community page */}
               <li><Link to="/about" className="hover:text-primary transition-colors">{t('footer.about')}</Link></li>
               <li><Link to="/rules" className="hover:text-primary transition-colors">{t('footer.rules')}</Link></li>
               <li><Link to="/contact" className="hover:text-primary transition-colors">{t('footer.contact')}</Link></li>
