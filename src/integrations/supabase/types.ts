@@ -367,9 +367,11 @@ export type Database = {
           created_at: string
           description: string | null
           duration_seconds: number | null
+          favorites_count: number
           id: string
           is_featured: boolean
           language: string
+          playlist_add_count: number
           submitted_by: string | null
           thumbnail_url: string
           title: string
@@ -383,9 +385,11 @@ export type Database = {
           created_at?: string
           description?: string | null
           duration_seconds?: number | null
+          favorites_count?: number
           id?: string
           is_featured?: boolean
           language?: string
+          playlist_add_count?: number
           submitted_by?: string | null
           thumbnail_url: string
           title: string
@@ -399,9 +403,11 @@ export type Database = {
           created_at?: string
           description?: string | null
           duration_seconds?: number | null
+          favorites_count?: number
           id?: string
           is_featured?: boolean
           language?: string
+          playlist_add_count?: number
           submitted_by?: string | null
           thumbnail_url?: string
           title?: string
@@ -432,8 +438,31 @@ export type Database = {
     }
     Functions: {
       increment_video_view_count: {
-        Args: { p_video_id: string }
+        Args: { p_video_id: string; p_session_id?: string | null }
         Returns: number
+      }
+      list_featured_videos: {
+        Args: { p_limit?: number; p_offset?: number }
+        Returns: {
+          category: Json | null
+          category_id: string | null
+          channel_name: string
+          created_at: string
+          description: string | null
+          duration_seconds: number | null
+          favorites_count: number
+          featured_score: number
+          id: string
+          is_featured: boolean
+          language: string
+          playlist_add_count: number
+          submitted_by: string | null
+          thumbnail_url: string
+          title: string
+          updated_at: string
+          view_count: number
+          youtube_id: string
+        }[]
       }
       mark_top_videos_as_featured: {
         Args: { p_limit?: number }
