@@ -22,7 +22,7 @@ export const videoKeys = {
   list: (params?: VideoListParams) => [...videoKeys.lists(), normalizeVideoListParams(params)] as const,
   details: () => [...videoKeys.all, 'detail'] as const,
   detail: (id: string) => [...videoKeys.details(), id] as const,
-  featured: (limit: number) => [...videoKeys.all, 'featured', limit] as const,
+  featured: (limit: number, offset = 0) => [...videoKeys.all, 'featured', limit, offset] as const,
   recent: (limit: number) => [...videoKeys.all, 'recent', limit] as const,
   related: (currentVideoId: string, categoryId: string | null, limit: number) =>
     [...videoKeys.all, 'related', currentVideoId, categoryId ?? 'none', limit] as const,
