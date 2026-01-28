@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { CategoryCard } from '@/components/CategoryCard';
 import { useCategories } from '@/features/categories/queries/useCategories';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'; // Import ScrollArea and ScrollBar
 
 export const CategorySection = () => {
   const { t } = useTranslation();
@@ -31,26 +32,29 @@ export const CategorySection = () => {
         </div>
 
         {categoriesLoading ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
+          <div className="flex space-x-4 overflow-hidden">
             {Array.from({ length: 7 }).map((_, i) => (
-              <Skeleton key={i} className="h-32 rounded-2xl" />
+              <Skeleton key={i} className="min-w-[140px] h-32 rounded-2xl" />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
-            {categories?.map((category, index) => (
-              <div
-                key={category.id}
-                className="animate-fade-up"
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                <CategoryCard
-                  category={category}
-                  onClick={() => navigate(`/videos?category=${category.id}`)}
-                />
-              </div>
-            ))}
-          </div>
+          <ScrollArea className="w-full whitespace-nowrap pb-4">
+            <div className="flex w-max space-x-4">
+              {categories?.map((category, index) => (
+                <div
+                  key={category.id}
+                  className="animate-fade-up"
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
+                  <CategoryCard
+                    category={category}
+                    onClick={() => navigate(`/videos?category=${category.id}`)}
+                  />
+                </div>
+              ))}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
         )}
       </div>
     </section>
