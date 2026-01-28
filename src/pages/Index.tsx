@@ -1,9 +1,7 @@
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
-import { CategoryCard } from "@/components/CategoryCard";
 import { VideoCard } from "@/components/VideoCard";
 import { Footer } from "@/components/Footer";
-import { useCategories } from "@/features/categories/queries/useCategories";
 import { useFeaturedVideos, useRecentVideos } from "@/features/videos/queries/useVideos";
 import { usePlaylists } from "@/features/playlists/queries/usePlaylists"; // Import usePlaylists
 import { ArrowRight, TrendingUp, Clock, Loader2, ListVideo } from "lucide-react"; // Import ListVideo icon
@@ -14,10 +12,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 import { PlaylistCard } from "@/components/playlist/PlaylistCard"; // Import PlaylistCard
+import { CategorySection } from "@/components/CategorySection"; // Import the new CategorySection
 
 const Index = () => {
   const { t } = useTranslation(); // Initialize useTranslation
-  const { data: categories, isLoading: categoriesLoading } = useCategories();
   const { data: featuredVideos, isLoading: featuredLoading } = useFeaturedVideos(4);
   const { data: recentVideos, isLoading: recentLoading } = useRecentVideos(4);
   const { data: recentPlaylists, isLoading: playlistsLoading } = usePlaylists({ isPublic: true, limit: 3 }); // Fetch recent public playlists
@@ -32,47 +30,7 @@ const Index = () => {
         <HeroSection />
 
         {/* Categories Section */}
-        <section className="py-16 bg-background">
-          <div className="container">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="text-2xl md:text-3xl font-bold">{t('index.categoriesTitle')}</h2>
-                <p className="text-muted-foreground mt-1">{t('index.categoriesDescription')}</p>
-              </div>
-              <Button 
-                variant="ghost" 
-                className="gap-2 group"
-                onClick={() => navigate('/videos')}
-              >
-                {t('index.viewAll')}
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </div>
-
-            {categoriesLoading ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
-                {Array.from({ length: 7 }).map((_, i) => (
-                  <Skeleton key={i} className="h-32 rounded-2xl" />
-                ))}
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
-                {categories?.map((category, index) => (
-                  <div
-                    key={category.id}
-                    className="animate-fade-up"
-                    style={{ animationDelay: `${index * 0.05}s` }}
-                  >
-                    <CategoryCard 
-                      category={category} 
-                      onClick={() => navigate(`/videos?category=${category.id}`)}
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
+        <CategorySection />
 
         {/* Featured Videos Section */}
         <section className="py-16 bg-muted/30">
