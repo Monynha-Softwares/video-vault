@@ -259,7 +259,7 @@
         "invalidUrl": "Por favor, insira uma URL de playlist do YouTube válida.",
         "notYoutubePlaylistUrl": "Apenas URLs de playlists do YouTube são aceitas.",
         "nameMinLength": "Nome da playlist deve ter pelo menos 3 caracteres.",
-        "nameMaxLength": "Nome da playlist não pode exceder 100 caracteres.",
+      "nameMaxLength": "Nome da playlist não pode exceder 100 caracteres.",
         "notLoggedIn": "Você precisa estar logado para importar playlists.",
         "noPlaylistId": "Não foi possível extrair um ID de playlist da URL fornecida.",
         "generic": "Ocorreu um erro durante a importação da playlist. Por favor, tente novamente.",
@@ -534,7 +534,7 @@
     },
     "q3": {
       "question": "Esta plataforma é open source?",
-      "answer": "Com certeza. Você pode acessar o código-fonte em GitHub.com/Monynha-Softwares/video-vault."
+      "answer": "Com certeza. Você pode acessar o código-fonte em https://github.com/Monynha-Softwares/video-vault."
     },
     "q4": {
       "question": "Posso contribuir?",

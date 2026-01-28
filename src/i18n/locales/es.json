@@ -536,7 +536,7 @@
     },
     "q3": {
       "question": "Esta plataforma es de código abierto?",
-      "answer": "Absolutamente. Puedes acceder al código fuente en GitHub.com/Monynha-Softwares/video-vault."
+      "answer": "Absolutamente. Puedes acceder al código fuente en https://github.com/Monynha-Softwares/video-vault."
     },
     "q4": {
       "question": "Posso contribuir?",

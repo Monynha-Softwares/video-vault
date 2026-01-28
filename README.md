@@ -70,7 +70,7 @@ I chose a stack that's modern, scalable, and – honestly – a joy to work with
 
 ### UX Polish 🎨
 - **Lucide React** – Clean icons
-- **Sonner** – Toast notifications that don't annoy
+- **Sonner** – Toast notifications that don-t annoy
 - **date-fns** – Dates done right
 - **i18next** – Portuguese, English, and more
 
@@ -118,7 +118,7 @@ Portuguese, English – we're building for everyone. More languages coming.
 
 ```bash
 # Clone the repo
-git clone <YOUR_GIT_URL>
+git clone https://github.com/Monynha-Softwares/video-vault
 
 # Go into the folder
 cd monynha-fun
@@ -334,7 +334,7 @@ Great! You can work locally or directly on GitHub. Here's how:
 
 ### Option 1: Local Development (The Pro Way)
 ```bash
-git clone <repo-url>
+git clone https://github.com/Monynha-Softwares/video-vault
 cd monynha-fun
 npm i
 npm run dev

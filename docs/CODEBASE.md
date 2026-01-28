@@ -408,7 +408,7 @@ export const Header = () => {
 ### Setup Local Development
 ```bash
 # Clone & install
-git clone <repo-url>
+git clone https://github.com/Monynha-Softwares/video-vault
 cd video-vault
 npm install  # or pnpm install
 

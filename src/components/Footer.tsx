@@ -65,7 +65,7 @@ export const Footer = () => {
             <a href="https://monynha.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
               <Globe className="w-5 h-5" />
             </a>
-            <a href="https://github.com/Monynha-Softwares" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+            <a href="https://github.com/Monynha-Softwares/video-vault" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
               <Github className="w-5 h-5" />
             </a>
           </div>
