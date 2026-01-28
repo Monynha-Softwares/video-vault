@@ -257,13 +257,13 @@
         "nameMaxLength": "Nome da playlist não pode exceder 100 caracteres.",
         "notLoggedIn": "Você precisa estar logado para importar playlists.",
         "noPlaylistId": "Não foi possível extrair um ID de playlist da URL fornecida.",
-        "generic": "Ocorreu um erro durante a importação da playlist. Por favor, tente novamente."
+        "generic": "Ocorreu um erro durante a importação da playlist. Por favor, tente novamente.",
+        "maxRetriesReached": "Não foi possível criar a playlist após várias tentativas devido a um conflito de slug. Por favor, tente com um nome de playlist diferente."
       },
       "success": {
         "playlistCreated": "Playlist '{{name}}' criada com sucesso!",
         "videoAdded": "Vídeo '{{title}}' adicionado ao Monynha Fun.",
-        "videoAddedToPlaylist": "Vídeo '{{title}}' adicionado à playlist '{{playlistName}}'.",
-        "aiEnrichmentStarted": "Enriquecimento de IA iniciado para o vídeo importado."
+        "videoAddedToPlaylist": "Vídeo '{{title}}' adicionado à playlist '{{playlistName}}'."
       },
       "info": {
         "minimalMode": "Playlist criada no modo mínimo. Nenhum vídeo foi importado.",
@@ -273,8 +273,7 @@
       },
       "warning": {
         "videoMetadataFailed": "Falha ao buscar metadados para o vídeo. Ele será adicionado com informações básicas.",
-        "noVideoInUrl": "Nenhum ID de vídeo único encontrado na URL fornecida para importação aprimorada.",
-        "noVideoInUrlForEnhanced": "Nenhum ID de vídeo único encontrado na URL fornecida para importação aprimorada. Apenas o modo minimalista é possível."
+        "noVideoInUrl": "Nenhum ID de vídeo único encontrado na URL fornecida para importação aprimorada."
       },
       "apiLimitationInfo": "Devido às restrições da API do YouTube e às políticas de segurança do navegador (CORS), o Monynha Fun não pode buscar de forma confiável uma lista completa de vídeos de uma URL de playlist do YouTube diretamente do seu navegador. Para uma importação completa, um serviço de backend seria necessário."
     }

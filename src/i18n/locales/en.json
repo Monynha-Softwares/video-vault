@@ -240,6 +240,7 @@
         "urlPlaceholder": "https://www.youtube.com/playlist?list=...",
         "nameLabel": "Playlist Name",
         "namePlaceholder": "Name for your new playlist",
+        "defaultPlaylistName": "Imported YouTube Playlist",
         "modeLabel": "Import Mode",
         "minimalMode": "Minimal Import",
         "minimalModeHint": "Creates a playlist with the URL and a default description. No videos will be imported.",
@@ -256,7 +257,8 @@
         "nameMaxLength": "Playlist name cannot exceed 100 characters.",
         "notLoggedIn": "You need to be logged in to import playlists.",
         "noPlaylistId": "Could not extract a playlist ID from the provided URL.",
-        "generic": "An error occurred during playlist import. Please try again."
+        "generic": "An error occurred during playlist import. Please try again.",
+        "maxRetriesReached": "Failed to create playlist after multiple attempts due to a slug conflict. Please try a different playlist name."
       },
       "success": {
         "playlistCreated": "Playlist '{{name}}' created successfully!",

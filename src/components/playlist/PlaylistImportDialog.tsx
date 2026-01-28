@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -37,6 +37,19 @@ const importSchema = z.object({
 });
 
 type ImportFormValues = z.infer<typeof importSchema>;
+
+// Helper to generate a slug
+const generateSlug = (name: string, suffix: string = '') => {
+  let baseSlug = name.toLowerCase()
+    .replace(/[^a-z0-9-]/g, '-') // Replace non-alphanumeric with hyphens
+    .replace(/-+/g, '-')         // Replace multiple hyphens with a single one
+    .replace(/^-|-$/g, '');      // Trim hyphens from start/end
+
+  if (suffix) {
+    baseSlug = `${baseSlug}-${suffix}`;
+  }
+  return baseSlug;
+};
 
 export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ children }) => {
   const { t } = useTranslation();
@@ -92,70 +105,97 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
       return;
     }
 
-    const playlistId = extractYouTubePlaylistId(values.playlistUrl);
-    if (!playlistId) {
+    const youtubePlaylistId = extractYouTubePlaylistId(values.playlistUrl);
+    if (!youtubePlaylistId) {
       toast.error(t('playlists.import.error.noPlaylistId'));
       return;
     }
 
-    try {
-      // 1. Create the playlist
-      const newPlaylist = await createPlaylistMutation.mutateAsync({
-        name: values.playlistName,
-        slug: values.playlistName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, ''), // Basic slug generation
-        description: t('playlists.import.defaultDescription', { url: values.playlistUrl }),
-        thumbnail_url: videoMetadata?.thumbnailUrl || null, // Use video thumbnail as playlist thumbnail if available
-        language: 'pt', // Default language, can be extended later
-        is_public: true,
-        is_ordered: true, // Default to ordered
-      });
+    let currentPlaylistName = values.playlistName;
+    let currentSlug = generateSlug(currentPlaylistName);
+    let retryCount = 0;
+    const MAX_RETRIES = 3; // Limit retries to prevent infinite loops
 
-      toast.success(t('playlists.import.success.playlistCreated', { name: newPlaylist.name }));
+    while (retryCount < MAX_RETRIES) {
+      try {
+        // 1. Create the playlist
+        const newPlaylist = await createPlaylistMutation.mutateAsync({
+          name: currentPlaylistName,
+          slug: currentSlug,
+          description: t('playlists.import.defaultDescription', { url: values.playlistUrl }),
+          thumbnail_url: videoMetadata?.thumbnailUrl || null, // Use video thumbnail as playlist thumbnail if available
+          language: 'pt', // Default language, can be extended later
+          is_public: true,
+          is_ordered: true, // Default to ordered
+        });
 
-      // 2. Handle video import based on mode
-      if (values.importMode === 'enhanced') {
-        if (extractedVideoId && videoMetadata) {
-          toast.info(t('playlists.import.info.enhancedModeLimited'));
-          
-          const existingVideo = await findVideoByYoutubeId(videoMetadata.videoId);
-          let videoToAddToPlaylist;
+        toast.success(t('playlists.import.success.playlistCreated', { name: newPlaylist.name }));
 
-          if (existingVideo) {
-            videoToAddToPlaylist = existingVideo;
-            toast.info(t('playlists.import.info.videoAlreadyExists', { title: videoMetadata.title }));
-          } else {
-            // Create video if it doesn't exist
-            videoToAddToPlaylist = await createVideo({
-              youtube_id: videoMetadata.videoId,
-              title: videoMetadata.title,
-              description: videoMetadata.description || null,
-              channel_name: videoMetadata.channelName,
-              thumbnail_url: getYouTubeThumbnail(videoMetadata.videoId, 'max'),
-              language: 'pt', // Default language
-              submitted_by: user.id,
+        // 2. Handle video import based on mode
+        if (values.importMode === 'enhanced') {
+          if (extractedVideoId && videoMetadata) {
+            toast.info(t('playlists.import.info.enhancedModeLimited'));
+            
+            const existingVideo = await findVideoByYoutubeId(videoMetadata.videoId);
+            let videoToAddToPlaylist;
+
+            if (existingVideo) {
+              videoToAddToPlaylist = existingVideo;
+              toast.info(t('playlists.import.info.videoAlreadyExists', { title: videoMetadata.title }));
+            } else {
+              // Create video if it doesn't exist
+              videoToAddToPlaylist = await createVideo({
+                youtube_id: videoMetadata.videoId,
+                title: videoMetadata.title,
+                description: videoMetadata.description || null,
+                channel_name: videoMetadata.channelName,
+                thumbnail_url: getYouTubeThumbnail(videoMetadata.videoId, 'max'),
+                language: 'pt', // Default language
+                submitted_by: user.id,
+              });
+              toast.success(t('playlists.import.success.videoAdded', { title: videoMetadata.title }));
+            }
+
+            // Add the video to the new playlist
+            await addVideoMutation.mutateAsync({
+              playlistId: newPlaylist.id,
+              videoId: videoToAddToPlaylist.id,
             });
-            toast.success(t('playlists.import.success.videoAdded', { title: videoMetadata.title }));
+            toast.success(t('playlists.import.success.videoAddedToPlaylist', { title: videoToAddToPlaylist.title, playlistName: newPlaylist.name }));
+          } else {
+            toast.warn(t('playlists.import.warning.noVideoInUrlForEnhanced'));
+            toast.info(t('playlists.import.info.minimalMode')); // Fallback to minimal mode message
           }
-
-          // Add the video to the new playlist
-          await addVideoMutation.mutateAsync({
-            playlistId: newPlaylist.id,
-            videoId: videoToAddToPlaylist.id,
-          });
-          toast.success(t('playlists.import.success.videoAddedToPlaylist', { title: videoToAddToPlaylist.title, playlistName: newPlaylist.name }));
         } else {
-          toast.warn(t('playlists.import.warning.noVideoInUrlForEnhanced'));
-          toast.info(t('playlists.import.info.minimalMode')); // Fallback to minimal mode message
+          toast.info(t('playlists.import.info.minimalMode'));
         }
-      } else {
-        toast.info(t('playlists.import.info.minimalMode'));
-      }
 
-      setOpen(false);
-    } catch (error) {
-      console.error('Playlist import error:', error);
-      toast.error(t('playlists.import.error.generic'));
+        setOpen(false);
+        return; // Exit on success
+      } catch (error: any) {
+        if (error.code === '23505' && error.message.includes('playlists_slug_key')) {
+          // Duplicate slug error, retry with a unique suffix
+          retryCount++;
+          const randomSuffix = Math.random().toString(36).substring(2, 8); // Short random string
+          currentSlug = generateSlug(currentPlaylistName, randomSuffix);
+          console.warn(`[PlaylistImportDialog] Duplicate slug detected. Retrying with new slug: ${currentSlug}`);
+          // Do not update currentPlaylistName, as the user's input name should remain the same.
+          // Only the internal slug is modified for uniqueness.
+        } else {
+          // Other error, re-throw or handle
+          console.error('Playlist import error:', error);
+          toast.error(t('playlists.import.error.generic'));
+          setOpen(false);
+          return; // Exit on other errors
+        }
+      }
     }
+
+    // If loop finishes without success after max retries
+    toast.error(t('playlists.import.error.generic'), {
+      description: t('playlists.import.error.maxRetriesReached'),
+    });
+    setOpen(false);
   };
 
   const showVideoMetadataFeedback = importMode === 'enhanced' && playlistUrl.trim() !== '';
