@@ -53,10 +53,13 @@
     "headingPart1": "Descubre videos que",
     "headingPart2": "merecen ser recordados",
     "description": "Una comunidad dedicada a preservar y compartir los mejores videos de YouTube. Tutoriales antiguos, recetas tradicionales, memes icónicos y mucho más.",
+    "submitUrlPlaceholder": "Pega una URL de video de YouTube aquí...",
     "submitVideoButton": "Enviar un Video",
-    "exploreCategoriesButton": "Explorar Categorías",
-    "videosCount": "{{count}} videos",
-    "contributorsCount": "{{count}} contribuidores"
+    "error": {
+      "invalidUrl": "Formato de URL inválido.",
+      "notYoutubeUrl": "Solo se aceptan URLs de videos de YouTube.",
+      "emptyUrl": "Por favor, pega una URL de video de YouTube."
+    }
   },
   "auth": {
     "loginTitle": "Inicia sesión en tu cuenta",

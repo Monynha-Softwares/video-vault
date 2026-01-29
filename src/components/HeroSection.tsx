@@ -1,21 +1,88 @@
-import { ArrowRight, Sparkles, Youtube, Users } from "lucide-react";
+import { ArrowRight, Sparkles, Youtube, Loader2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useVideoCount } from "@/features/videos/queries/useVideos"; // Import the new hook
-import { useContributorCount } from "@/features/profile/queries/useProfile"; // Import the new hook
-import { useCategories } from "@/features/categories/queries/useCategories";
-import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton for loading state
+import { useState, useEffect } from "react";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useAuth } from '@/features/auth/useAuth';
+import { extractYouTubeId } from '@/shared/lib/youtube';
+import { toast } from 'sonner';
+
+// Define Zod schema for the YouTube URL input
+const heroSubmitSchema = z.object({
+  youtubeUrl: z
+    .string()
+    .url('hero.error.invalidUrl')
+    .refine((url) => {
+      const youtubeId = extractYouTubeId(url);
+      return !!youtubeId;
+    }, 'hero.error.notYoutubeUrl'),
+});
+
+type HeroSubmitFormValues = z.infer<typeof heroSubmitSchema>;
 
 export const HeroSection = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [query, setQuery] = useState("");
-  const { data: videoCount, isLoading: videoCountLoading } = useVideoCount(); // Use the hook
-  const { data: contributorCount, isLoading: contributorCountLoading } = useContributorCount(); // Use the hook
-  const { data: categories, isLoading: categoriesLoading } = useCategories();
+  const { user, loading: authLoading } = useAuth();
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm<HeroSubmitFormValues>({
+    resolver: zodResolver(heroSubmitSchema),
+    defaultValues: {
+      youtubeUrl: '',
+    },
+  });
+
+  const onSubmit = async (values: HeroSubmitFormValues) => {
+    setIsSubmittingForm(true);
+    const youtubeUrl = values.youtubeUrl;
+
+    if (!youtubeUrl) {
+      toast.error(t('hero.error.emptyUrl'));
+      setIsSubmittingForm(false);
+      return;
+    }
+
+    // Client-side validation for YouTube URL format
+    const youtubeId = extractYouTubeId(youtubeUrl);
+    if (!youtubeId) {
+      toast.error(t('hero.error.invalidYoutubeUrl'));
+      setIsSubmittingForm(false);
+      return;
+    }
+
+    if (user) {
+      // User is authenticated, redirect directly to Submit page
+      navigate('/submit', { state: { prefillVideoUrl: youtubeUrl } });
+    } else {
+      // User is not authenticated, redirect to Auth page and store URL
+      localStorage.setItem('redirectAfterLogin', '/submit');
+      localStorage.setItem('prefillVideoUrl', youtubeUrl);
+      navigate('/auth');
+    }
+    setIsSubmittingForm(false);
+  };
+
+  // Handle direct submission from the "Submit a Video" button
+  const handleDirectSubmitClick = () => {
+    // If the input is empty, just navigate to submit page
+    // The submit page will handle the empty state or prompt for URL
+    const currentUrl = (document.getElementById('youtube-url-hero') as HTMLInputElement)?.value;
+    if (currentUrl && extractYouTubeId(currentUrl)) {
+      onSubmit({ youtubeUrl: currentUrl });
+    } else {
+      if (user) {
+        navigate('/submit');
+      } else {
+        localStorage.setItem('redirectAfterLogin', '/submit');
+        navigate('/auth');
+      }
+    }
+  };
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 md:py-24">
@@ -44,89 +111,52 @@ export const HeroSection = () => {
             {t('hero.description')}
           </p>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up" style={{ animationDelay: "0.3s" }}>
-            <Button 
-              variant="hero" 
-              size="xl" 
-              className="gap-2 group"
-              onClick={() => navigate('/submit')}
-            >
-              <Youtube className="w-5 h-5" />
-              {t('hero.submitVideoButton')}
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-            <Button 
-              variant="outline" 
-              size="lg"
-              onClick={() => navigate('/videos')}
-            >
-              {t('hero.exploreCategoriesButton')}
-            </Button>
-          </div>
-
-          {/* Search (prominent) */}
+          {/* Video Submission Input */}
           <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (query.trim()) navigate(`/videos?query=${encodeURIComponent(query.trim())}`);
-            }}
-            className="w-full max-w-xl mx-auto mt-4"
+            onSubmit={handleSubmit(onSubmit)}
+            className="w-full max-w-xl mx-auto mt-4 animate-fade-up"
+            style={{ animationDelay: "0.3s" }}
           >
             <div className="flex gap-2">
-              <Input
-                type="search"
-                placeholder={t('hero.searchPlaceholder')}
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="h-12"
-              />
-              <Button type="submit" className="px-4" variant="hero">
-                {t('hero.searchButton')}
+              <div className="relative flex-1">
+                <Youtube className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Input
+                  id="youtube-url-hero"
+                  type="url"
+                  placeholder={t('hero.submitUrlPlaceholder')}
+                  {...register('youtubeUrl')}
+                  className="h-12 pl-10 pr-4"
+                  aria-invalid={errors.youtubeUrl ? "true" : "false"}
+                />
+                {errors.youtubeUrl && (
+                  <AlertCircle className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-destructive" />
+                )}
+              </div>
+              <Button type="submit" className="px-6" variant="hero" disabled={isSubmittingForm || authLoading}>
+                {isSubmittingForm || authLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <ArrowRight className="w-5 h-5" />
+                )}
               </Button>
             </div>
-
-            {/* Trending categories */}
-            <div className="flex flex-wrap items-center justify-center gap-2 mt-3 text-sm text-muted-foreground">
-              <span className="mr-2 font-medium text-muted-foreground">{t('hero.trendingLabel')}</span>
-              {categoriesLoading ? (
-                <Skeleton className="h-6 w-24" />
-              ) : (
-                categories?.slice(0, 6).map((c) => (
-                  <Button
-                    key={c.id}
-                    variant="ghost"
-                    size="sm"
-                    className="px-3 py-1"
-                    onClick={() => navigate(`/videos?category=${c.id}`)}
-                  >
-                    {c.name}
-                  </Button>
-                ))
-              )}
-            </div>
+            {errors.youtubeUrl && (
+              <p role="alert" className="text-sm text-destructive mt-2 text-left">
+                {t(errors.youtubeUrl.message as string)}
+              </p>
+            )}
           </form>
 
-          {/* Stats */}
-          <div className="flex flex-wrap items-center justify-center gap-8 pt-8 animate-fade-up" style={{ animationDelay: "0.4s" }}>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Youtube className="w-5 h-5 text-primary" />
-              {videoCountLoading ? (
-                <Skeleton className="h-5 w-12" />
-              ) : (
-                <span className="font-semibold text-foreground">{videoCount?.toLocaleString()}</span>
-              )}
-              <span>{t('hero.videosCount', { count: videoCount || 0 })}</span>
-            </div>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Users className="w-5 h-5 text-accent" />
-              {contributorCountLoading ? (
-                <Skeleton className="h-5 w-12" />
-              ) : (
-                <span className="font-semibold text-foreground">{contributorCount?.toLocaleString()}</span>
-              )}
-              <span>{t('hero.contributorsCount', { count: contributorCount || 0 })}</span>
-            </div>
+          {/* Secondary CTA Button */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up" style={{ animationDelay: "0.4s" }}>
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={handleDirectSubmitClick}
+              disabled={authLoading}
+            >
+              {t('hero.submitVideoButton')}
+            </Button>
           </div>
         </div>
       </div>

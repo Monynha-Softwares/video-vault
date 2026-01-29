@@ -53,10 +53,13 @@
     "headingPart1": "Découvrez des vidéos qui",
     "headingPart2": "méritent d'être mémorisées",
     "description": "Une communauté dédiée à la préservation et au partage des meilleures vidéos YouTube. Vieux tutoriels, recettes traditionnelles, mèmes emblématiques et bien plus encore.",
+    "submitUrlPlaceholder": "Collez une URL de vidéo YouTube ici...",
     "submitVideoButton": "Soumettre une Vidéo",
-    "exploreCategoriesButton": "Explorer les Catégories",
-    "videosCount": "{{count}} vidéos",
-    "contributorsCount": "{{count}} contributeurs"
+    "error": {
+      "invalidUrl": "Format d'URL invalide.",
+      "notYoutubeUrl": "Seules les URLs de vidéos YouTube sont acceptées.",
+      "emptyUrl": "Veuillez coller une URL de vidéo YouTube."
+    }
   },
   "auth": {
     "loginTitle": "Connectez-vous à votre compte",
@@ -424,7 +427,6 @@
         "displayNamePlaceholder": "Tu nombre o apodo",
         "avatarUrlLabel": "URL del Avatar",
         "avatarUrlPlaceholder": "https://ejemplo.com/tu-foto.jpg",
-        "avatarUrlHint": "Enlace directo a tu imagen de perfil.",
         "bioLabel": "Biografía",
         "bioPlaceholder": "Cuéntanos un poco sobre ti...",
         "savingButton": "Guardando...",

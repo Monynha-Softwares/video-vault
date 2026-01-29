@@ -53,13 +53,13 @@
     "headingPart1": "Descubra vídeos que",
     "headingPart2": "merecem ser lembrados",
     "description": "Uma comunidade dedicada a preservar e compartilhar os melhores vídeos do YouTube. Tutoriais antigos, receitas tradicionais, memes icônicos e muito mais.",
+    "submitUrlPlaceholder": "Cole uma URL de vídeo do YouTube aqui...",
     "submitVideoButton": "Enviar um Vídeo",
-    "exploreCategoriesButton": "Explorar Categorias",
-    "searchPlaceholder": "Buscar vídeos, canais ou temas...",
-    "searchButton": "Buscar",
-    "trendingLabel": "Tendências:",
-    "videosCount": "{{count}} vídeos",
-    "contributorsCount": "{{count}} contribuidores"
+    "error": {
+      "invalidUrl": "Formato de URL inválido.",
+      "notYoutubeUrl": "Apenas URLs de vídeos do YouTube são aceitas.",
+      "emptyUrl": "Por favor, cole uma URL de vídeo do YouTube."
+    }
   },
   "auth": {
     "loginTitle": "Entre na sua conta",
@@ -423,7 +423,6 @@
         "displayNamePlaceholder": "Seu nome ou apelido",
         "avatarUrlLabel": "URL do Avatar",
         "avatarUrlPlaceholder": "https://exemplo.com/sua-foto.jpg",
-        "avatarUrlHint": "Link direto para sua imagem de perfil.",
         "bioLabel": "Bio",
         "bioPlaceholder": "Fale um pouco sobre você...",
         "savingButton": "Salvando...",

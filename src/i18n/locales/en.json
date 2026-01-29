@@ -53,13 +53,13 @@
     "headingPart1": "Discover videos that",
     "headingPart2": "deserve to be remembered",
     "description": "A community dedicated to preserving and sharing the best YouTube videos. Old tutorials, traditional recipes, iconic memes, and more.",
+    "submitUrlPlaceholder": "Paste a YouTube video URL here...",
     "submitVideoButton": "Submit a Video",
-    "exploreCategoriesButton": "Explore Categories",
-    "searchPlaceholder": "Search videos, channels or topics...",
-    "searchButton": "Search",
-    "trendingLabel": "Trending:",
-    "videosCount": "{{count}} videos",
-    "contributorsCount": "{{count}} contributors"
+    "error": {
+      "invalidUrl": "Invalid URL format.",
+      "notYoutubeUrl": "Only YouTube video URLs are accepted.",
+      "emptyUrl": "Please paste a YouTube video URL."
+    }
   },
   "auth": {
     "loginTitle": "Log in to your account",

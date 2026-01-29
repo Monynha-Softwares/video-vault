@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom'; // Import useLocation
 import { useAuth } from '@/features/auth/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -34,6 +34,7 @@ export default function Auth() {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation(); // Initialize useLocation
 
   // Form setup for login/signup
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset, watch } = useForm<z.infer<typeof loginSchema> | z.infer<typeof signupSchema>>({
@@ -55,9 +56,21 @@ export default function Auth() {
 
   useEffect(() => {
     if (!loading && user) {
-      navigate('/');
+      const redirectAfterLogin = localStorage.getItem('redirectAfterLogin');
+      const prefillVideoUrl = localStorage.getItem('prefillVideoUrl');
+
+      if (redirectAfterLogin && prefillVideoUrl) {
+        localStorage.removeItem('redirectAfterLogin');
+        localStorage.removeItem('prefillVideoUrl');
+        navigate(redirectAfterLogin, { state: { prefillVideoUrl: prefillVideoUrl } });
+      } else if (redirectAfterLogin) {
+        localStorage.removeItem('redirectAfterLogin');
+        navigate(redirectAfterLogin);
+      } else {
+        navigate('/');
+      }
     }
-  }, [user, loading, navigate]);
+  }, [user, loading, navigate, location]); // Added location to dependencies
 
   useEffect(() => {
     reset(); // Reset form fields when switching between login/signup
@@ -81,7 +94,7 @@ export default function Auth() {
           toast.success(t('auth.success.welcomeBack'), {
             description: t('auth.success.loginSuccess')
           });
-          navigate('/');
+          // Redirection handled by useEffect
         }
       } else {
         const signupValues = values as z.infer<typeof signupSchema>;
@@ -98,6 +111,7 @@ export default function Auth() {
           toast.success(t('auth.success.accountCreated'), {
             description: t('auth.success.confirmEmail')
           });
+          // Redirection handled by useEffect
         }
       }
     } catch (err) {
