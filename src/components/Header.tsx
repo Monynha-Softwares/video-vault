@@ -55,7 +55,7 @@ export const Header = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 w-full border-b border-border/80 bg-background/80 backdrop-blur-xl">
       <div className="container flex h-16 items-center justify-between gap-4">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 group">
@@ -221,7 +221,6 @@ export const Header = () => {
                     </span>
                   </Link>
                 </SheetTitle>
-
               </SheetHeader>
               <ScrollArea className="flex-1 py-4">
                 <div className="space-y-6">
