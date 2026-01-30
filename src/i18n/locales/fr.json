@@ -18,6 +18,7 @@
   },
   "header": {
     "searchPlaceholder": "Rechercher des vidéos, des chaînes...",
+    "videos": "Vidéos",
     "favorites": "Favoris",
     "submitVideo": "Soumettre une Vidéo",
     "logout": "Déconnexion",
@@ -56,6 +57,7 @@
     "description": "Une communauté dédiée à la préservation et au partage des meilleures vidéos YouTube. Vieux tutoriels, recettes traditionnelles, mèmes emblématiques et bien plus encore.",
     "submitUrlPlaceholder": "Collez une URL de vidéo YouTube ici...",
     "submitVideoButton": "Soumettre une Vidéo",
+    "exploreVideosButton": "Explorer les Vidéos",
     "error": {
       "invalidUrl": "Format d'URL invalide.",
       "notYoutubeUrl": "Seules les URLs de vidéos YouTube sont acceptées.",
@@ -171,6 +173,8 @@
     "viewsLabel": "vues",
     "descriptionTitle": "Description",
     "noDescription": "Aucune description fournie pour cette vidéo.",
+    "addedBy": "Ajouté par",
+    "anonymousAuthor": "Anonyme",
     "relatedVideosTitle": "Vidéos Similaires",
     "noRelatedVideos": "Aucune vidéo similaire trouvée.",
     "favoriteInfo": "Vous devez être connecté pour ajouter des vidéos aux favoris.",
@@ -543,7 +547,8 @@
   "comments": {
     "title": "Comentarios",
     "form": {
-      "placeholder": "Añade un comentario...",
+      "placeholder": "Añade un comentario... Usa @usuario para mencionar a alguien.",
+      "mentionHelper": "Consejo: usa @usuario para mencionar a alguien.",
       "submitButton": "Comentar",
       "submitting": "Enviando...",
       "contentRequired": "El comentario no puede estar vacío.",
