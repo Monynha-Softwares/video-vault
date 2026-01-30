@@ -50,7 +50,7 @@ export const Header = () => {
     { to: "/community", label: t('footer.community'), icon: Users },
     { to: "/about", label: t('footer.about'), icon: Info },
     { to: "/rules", label: t('footer.rules'), icon: BookOpen },
-    { to: "/contact", label: t('footer.contact'), icon: Mail },
+    // { to: "/contact", label: t('footer.contact'), icon: Mail }, // Removed contact link
     { to: "/faq", label: t('footer.faq'), icon: HelpCircle },
   ];
 
