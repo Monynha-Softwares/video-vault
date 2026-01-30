@@ -67,8 +67,22 @@ export const Header = () => {
           </span>
         </Link>
 
+        {/* New Desktop Nav Links */}
+        <nav className="hidden md:flex items-center gap-6 ml-8">
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              activeClassName="text-primary"
+            >
+              {link.label}
+            </NavLink>
+          ))}
+        </nav>
+
         {/* Search Bar - Desktop */}
-        <form onSubmit={handleSearchSubmit} className="hidden md:flex flex-1 max-w-xl mx-8">
+        <form onSubmit={handleSearchSubmit} className="hidden md:flex flex-1 max-w-xl ml-auto mr-8">
           <div className="relative w-full">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
