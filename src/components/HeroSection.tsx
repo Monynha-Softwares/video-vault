@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from '@hookform/resolvers-zod';
 import { z } from 'zod';
 import { useAuth } from '@/features/auth/useAuth';
 import { extractYouTubeId } from '@/shared/lib/youtube';
@@ -30,7 +30,7 @@ export const HeroSection = () => {
   const { user, loading: authLoading } = useAuth();
   const [isSubmittingForm, setIsSubmittingForm] = useState(false);
 
-  const { register, handleSubmit, formState: { errors }, setValue } = useForm<HeroSubmitFormValues>({
+  const { register, handleSubmit, formState: { errors } } = useForm<HeroSubmitFormValues>({
     resolver: zodResolver(heroSubmitSchema),
     defaultValues: {
       youtubeUrl: '',

@@ -190,7 +190,7 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
         const newPlaylist = await createPlaylistMutation.mutateAsync({
           name: currentPlaylistName,
           slug: currentSlug,
-          description: t('playlists.import.defaultDescription', { url: values.playlistUrl }),
+          description: `Imported from YouTube playlist: ${values.playlistUrl}`,
           thumbnail_url: videosToImport.length > 0 ? videosToImport[0].thumbnail_url : null,
           language: 'pt', // Default language, could be made configurable
           is_public: true,
