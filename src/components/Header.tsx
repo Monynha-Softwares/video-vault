@@ -46,7 +46,7 @@ export const Header = () => {
   const navLinks = [
     { to: "/", label: t('header.home'), icon: Home },
     { to: "/videos", label: t('header.videos'), icon: ListVideo },
-    { to: "/playlists", label: t('header.playlists'), icon: ListVideo },
+    // { to: "/playlists", label: t('header.playlists'), icon: ListVideo },
     { to: "/community", label: t('footer.community'), icon: Users },
     { to: "/about", label: t('footer.about'), icon: Info },
     { to: "/rules", label: t('footer.rules'), icon: BookOpen },
@@ -59,7 +59,8 @@ export const Header = () => {
     link.to !== "/" && // Remove Home
     link.to !== "/about" && // Remove About
     link.to !== "/rules" && // Remove Rules
-    link.to !== "/faq" // Remove FAQ
+    link.to !== "/faq" &&// Remove FAQ
+    link.to !== "/playlists" // Remove Playlists
   );
 
   return (
@@ -107,15 +108,7 @@ export const Header = () => {
         <div className="flex items-center gap-2">
           {user && profile ? (
             <>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="hidden sm:flex gap-2 text-muted-foreground hover:text-foreground"
-                onClick={() => navigate('/playlists')}
-              >
-                <ListVideo className="h-4 w-4" />
-                <span className="hidden lg:inline">{t('header.playlists')}</span>
-              </Button>
+
               <Button
                 variant="ghost"
                 size="sm"
