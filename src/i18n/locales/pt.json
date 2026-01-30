@@ -260,7 +260,8 @@
         "generic": "Ocorreu um erro durante a importação da playlist. Por favor, tente novamente.",
         "maxRetriesReached": "Não foi possível criar a playlist após várias tentativas devido a um conflito de slug. Por favor, tente com um nome de playlist diferente.",
         "youtubeApiFetchFailed": "Falha ao buscar detalhes da playlist do YouTube. Por favor, verifique a URL ou tente novamente mais tarde.",
-        "videoProcessingFailed": "Falha ao processar o vídeo '{{title}}': {{error}}"
+        "videoProcessingFailed": "Falha ao processar o vídeo '{{title}}': {{error}}",
+        "youtubeApiKeyMissing": "A chave de API do YouTube está faltando ou é inválida no servidor. Por favor, entre em contato com o suporte."
       },
       "success": {
         "playlistCreated": "Playlist '{{name}}' criada com sucesso!",

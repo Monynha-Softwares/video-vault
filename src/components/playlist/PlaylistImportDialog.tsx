@@ -115,7 +115,9 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
       });
 
       if (error) {
-        throw new Error(error.message);
+        // Extract the specific error message from the Edge Function response
+        const errorMessage = error.message || t('playlists.import.error.youtubeApiFetchFailed');
+        throw new Error(errorMessage);
       }
 
       if (data && data.videos.length > 0) {
@@ -132,7 +134,7 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
       setYoutubeFetchError(null);
     } catch (err) {
       console.error('[PlaylistImportDialog] Error fetching YouTube playlist metadata:', err);
-      setYoutubeFetchError(t('playlists.import.error.youtubeApiFetchFailed'));
+      setYoutubeFetchError(err instanceof Error ? err.message : t('playlists.import.error.youtubeApiFetchFailed'));
     } finally {
       setIsFetchingYoutube(false);
     }
