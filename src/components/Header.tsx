@@ -59,8 +59,8 @@ export const Header = () => {
     link.to !== "/" && // Remove Home
     link.to !== "/about" && // Remove About
     link.to !== "/rules" && // Remove Rules
-    link.to !== "/faq" &&// Remove FAQ
-    link.to !== "/playlists" // Remove Playlists
+    link.to !== "/faq" // &&// Remove FAQ
+    // link.to !== "/playlists" // Remove Playlists
   );
 
   return (
@@ -173,15 +173,15 @@ export const Header = () => {
             </>
           ) : (
             <>
-              <Button
+              {/* <Button
                 variant="ghost"
                 size="sm"
                 className="hidden sm:flex gap-2 text-muted-foreground hover:text-foreground"
                 onClick={() => navigate('/playlists')}
-              >
-                <ListVideo className="h-4 w-4" />
-                <span className="hidden lg:inline">{t('header.playlists')}</span>
-              </Button>
+              > */}
+                {/* <ListVideo className="h-4 w-4" /> */}
+                {/* <span className="hidden lg:inline">{t('header.playlists')}</span> */}
+              {/* </Button> */}
               <Button
                 variant="hero"
                 size="sm"
