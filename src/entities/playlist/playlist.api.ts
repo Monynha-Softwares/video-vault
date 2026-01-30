@@ -108,8 +108,7 @@ export async function listPlaylistVideos(playlistId: string) {
     .select(
       `
       *,
-      video:videos!playlist_videos_video_id_fkey(id, title, youtube_id, thumbnail_url, channel_name, duration_seconds),
-      added_by_profile:profiles!playlist_videos_added_by_fkey(id, username, display_name, avatar_url)
+      video:videos!playlist_videos_video_id_fkey(id, title, youtube_id, thumbnail_url, channel_name, duration_seconds)
     `,
     )
     .eq('playlist_id', playlistId)
@@ -120,7 +119,6 @@ export async function listPlaylistVideos(playlistId: string) {
   return (data || []).map((pv: PlaylistVideo) => ({
     ...pv,
     video: pv.video,
-    added_by_profile: pv.added_by_profile,
   })) as PlaylistVideo[];
 }
 
