@@ -14,14 +14,14 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Loader2, Youtube, ListVideo, Info, CheckCircle, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/features/auth/useAuth';
-import { extractYouTubeId, extractYouTubePlaylistId, getYouTubeThumbnail } from '@/shared/lib/youtube';
+import { extractYouTubePlaylistId } from '@/shared/lib/youtube';
 import { useCreatePlaylist, useAddVideoToPlaylist } from '@/features/playlists';
-import { useYouTubeMetadata } from '@/features/submit/useYouTubeMetadata';
 import { createVideo, findVideoByYoutubeId } from '@/entities/video/video.api';
+import { invokeEdgeFunction } from '@/shared/api/supabase/edgeFunctions';
+import type { VideoInsert } from '@/entities/video/video.types';
 
 interface PlaylistImportDialogProps {
   children: React.ReactNode;
@@ -32,7 +32,6 @@ const importSchema = z.object({
     (url) => url.includes('youtube.com/playlist') || (url.includes('youtube.com/watch') && url.includes('list=')),
     'playlists.import.error.notYoutubePlaylistUrl'
   ),
-  importMode: z.enum(['minimal', 'enhanced']),
   playlistName: z.string().min(3, 'playlists.import.error.nameMinLength').max(100, 'playlists.import.error.nameMaxLength'),
 });
 
@@ -57,6 +56,8 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
   const [open, setOpen] = useState(false);
   const createPlaylistMutation = useCreatePlaylist();
   const addVideoMutation = useAddVideoToPlaylist();
+  const [isFetchingYoutube, setIsFetchingYoutube] = useState(false);
+  const [youtubeFetchError, setYoutubeFetchError] = useState<string | null>(null);
 
   const {
     register,
@@ -69,35 +70,84 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
     resolver: zodResolver(importSchema),
     defaultValues: {
       playlistUrl: '',
-      importMode: 'minimal',
       playlistName: '',
     },
   });
 
   const playlistUrl = watch('playlistUrl');
-  const importMode = watch('importMode');
-
-  // Only fetch video metadata if a video ID is present in the URL (for enhanced mode)
-  const extractedVideoId = extractYouTubeId(playlistUrl);
-  const { metadata: videoMetadata, isLoading: videoMetadataLoading, error: videoMetadataError } = useYouTubeMetadata(
-    importMode === 'enhanced' && extractedVideoId ? playlistUrl : ''
-  );
+  const playlistName = watch('playlistName');
 
   useEffect(() => {
     if (!open) {
       reset();
+      setYoutubeFetchError(null);
+      setIsFetchingYoutube(false);
     }
   }, [open, reset]);
 
+  // Effect to pre-fill playlist name based on URL (if possible, though YouTube API is needed for actual name)
   useEffect(() => {
-    // Pre-fill playlist name if video metadata is available and name is empty
-    if (videoMetadata && !watch('playlistName')) {
-      setValue('playlistName', videoMetadata.title);
-    } else if (!videoMetadata && !watch('playlistName') && playlistUrl.includes('youtube.com/playlist')) {
-      // If it's a pure playlist URL and no video metadata, provide a generic name
+    if (playlistUrl.includes('youtube.com/playlist') && !playlistName) {
       setValue('playlistName', t('playlists.import.defaultPlaylistName'));
     }
-  }, [videoMetadata, setValue, watch, playlistUrl, t]);
+  }, [playlistUrl, playlistName, setValue, t]);
+
+  const handlePlaylistUrlChange = useCallback(async (url: string) => {
+    setYoutubeFetchError(null);
+    if (!url.trim() || errors.playlistUrl) {
+      setIsFetchingYoutube(false);
+      return;
+    }
+
+    const youtubePlaylistId = extractYouTubePlaylistId(url);
+    if (!youtubePlaylistId) {
+      setYoutubeFetchError(t('playlists.import.error.noPlaylistId'));
+      setIsFetchingYoutube(false);
+      return;
+    }
+
+    setIsFetchingYoutube(true);
+    try {
+      // Call the new Edge Function to get playlist details
+      const { data, error } = await invokeEdgeFunction<{ playlistId: string; videos: VideoInsert[] }>('import-youtube-playlist', {
+        body: { playlistUrl: url },
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      if (data && data.videos.length > 0) {
+        // Attempt to use the first video's title as a suggestion for playlist name
+        if (!playlistName) {
+          setValue('playlistName', data.videos[0].title);
+        }
+      } else {
+        // Fallback name if no videos or title found
+        if (!playlistName) {
+          setValue('playlistName', t('playlists.import.defaultPlaylistName'));
+        }
+      }
+      setYoutubeFetchError(null);
+    } catch (err) {
+      console.error('[PlaylistImportDialog] Error fetching YouTube playlist metadata:', err);
+      setYoutubeFetchError(t('playlists.import.error.youtubeApiFetchFailed'));
+    } finally {
+      setIsFetchingYoutube(false);
+    }
+  }, [errors.playlistUrl, playlistName, setValue, t]);
+
+  // Watch playlistUrl and trigger metadata fetch
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name === 'playlistUrl') {
+        handlePlaylistUrlChange(value.playlistUrl || '');
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, handlePlaylistUrlChange]);
+
 
   const onSubmit = async (values: ImportFormValues) => {
     if (!user) {
@@ -114,17 +164,33 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
     let currentPlaylistName = values.playlistName;
     let currentSlug = generateSlug(currentPlaylistName);
     let retryCount = 0;
-    const MAX_RETRIES = 3; // Limit retries to prevent infinite loops
+    const MAX_RETRIES = 3;
 
     while (retryCount < MAX_RETRIES) {
       try {
-        // 1. Create the playlist
+        // 1. Fetch all videos from the YouTube playlist using the Edge Function
+        const { data: edgeFunctionData, error: edgeFunctionError } = await invokeEdgeFunction<{ playlistId: string; videos: VideoInsert[] }>('import-youtube-playlist', {
+          body: { playlistUrl: values.playlistUrl },
+          headers: { 'Content-Type': 'application/json' },
+        });
+
+        if (edgeFunctionError) {
+          throw new Error(edgeFunctionError.message);
+        }
+        if (!edgeFunctionData || !edgeFunctionData.videos || edgeFunctionData.videos.length === 0) {
+          toast.warning(t('playlists.import.warning.noVideosFoundInPlaylist'));
+          // Proceed to create an empty playlist if no videos are found
+        }
+
+        const videosToImport = edgeFunctionData?.videos || [];
+
+        // 2. Create the playlist
         const newPlaylist = await createPlaylistMutation.mutateAsync({
           name: currentPlaylistName,
           slug: currentSlug,
           description: t('playlists.import.defaultDescription', { url: values.playlistUrl }),
-          thumbnail_url: videoMetadata?.thumbnailUrl || null,
-          language: 'pt',
+          thumbnail_url: videosToImport.length > 0 ? videosToImport[0].thumbnail_url : null,
+          language: 'pt', // Default language, could be made configurable
           is_public: true,
           is_ordered: true,
           course_code: null,
@@ -133,29 +199,28 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
 
         toast.success(t('playlists.import.success.playlistCreated', { name: newPlaylist.name }));
 
-        // 2. Handle video import based on mode
-        if (values.importMode === 'enhanced') {
-          if (extractedVideoId && videoMetadata) {
-            toast.info(t('playlists.import.info.enhancedModeLimited'));
-            
-            const existingVideo = await findVideoByYoutubeId(videoMetadata.videoId);
+        // 3. Add each video to the video library and then to the playlist
+        for (const videoData of videosToImport) {
+          try {
+            const existingVideo = await findVideoByYoutubeId(videoData.youtube_id);
             let videoToAddToPlaylist;
 
             if (existingVideo) {
               videoToAddToPlaylist = existingVideo;
-              toast.info(t('playlists.import.info.videoAlreadyExists', { title: videoMetadata.title }));
+              toast.info(t('playlists.import.info.videoAlreadyExists', { title: videoData.title }));
             } else {
               // Create video if it doesn't exist
               videoToAddToPlaylist = await createVideo({
-                youtube_id: videoMetadata.videoId,
-                title: videoMetadata.title,
-                description: videoMetadata.description || null,
-                channel_name: videoMetadata.channelName,
-                thumbnail_url: getYouTubeThumbnail(videoMetadata.videoId, 'max'),
-                language: 'pt', // Default language
+                youtube_id: videoData.youtube_id,
+                title: videoData.title,
+                description: videoData.description || null,
+                channel_name: videoData.channel_name,
+                thumbnail_url: videoData.thumbnail_url,
+                duration_seconds: videoData.duration_seconds, // Use duration from API if available, otherwise null
+                language: videoData.language || 'pt', // Use language from API if available, otherwise default
                 submitted_by: user.id,
               });
-              toast.success(t('playlists.import.success.videoAdded', { title: videoMetadata.title }));
+              toast.success(t('playlists.import.success.videoAdded', { title: videoData.title }));
             }
 
             // Add the video to the new playlist
@@ -163,44 +228,40 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
               playlistId: newPlaylist.id,
               videoId: videoToAddToPlaylist.id,
             });
-            toast.success(t('playlists.import.success.videoAddedToPlaylist', { title: videoToAddToPlaylist.title, playlistName: newPlaylist.name }));
-          } else {
-            toast.warning(t('playlists.import.warning.noVideoInUrlForEnhanced'));
-            toast.info(t('playlists.import.info.minimalMode'));
+            // No toast here to avoid spamming, the playlist created toast is enough
+          } catch (videoError: any) {
+            console.error(`[PlaylistImportDialog] Error processing video ${videoData.youtube_id}:`, videoError);
+            toast.error(t('playlists.import.error.videoProcessingFailed', { title: videoData.title, error: videoError.message }));
           }
-        } else {
-          toast.info(t('playlists.import.info.minimalMode'));
         }
 
+        toast.success(t('playlists.import.success.allVideosProcessed', { count: videosToImport.length }));
         setOpen(false);
         return; // Exit on success
       } catch (error: any) {
         if (error.code === '23505' && error.message.includes('playlists_slug_key')) {
-          // Duplicate slug error, retry with a unique suffix
           retryCount++;
-          const randomSuffix = Math.random().toString(36).substring(2, 8); // Short random string
+          const randomSuffix = Math.random().toString(36).substring(2, 8);
           currentSlug = generateSlug(currentPlaylistName, randomSuffix);
           console.warn(`[PlaylistImportDialog] Duplicate slug detected. Retrying with new slug: ${currentSlug}`);
-          // Do not update currentPlaylistName, as the user's input name should remain the same.
-          // Only the internal slug is modified for uniqueness.
         } else {
-          // Other error, re-throw or handle
           console.error('Playlist import error:', error);
-          toast.error(t('playlists.import.error.generic'));
+          toast.error(t('playlists.import.error.generic'), {
+            description: error.message,
+          });
           setOpen(false);
-          return; // Exit on other errors
+          return;
         }
       }
     }
 
-    // If loop finishes without success after max retries
     toast.error(t('playlists.import.error.generic'), {
       description: t('playlists.import.error.maxRetriesReached'),
     });
     setOpen(false);
   };
 
-  const showVideoMetadataFeedback = importMode === 'enhanced' && playlistUrl.trim() !== '';
+  const isFormDisabled = isSubmitting || createPlaylistMutation.isPending || addVideoMutation.isPending || isFetchingYoutube;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -228,23 +289,24 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
                 placeholder={t('playlists.import.form.urlPlaceholder')}
                 {...register('playlistUrl')}
                 className="pl-10"
-                aria-invalid={errors.playlistUrl ? "true" : "false"}
+                aria-invalid={errors.playlistUrl || youtubeFetchError ? "true" : "false"}
+                disabled={isFormDisabled}
               />
-              {showVideoMetadataFeedback && videoMetadataLoading && (
+              {isFetchingYoutube && (
                 <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-muted-foreground" />
               )}
-              {showVideoMetadataFeedback && videoMetadata && !videoMetadataError && !videoMetadataLoading && (
+              {!isFetchingYoutube && !youtubeFetchError && playlistUrl.trim() !== '' && !errors.playlistUrl && (
                 <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-green-500" />
               )}
-              {showVideoMetadataFeedback && videoMetadataError && !videoMetadataLoading && (
+              {(!isFetchingYoutube && (youtubeFetchError || errors.playlistUrl)) && (
                 <AlertCircle className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-destructive" />
               )}
             </div>
             {errors.playlistUrl && (
               <p role="alert" className="text-sm text-destructive">{t(errors.playlistUrl.message as string)}</p>
             )}
-            {showVideoMetadataFeedback && videoMetadataError && !errors.playlistUrl && (
-              <p className="text-sm text-destructive">{videoMetadataError}</p>
+            {youtubeFetchError && !errors.playlistUrl && (
+              <p className="text-sm text-destructive">{youtubeFetchError}</p>
             )}
           </div>
 
@@ -257,35 +319,11 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
               placeholder={t('playlists.import.form.namePlaceholder')}
               {...register('playlistName')}
               aria-invalid={errors.playlistName ? "true" : "false"}
+              disabled={isFormDisabled}
             />
             {errors.playlistName && (
               <p role="alert" className="text-sm text-destructive">{t(errors.playlistName.message as string)}</p>
             )}
-          </div>
-
-          {/* Import Mode */}
-          <div className="space-y-2">
-            <Label>{t('playlists.import.form.modeLabel')}</Label>
-            <RadioGroup
-              value={importMode}
-              onValueChange={(value: 'minimal' | 'enhanced') => setValue('importMode', value)}
-              className="flex flex-col space-y-2"
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="minimal" id="minimal" />
-                <Label htmlFor="minimal">{t('playlists.import.form.minimalMode')}</Label>
-              </div>
-              <p className="text-xs text-muted-foreground ml-6 -mt-1 mb-2">{t('playlists.import.form.minimalModeHint')}</p>
-
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="enhanced" id="enhanced" />
-                <Label htmlFor="enhanced">{t('playlists.import.form.enhancedMode')}</Label>
-              </div>
-              <p className="text-xs text-muted-foreground ml-6 -mt-1">
-                {t('playlists.import.form.enhancedModeHint')}
-                <span className="font-semibold text-destructive ml-1">{t('playlists.import.form.enhancedModeWarning')}</span>
-              </p>
-            </RadioGroup>
           </div>
 
           {/* Submit Button */}
@@ -293,9 +331,9 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
             type="submit"
             className="w-full"
             size="lg"
-            disabled={isSubmitting || createPlaylistMutation.isPending || addVideoMutation.isPending || (importMode === 'enhanced' && videoMetadataLoading) || !!errors.playlistUrl}
+            disabled={isFormDisabled || !!errors.playlistUrl || !!youtubeFetchError}
           >
-            {isSubmitting || createPlaylistMutation.isPending || addVideoMutation.isPending || (importMode === 'enhanced' && videoMetadataLoading) ? (
+            {isFormDisabled ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                 {t('playlists.import.form.importingButton')}

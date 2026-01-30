@@ -240,19 +240,13 @@
     "import": {
       "button": "Importar do YouTube",
       "title": "Importar Playlist do YouTube",
-      "description": "Cole uma URL de uma playlist do YouTube para importá-la como uma nova playlist.",
+      "description": "Cole uma URL de uma playlist do YouTube para importá-la como uma nova playlist, incluindo todos os seus vídeos.",
       "form": {
         "urlLabel": "URL da Playlist do YouTube",
         "urlPlaceholder": "https://www.youtube.com/playlist?list=...",
         "nameLabel": "Nome da Playlist",
         "namePlaceholder": "Nome para sua nova playlist",
         "defaultPlaylistName": "Playlist Importada do YouTube",
-        "modeLabel": "Modo de Importação",
-        "minimalMode": "Importação Mínima",
-        "minimalModeHint": "Cria uma playlist com a URL e uma descrição padrão. Nenhum vídeo será importado.",
-        "enhancedMode": "Importação Aprimorada (Melhor Esforço)",
-        "enhancedModeHint": "Tenta importar o primeiro vídeo da URL da playlist, se disponível. ",
-        "enhancedModeWarning": "A enumeração completa de vídeos da playlist não é possível sem a API de Dados do YouTube ou um serviço de backend devido a restrições de segurança do navegador.",
         "importButton": "Importar Playlist",
         "importingButton": "Importando..."
       },
@@ -260,28 +254,26 @@
         "invalidUrl": "Por favor, insira uma URL de playlist do YouTube válida.",
         "notYoutubePlaylistUrl": "Apenas URLs de playlists do YouTube são aceitas.",
         "nameMinLength": "Nome da playlist deve ter pelo menos 3 caracteres.",
-      "nameMaxLength": "Nome da playlist não pode exceder 100 caracteres.",
+        "nameMaxLength": "Nome da playlist não pode exceder 100 caracteres.",
         "notLoggedIn": "Você precisa estar logado para importar playlists.",
         "noPlaylistId": "Não foi possível extrair um ID de playlist da URL fornecida.",
         "generic": "Ocorreu um erro durante a importação da playlist. Por favor, tente novamente.",
-        "maxRetriesReached": "Não foi possível criar a playlist após várias tentativas devido a um conflito de slug. Por favor, tente com um nome de playlist diferente."
+        "maxRetriesReached": "Não foi possível criar a playlist após várias tentativas devido a um conflito de slug. Por favor, tente com um nome de playlist diferente.",
+        "youtubeApiFetchFailed": "Falha ao buscar detalhes da playlist do YouTube. Por favor, verifique a URL ou tente novamente mais tarde.",
+        "videoProcessingFailed": "Falha ao processar o vídeo '{{title}}': {{error}}"
       },
       "success": {
         "playlistCreated": "Playlist '{{name}}' criada com sucesso!",
         "videoAdded": "Vídeo '{{title}}' adicionado ao Monynha Fun.",
-        "videoAddedToPlaylist": "Vídeo '{{title}}' adicionado à playlist '{{playlistName}}'."
+        "allVideosProcessed": "Todos os {{count}} vídeos foram importados para a playlist com sucesso."
       },
       "info": {
-        "minimalMode": "Playlist criada no modo mínimo. Nenhum vídeo foi importado.",
-        "enhancedModeLimited": "O modo aprimorado é limitado. Tentando importar o primeiro vídeo da URL.",
-        "videoAlreadyExists": "Vídeo '{{title}}' já existe no Monynha Fun. Ignorando criação.",
-        "aiEnrichmentStarted": "Enriquecimento de IA iniciado para o vídeo importado."
+        "videoAlreadyExists": "Vídeo '{{title}}' já existe no Monynha Fun. Ignorando criação."
       },
       "warning": {
-        "videoMetadataFailed": "Falha ao buscar metadados para o vídeo. Ele será adicionado com informações básicas.",
-        "noVideoInUrl": "Nenhum ID de vídeo único encontrado na URL fornecida para importação aprimorada."
+        "noVideosFoundInPlaylist": "Nenhum vídeo encontrado na playlist do YouTube. Uma playlist vazia será criada."
       },
-      "apiLimitationInfo": "Devido às restrições da API do YouTube e às políticas de segurança do navegador (CORS), o Monynha Fun não pode buscar de forma confiável uma lista completa de vídeos de uma URL de playlist do YouTube diretamente do seu navegador. Para uma importação completa, um serviço de backend seria necessário."
+      "apiLimitationInfo": "O Monynha Fun usa um serviço de backend para buscar vídeos de playlists do YouTube, mas depende da API de Dados do YouTube, que possui cotas e pode nem sempre retornar todos os vídeos para playlists muito grandes. Para resultados ótimos, certifique-se de que a playlist seja pública."
     }
   },
   "playlistDetails": {
@@ -435,7 +427,7 @@
         "invalidAvatarUrl": "URL do avatar inválida",
         "bioMaxLength": "Bio não pode exceder 300 caracteres",
         "notLoggedInTitle": "Erro",
-      "notLoggedInDescription": "Você precisa estar logado para editar seu perfil."
+        "notLoggedInDescription": "Você precisa estar logado para editar seu perfil."
       }
     },
     "social": {
@@ -560,59 +552,5 @@
     "noComments": "Nenhum comentário ainda. Seja o primeiro a comentar!",
     "loadError": "Erro ao carregar comentários.",
     "deleteError": "Falha ao excluir o comentário."
-  },
-  "account": {
-    "settings": {
-      "title": "Configurações da Conta",
-      "description": "Gerencie a segurança e credenciais da sua conta",
-      "securityTitle": "Segurança",
-      "profileLinkDescription": "Deseja editar seu perfil público em vez disso?",
-      "emailSection": {
-        "title": "Endereço de Email",
-        "description": "Gerencie o endereço de email associado à sua conta",
-        "current": "Email atual",
-        "newEmail": "Novo endereço de email",
-        "confirmChange": "Atualizar Email",
-        "changeInfo": "Depois de enviar, você receberá um email de confirmação no novo endereço. Clique no link para confirmar a alteração."
-      },
-      "passwordSection": {
-        "title": "Senha",
-        "description": "Altere a senha da sua conta",
-        "currentPassword": "Senha atual",
-        "newPassword": "Nova senha",
-        "confirmPassword": "Confirmar nova senha",
-        "update": "Atualizar Senha"
-      },
-      "success": {
-        "emailUpdated": "Solicitação de atualização de email enviada. Verifique seu novo email para confirmar.",
-        "passwordUpdated": "Senha atualizada com sucesso"
-      },
-      "error": {
-        "notLoggedIn": "Você precisa estar logado para atualizar as configurações da conta.",
-        "sameEmail": "O novo email deve ser diferente do atual.",
-        "emailUpdateFailed": "Falha ao atualizar o email",
-        "passwordMismatch": "As senhas não coincidem",
-        "currentPasswordRequired": "A senha atual é obrigatória",
-        "samePassword": "A nova senha deve ser diferente da atual",
-        "wrongCurrentPassword": "A senha atual está incorreta",
-        "passwordUpdateFailed": "Falha ao atualizar a senha"
-      }
-    }
-  },
-  "auth": {
-    "resetPassword": {
-      "title": "Definir Nova Senha",
-      "description": "Digite sua nova senha abaixo",
-      "newPassword": "Nova senha",
-      "confirmPassword": "Confirmar senha",
-      "submit": "Redefinir Senha",
-      "success": "Senha redefinida com sucesso!",
-      "successTitle": "Senha Atualizada",
-      "redirecting": "Redirecionando para a página de login...",
-      "error": {
-        "generic": "Falha ao redefinir a senha",
-        "passwordMismatch": "As senhas não coincidem"
-      }
-    }
   }
 }

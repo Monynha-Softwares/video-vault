@@ -243,19 +243,13 @@
     "import": {
       "button": "Importar de YouTube",
       "title": "Importar Lista de Reproducción de YouTube",
-      "description": "Pega una URL de una lista de reproducción de YouTube para importarla como una nueva lista de reproducción.",
+      "description": "Pega una URL de una lista de reproducción de YouTube para importarla como una nueva lista de reproducción, incluyendo todos sus videos.",
       "form": {
         "urlLabel": "URL de la Lista de Reproducción de YouTube",
         "urlPlaceholder": "https://www.youtube.com/playlist?list=...",
         "nameLabel": "Nombre de la Lista de Reproducción",
         "namePlaceholder": "Nombre para tu nueva lista de reproducción",
         "defaultPlaylistName": "Lista de Reproducción Importada de YouTube",
-        "modeLabel": "Modo de Importación",
-        "minimalMode": "Importación Mínima",
-        "minimalModeHint": "Crea una lista de reproducción con la URL y una descripción predeterminada. No se importarán videos.",
-        "enhancedMode": "Importación Mejorada (Mejor Esfuerzo)",
-        "enhancedModeHint": "Intenta importar el primer video de la URL de la lista de reproducción si está disponible. ",
-        "enhancedModeWarning": "La enumeración completa de videos de la lista de reproducción no es posible sin la API de datos de YouTube o un servicio de backend debido a restricciones de seguridad del navegador.",
         "importButton": "Importar Lista de Reproducción",
         "importingButton": "Importando..."
       },
@@ -266,26 +260,23 @@
         "nameMaxLength": "El nombre de la lista de reproducción no puede exceder los 100 caracteres.",
         "notLoggedIn": "Debes iniciar sesión para importar listas de reproducción.",
         "noPlaylistId": "No se pudo extraer un ID de lista de reproducción de la URL proporcionada.",
-        "generic": "Ocurrió un error durante la importación de la lista de reproducción. Por favor, inténtalo de nuevo."
+        "generic": "Ocurrió un error durante la importación de la lista de reproducción. Por favor, inténtalo de nuevo.",
+        "maxRetriesReached": "No se pudo crear la lista de reproducción después de varios intentos debido a un conflicto de slug. Por favor, intenta con un nombre de playlist diferente.",
+        "youtubeApiFetchFailed": "Error al obtener los detalles de la lista de reproducción de YouTube. Por favor, verifica la URL o inténtalo de nuevo más tarde.",
+        "videoProcessingFailed": "Error al procesar el video '{{title}}': {{error}}"
       },
       "success": {
         "playlistCreated": "¡Lista de reproducción '{{name}}' creada con éxito!",
         "videoAdded": "Video '{{title}}' añadido a Monynha Fun.",
-        "videoAddedToPlaylist": "Video '{{title}}' añadido a la lista de reproducción '{{playlistName}}'.",
-        "aiEnrichmentStarted": "Enriquecimiento de IA iniciado para el video importado."
+        "allVideosProcessed": "Se importaron {{count}} videos a la lista de reproducción con éxito."
       },
       "info": {
-        "minimalMode": "Lista de reproducción creada en modo mínimo. No se importaron videos.",
-        "enhancedModeLimited": "El modo mejorado es limitado. Intentando importar el primer video de la URL.",
-        "videoAlreadyExists": "El video '{{title}}' ya existe en Monynha Fun. Se omite la creación.",
-        "aiEnrichmentStarted": "Enriquecimiento de IA iniciado para el video importado."
+        "videoAlreadyExists": "El video '{{title}}' ya existe en Monynha Fun. Se omite la creación."
       },
       "warning": {
-        "videoMetadataFailed": "No se pudieron obtener los metadatos del video. Se añadirá con información básica.",
-        "noVideoInUrl": "No se encontró un ID de video único en la URL proporcionada para la importación mejorada.",
-        "noVideoInUrlForEnhanced": "Nenhum ID de vídeo único encontrado na URL fornecida para importação aprimorada. Apenas o modo minimalista é possível."
+        "noVideosFoundInPlaylist": "No se encontraron videos en la lista de reproducción de YouTube. Se creará una lista de reproducción vacía."
       },
-      "apiLimitationInfo": "Debido a las restricciones de la API de YouTube y las políticas de seguridad del navegador (CORS), Monynha Fun no puede obtener de forma fiable una lista completa de videos de una URL de lista de reproducción de YouTube directamente desde tu navegador. Para una importación completa, se requeriría un servicio de backend."
+      "apiLimitationInfo": "Monynha Fun utiliza un servicio de backend para obtener videos de listas de reproducción de YouTube, pero depende de la API de datos de YouTube, que tiene cuotas y puede que no siempre devuelva todos los videos para listas de reproducción muy grandes. Para obtener resultados óptimos, asegúrate de que la lista de reproducción sea pública."
     }
   },
   "playlistDetails": {
@@ -550,76 +541,19 @@
     }
   },
   "comments": {
-    "title": "Commentaires",
+    "title": "Comentarios",
     "form": {
-      "placeholder": "Ajouter un commentaire...",
-      "submitButton": "Commenter",
-      "submitting": "Envoi en cours...",
-      "contentRequired": "Le commentaire ne peut pas être vide.",
-      "contentMaxLength": "Le commentaire ne peut pas dépasser 500 caractères."
+      "placeholder": "Añade un comentario...",
+      "submitButton": "Comentar",
+      "submitting": "Enviando...",
+      "contentRequired": "El comentario no puede estar vacío.",
+      "contentMaxLength": "El comentario no puede exceder los 500 caracteres."
     },
-    "loginToComment": "Vous devez être connecté pour commenter.",
-    "loginToCommentPrompt": "Connectez-vous pour ajouter votre commentaire.",
-    "loginAction": "Connexion",
-    "noComments": "Aucun commentaire pour l'instant. Soyez le premier à commenter !",
-    "loadError": "Erreur lors du chargement des commentaires.",
-    "deleteError": "Échec de la suppression du commentaire."
-  },
-  "account": {
-    "settings": {
-      "title": "Paramètres du Compte",
-      "description": "Gérez la sécurité et les identifiants de votre compte",
-      "securityTitle": "Sécurité",
-      "profileLinkDescription": "Souhaitez-vous modifier votre profil public à la place ?",
-      "emailSection": {
-        "title": "Adresse Email",
-        "description": "Gérez l'adresse email associée à votre compte",
-        "current": "Email actuel",
-        "newEmail": "Nouvelle adresse email",
-        "confirmChange": "Mettre à jour l'Email",
-        "changeInfo": "Après l'envoi, vous recevrez un email de confirmation à la nouvelle adresse. Cliquez sur le lien pour confirmer le changement."
-      },
-      "passwordSection": {
-        "title": "Mot de passe",
-        "description": "Modifiez le mot de passe de votre compte",
-        "currentPassword": "Mot de passe actuel",
-        "newPassword": "Nouveau mot de passe",
-        "confirmPassword": "Confirmer le nouveau mot de passe",
-        "update": "Mettre à jour le Mot de passe"
-      },
-      "success": {
-        "emailUpdated": "Demande de mise à jour de l'email envoyée. Vérifiez votre nouvel email pour confirmer.",
-        "passwordUpdated": "Mot de passe mis à jour avec succès"
-      },
-      "error": {
-        "notLoggedIn": "Vous devez être connecté pour mettre à jour les paramètres du compte.",
-        "sameEmail": "Le nouvel email doit être différent de l'actuel.",
-        "emailUpdateFailed": "Échec de la mise à jour de l'email",
-        "passwordMismatch": "Les mots de passe ne correspondent pas",
-        "currentPasswordRequired": "Le mot de passe actuel est requis",
-        "samePassword": "Le nouveau mot de passe doit être différent de l'actuel",
-        "wrongCurrentPassword": "Le mot de passe actuel est incorrect",
-        "passwordUpdateFailed": "Échec de la mise à jour du mot de passe"
-      }
-    }
-  },
-  "auth": {
-    "resetPassword": {
-      "title": "Définir un Nouveau Mot de passe",
-      "description": "Entrez votre nouveau mot de passe ci-dessous",
-      "newPassword": "Nouveau mot de passe",
-      "confirmPassword": "Confirmer le mot de passe",
-      "submit": "Réinitialiser le Mot de passe",
-      "success": "Mot de passe réinitialisé avec succès !",
-      "successTitle": "Mot de passe Mis à jour",
-      "redirecting": "Redirection vers la page de connexion...",
-      "error": {
-        "generic": "Échec de la réinitialisation du mot de passe",
-        "passwordMismatch": "Les mots de passe ne correspondent pas"
-      }
-    }
-  },
-  "header": {
-    "accountSettings": "Paramètres du Compte"
+    "loginToComment": "Debes iniciar sesión para comentar.",
+    "loginToCommentPrompt": "Inicia sesión para añadir tu comentario.",
+    "loginAction": "Iniciar Sesión",
+    "noComments": "Aún no hay comentarios. ¡Sé el primero en comentar!",
+    "loadError": "Error al cargar comentarios.",
+    "deleteError": "Error al eliminar el comentario."
   }
 }
