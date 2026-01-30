@@ -1,6 +1,6 @@
 # Monynha Fun: Diretrizes de Projeto para Agentes de IA
 
-Este documento descreve as tecnologias centrais e as regras específicas de uso de bibliotecas para o projeto **Monynha Fun**, da **Monynha Softwares**. A adesão a estas diretrizes garante consistência, manutenibilidade e desempenho ideal, alinhando-se à nossa filosofia de democratizar a tecnologia e valorizar a curadoria humana assistida por IA.
+Este documento descreve as tecnologias centrais e as regras específicas de uso de bibliotecas para o projeto **Monynha Fun**, de **Monynha Softwares**. A adesão a estas diretrizes garante consistência, manutenibilidade e desempenho ideal, alinhando-se à nossa filosofia de democratizar a tecnologia e valorizar a curadoria humana assistida por IA.
 
 ## Visão Geral da Pilha Tecnológica
 
@@ -26,7 +26,7 @@ Para manter uma base de código consistente e eficiente, siga estas regras ao im
 *   **Ícones**: Use ícones da biblioteca `lucide-react`.
 *   **Gerenciamento de Estado e Busca de Dados**: Para estado do servidor (busca de dados, cache, sincronização), use `TanStack Query`. Para estado simples do lado do cliente, use `useState` e `useContext` do React.
 *   **Roteamento**: Toda a navegação dentro do aplicativo deve ser tratada usando `react-router-dom`. Mantenha as definições de rota em `src/App.tsx`.
-*   **Autenticação e Interações com o Banco de Dados**: Todos os fluxos de autenticação (cadastro, login, logout) e operações de banco de dados devem usar o cliente `Supabase` (`@supabase/supabase-js`) importado de `src/integrations/supabase/client.ts`.
+*   **Autenticação e Interações com o Banco de Dados**: Todos os fluxos de autenticação (cadastro, login, logout) e operações de banco de dados devem usar o cliente `Supabase` (`@supabase/supabase-js`) importado de `src/integrations/supabase/client.ts`. **Para a interface de usuário de autenticação, utilizamos formulários customizados implementados com `react-hook-form` e `Zod` para maior flexibilidade e controle sobre o design.**
 *   **Manipulação de Formulários**: Para formulários, use `react-hook-form` para gerenciar o estado e as submissões do formulário, combinado com `Zod` para validação de esquema.
 *   **Notificações Toast**: Para exibir mensagens transitórias ao usuário (sucesso, erro, informação), use a biblioteca `sonner`.
 *   **Funções Utilitárias**: Para combinar classes Tailwind CSS, use a função utilitária `cn` de `src/lib/utils.ts`.

@@ -13,10 +13,11 @@ import { Badge } from '@/components/ui/badge';
 import { Eye, Clock, Folder, ArrowLeft, Heart as HeartIcon, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
+import { CommentsSection } from '@/components/comment/CommentsSection'; // Import CommentsSection
 
 const VideoDetails = () => {
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
   const { videoId } = useParams<{ videoId: string }>();
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
@@ -154,7 +155,7 @@ const VideoDetails = () => {
                   <Eye className="w-4 h-4" />
                   <span>{formatViewCount(video.view_count)} {t('videoDetails.viewsLabel')}</span>
                 </div>
-                {video.duration_seconds && (
+                {video.duration_seconds && video.duration_seconds > 0 && (
                   <div className="flex items-center gap-1">
                     <Clock className="w-4 h-4" />
                     <span>{formatDuration(video.duration_seconds)}</span>
@@ -180,6 +181,13 @@ const VideoDetails = () => {
                 {video.description || t('videoDetails.noDescription')}
               </p>
             </div>
+
+            {/* Comments Section */}
+            {videoId && (
+              <div className="border-t border-border/50 pt-6 mt-6">
+                <CommentsSection videoId={videoId} />
+              </div>
+            )}
           </div>
 
           {/* Related Videos Sidebar */}

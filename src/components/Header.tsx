@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Plus, Menu, X, LogOut, Heart, Globe, ListVideo, User as UserIcon, Settings, Home, Info, BookOpen, Mail, HelpCircle, Users } from "lucide-react";
+import { Search, Plus, Menu, LogOut, Heart, Globe, ListVideo, User as UserIcon, Settings, Home, Info, BookOpen, Mail, HelpCircle, Users, KeyRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
@@ -55,7 +55,7 @@ export const Header = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 w-full border-b border-border/80 bg-background/80 backdrop-blur-xl">
       <div className="container flex h-16 items-center justify-between gap-4">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 group">
@@ -83,7 +83,7 @@ export const Header = () => {
 
         {/* Actions */}
         <div className="flex items-center gap-2">
-          {user ? (
+          {user && profile ? (
             <>
               <Button
                 variant="ghost"
@@ -113,35 +113,40 @@ export const Header = () => {
                 <span className="hidden lg:inline">{t('header.submitVideo')}</span>
               </Button>
 
-              {/* User Dropdown */}
+              {/* Direct link to profile with Avatar */}
+              <Link to={`/profile/${profile.username}`} className="relative h-9 w-9 rounded-full hidden sm:flex items-center justify-center">
+                <Avatar className="h-9 w-9">
+                  <AvatarImage src={profile.avatar_url || undefined} alt={profile.display_name || profile.username || 'User'} />
+                  <AvatarFallback className="bg-primary/20 text-primary">
+                    {profile.display_name ? profile.display_name[0].toUpperCase() : (profile.username ? profile.username[0].toUpperCase() : <UserIcon className="h-5 w-5" />)}
+                  </AvatarFallback>
+                </Avatar>
+              </Link>
+
+              {/* Separate Dropdown for other actions */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-                    <Avatar className="h-9 w-9">
-                      <AvatarImage src={profile?.avatar_url || undefined} alt={profile?.display_name || profile?.username || 'User'} />
-                      <AvatarFallback className="bg-primary/20 text-primary">
-                        {profile?.display_name ? profile.display_name[0].toUpperCase() : (profile?.username ? profile.username[0].toUpperCase() : <UserIcon className="h-5 w-5" />)}
-                      </AvatarFallback>
-                    </Avatar>
+                  <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
+                    <Settings className="h-5 w-5" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{profile?.display_name || profile?.username}</p>
+                      <p className="text-sm font-medium leading-none">{profile.display_name || profile.username}</p>
                       <p className="text-xs leading-none text-muted-foreground">
                         {user.email}
                       </p>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => { navigate(`/profile/${profile?.username}`); setIsSheetOpen(false); }}>
-                    <UserIcon className="mr-2 h-4 w-4" />
-                    <span>{t('header.myProfile')}</span>
-                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => { navigate('/profile/edit'); setIsSheetOpen(false); }}>
                     <Settings className="mr-2 h-4 w-4" />
                     <span>{t('header.editProfile')}</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => { navigate('/account/settings'); setIsSheetOpen(false); }}>
+                    <KeyRound className="mr-2 h-4 w-4" />
+                    <span>{t('header.accountSettings')}</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
@@ -166,7 +171,7 @@ export const Header = () => {
                 variant="hero"
                 size="sm"
                 className="hidden sm:flex gap-2"
-                onClick={() => navigate('/auth')}
+                onClick={() => navigate('/submit')}
               >
                 <Plus className="h-4 w-4" />
                 <span className="hidden lg:inline">{t('header.submitVideo')}</span>
@@ -220,7 +225,6 @@ export const Header = () => {
                     </span>
                   </Link>
                 </SheetTitle>
-
               </SheetHeader>
               <ScrollArea className="flex-1 py-4">
                 <div className="space-y-6">
@@ -269,6 +273,15 @@ export const Header = () => {
                       >
                         <Settings className="h-4 w-4" />
                         <span>{t('header.editProfile')}</span>
+                      </NavLink>
+                      <NavLink
+                        to="/account/settings"
+                        className="flex items-center gap-3 px-4 py-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors"
+                        activeClassName="bg-muted text-foreground"
+                        onClick={() => setIsSheetOpen(false)}
+                      >
+                        <KeyRound className="h-4 w-4" />
+                        <span>{t('header.accountSettings')}</span>
                       </NavLink>
                       <NavLink
                         to="/playlists"

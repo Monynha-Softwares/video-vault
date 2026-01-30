@@ -4,6 +4,7 @@ import { Footer } from '@/components/Footer';
 import { useProfileByUsername } from '@/features/profile/queries/useProfile';
 import { useVideos } from '@/features/videos/queries/useVideos';
 import { usePlaylists } from '@/features/playlists/queries/usePlaylists';
+import { useUserSocialAccounts } from '@/features/user_social_accounts'; // Import the new hook
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -11,6 +12,7 @@ import { CalendarDays, User as UserIcon, Video as VideoIcon, ListVideo, ArrowLef
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/features/auth/useAuth';
 import { VideoCard } from '@/components/VideoCard';
+import { SocialAccountsDisplay } from '@/components/profile/SocialAccountsDisplay'; // Import the new component
 
 const Profile = () => {
   const { t } = useTranslation();
@@ -29,8 +31,9 @@ const Profile = () => {
     isPublic: isCurrentUser ? undefined : true,
     enabled: !!profile?.id,
   });
+  const { data: socialAccounts, isLoading: socialAccountsLoading } = useUserSocialAccounts(profile?.id); // Fetch social accounts
 
-  if (profileLoading || authLoading) {
+  if (profileLoading || authLoading || socialAccountsLoading) {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
@@ -107,6 +110,11 @@ const Profile = () => {
               <p className="text-muted-foreground mt-4 max-w-xl whitespace-pre-wrap">
                 {profile.bio}
               </p>
+            )}
+            {socialAccounts && socialAccounts.length > 0 && (
+              <div className="mt-4">
+                <SocialAccountsDisplay socialAccounts={socialAccounts} />
+              </div>
             )}
             {isCurrentUser && (
               <Button onClick={() => navigate('/profile/edit')} className="mt-4 gap-2">

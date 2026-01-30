@@ -39,6 +39,7 @@ export const Footer = () => {
           <div className="space-y-4">
             <h4 className="font-semibold text-sm">{t('footer.community')}</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><Link to="/community" className="hover:text-primary transition-colors">{t('footer.community')}</Link></li> {/* Added link to Community page */}
               <li><Link to="/about" className="hover:text-primary transition-colors">{t('footer.about')}</Link></li>
               <li><Link to="/rules" className="hover:text-primary transition-colors">{t('footer.rules')}</Link></li>
               <li><Link to="/contact" className="hover:text-primary transition-colors">{t('footer.contact')}</Link></li>
@@ -50,13 +51,21 @@ export const Footer = () => {
         {/* Bottom */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-8 mt-8 border-t border-border/50">
           <p className="text-sm text-muted-foreground flex items-center gap-1">
-            {t('footer.madeWithLove')} <Heart className="w-4 h-4 text-primary fill-primary inline-block" /> {t('footer.byMonynhaSoftwares')}
+            {t('footer.madeWithLove')} <Heart className="w-4 h-4 text-primary fill-primary inline-block" />{" "}
+            <a 
+              href="https://monynha.com" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-primary transition-colors"
+            >
+              {t('footer.byMonynhaSoftwares')}
+            </a>
           </p>
           <div className="flex items-center gap-4">
             <a href="https://monynha.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
               <Globe className="w-5 h-5" />
             </a>
-            <a href="https://github.com/Monynha-Softwares" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+            <a href="https://github.com/Monynha-Softwares/video-vault" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
               <Github className="w-5 h-5" />
             </a>
           </div>

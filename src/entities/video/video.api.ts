@@ -67,21 +67,33 @@ export async function getVideoById(id: string) {
   return data as VideoWithCategory;
 }
 
-export async function listFeaturedVideos(limit = 4) {
-  const { data, error } = await supabase
-    .from('videos')
-    .select(
-      `
-      *,
-      category:categories(id, name, slug, color)
-    `,
-    )
-    .eq('is_featured', true)
-    .order('view_count', { ascending: false })
-    .limit(limit);
+export async function listFeaturedVideos(limit = 4, offset = 0) {
+  const { data, error } = await supabase.rpc('list_featured_videos', {
+    p_limit: limit,
+    p_offset: offset,
+  });
 
-  if (error) throw error;
-  if (data && data.length > 0) return data as VideoWithCategory[];
+  if (!error && data) {
+    return data.map((row) => {
+      // Parse the category JSON if it's a string or object
+      let parsedCategory = null;
+      if (row.category) {
+        if (typeof row.category === 'string') {
+          try {
+            parsedCategory = JSON.parse(row.category);
+          } catch {
+            parsedCategory = null;
+          }
+        } else if (typeof row.category === 'object') {
+          parsedCategory = row.category as { id: string; name: string; slug: string; color: string };
+        }
+      }
+      return {
+        ...row,
+        category: parsedCategory,
+      };
+    }) as unknown as VideoWithCategory[];
+  }
 
   const { data: fallbackData, error: fallbackError } = await supabase
     .from('videos')
@@ -134,8 +146,8 @@ export async function listRelatedVideos(currentVideoId: string, categoryId: stri
   return data as VideoWithCategory[];
 }
 
-export async function incrementVideoViewCount(videoId: string) {
-  return supabase.rpc('increment_video_view_count', { p_video_id: videoId });
+export async function incrementVideoViewCount(videoId: string, sessionId?: string | null) {
+  return supabase.rpc('increment_video_view_count', { p_video_id: videoId, p_session_id: sessionId ?? null });
 }
 
 export async function markTopVideosAsFeatured(limit = 4) {

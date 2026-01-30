@@ -4,48 +4,55 @@ on:
   push:
     branches: ['**']
   pull_request:
+    branches: ['**']
 
-# Cancel in-progress runs when a new run is triggered
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
 
-      - name: Enable Corepack
-        run: corepack enable
+      - name: Install bun
+        run: npm install -g bun
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: bun install
 
       - name: Lint
-        run: pnpm run lint
+        run: bun run lint
 
-      - name: Typecheck
-        run: pnpm run typecheck
+      - name: Type check
+        run: bun run typecheck
 
       - name: Test
-        run: pnpm run test
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: bun run test
 
       - name: Build
-        run: pnpm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: bun run build
 
       - name: Upload build artifacts
-        if: success()
         uses: actions/upload-artifact@v4
+        if: success()
         with:
           name: dist
           path: dist/

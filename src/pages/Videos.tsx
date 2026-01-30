@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { VideoCard } from '@/components/VideoCard';
-import { useVideos } from '@/features/videos/queries/useVideos';
+import { useFeaturedVideos, useVideos } from '@/features/videos/queries/useVideos';
 import { useCategories } from '@/features/categories/queries/useCategories';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -20,6 +20,7 @@ const Videos = () => {
   const initialSearchQuery = searchParams.get('query') || '';
   const initialCategoryId = searchParams.get('category') || '';
   const initialLanguage = searchParams.get('language') || '';
+  const isFeatured = searchParams.get('featured') === 'true';
 
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
   const [selectedCategory, setSelectedCategory] = useState(initialCategoryId);
@@ -29,7 +30,9 @@ const Videos = () => {
     searchQuery: searchQuery || undefined,
     categoryId: selectedCategory || undefined,
     language: selectedLanguage || undefined,
+    enabled: !isFeatured,
   });
+  const { data: featuredVideos, isLoading: featuredLoading } = useFeaturedVideos(24, 0, isFeatured);
   const { data: categories, isLoading: categoriesLoading } = useCategories();
 
   useEffect(() => {
@@ -37,14 +40,17 @@ const Videos = () => {
     if (searchQuery) newSearchParams.set('query', searchQuery);
     if (selectedCategory) newSearchParams.set('category', selectedCategory);
     if (selectedLanguage) newSearchParams.set('language', selectedLanguage);
+    if (isFeatured) newSearchParams.set('featured', 'true');
     setSearchParams(newSearchParams);
-  }, [searchQuery, selectedCategory, selectedLanguage, setSearchParams]);
+  }, [searchQuery, selectedCategory, selectedLanguage, isFeatured, setSearchParams]);
 
   const handleClearFilters = () => {
     setSearchQuery('');
     setSelectedCategory('');
     setSelectedLanguage('');
-    setSearchParams(new URLSearchParams());
+    const resetParams = new URLSearchParams();
+    if (isFeatured) resetParams.set('featured', 'true');
+    setSearchParams(resetParams);
   };
 
   const availableLanguages = [
@@ -75,11 +81,16 @@ const Videos = () => {
               placeholder={t('videos.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              disabled={isFeatured}
               className="w-full pl-10 pr-4 h-10 bg-muted/50 border-0 focus-visible:ring-primary/30"
             />
           </div>
 
-          <Select value={selectedCategory} onValueChange={(value) => setSelectedCategory(value === "all" ? "" : value)}>
+          <Select
+            value={selectedCategory}
+            onValueChange={(value) => setSelectedCategory(value === "all" ? "" : value)}
+            disabled={isFeatured}
+          >
             <SelectTrigger className="w-full md:w-[200px] bg-muted/50 border-0 focus:ring-primary/30">
               <SelectValue placeholder={t('videos.allCategories')} />
             </SelectTrigger>
@@ -97,7 +108,11 @@ const Videos = () => {
             </SelectContent>
           </Select>
 
-          <Select value={selectedLanguage} onValueChange={(value) => setSelectedLanguage(value === "all" ? "" : value)}>
+          <Select
+            value={selectedLanguage}
+            onValueChange={(value) => setSelectedLanguage(value === "all" ? "" : value)}
+            disabled={isFeatured}
+          >
             <SelectTrigger className="w-full md:w-[150px] bg-muted/50 border-0 focus:ring-primary/30">
               <SelectValue placeholder={t('videos.allLanguages')} />
             </SelectTrigger>
@@ -112,7 +127,7 @@ const Videos = () => {
           </Select>
 
           {(searchQuery || selectedCategory || selectedLanguage) && (
-            <Button variant="outline" onClick={handleClearFilters} className="gap-2">
+            <Button variant="outline" onClick={handleClearFilters} className="gap-2" disabled={isFeatured}>
               <X className="w-4 h-4" />
               {t('videos.clearFilters')}
             </Button>
@@ -120,7 +135,35 @@ const Videos = () => {
         </div>
 
         {/* Video List */}
-        {videosLoading ? (
+        {isFeatured ? (
+          featuredLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="space-y-3">
+                  <Skeleton className="aspect-video rounded-2xl" />
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-3 w-1/2" />
+                </div>
+              ))}
+            </div>
+          ) : featuredVideos && featuredVideos.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {featuredVideos.map((video, index) => (
+                <div
+                  key={video.id}
+                  className="animate-fade-up"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <VideoCard video={video} variant="default" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 text-muted-foreground">
+              {t('index.noFeaturedVideos')}
+            </div>
+          )
+        ) : videosLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {Array.from({ length: 8 }).map((_, i) => (
               <div key={i} className="space-y-3">

@@ -25,6 +25,7 @@
     "playlists": "Listas de Reproducción",
     "myProfile": "Mi Perfil",
     "editProfile": "Editar Perfil",
+    "accountSettings": "Configuración de la Cuenta",
     "home": "Inicio",
     "toggleMenu": "Alternar menú",
     "closeMenu": "Cerrar menú",
@@ -53,10 +54,13 @@
     "headingPart1": "Descubre videos que",
     "headingPart2": "merecen ser recordados",
     "description": "Una comunidad dedicada a preservar y compartir los mejores videos de YouTube. Tutoriales antiguos, recetas tradicionales, memes icónicos y mucho más.",
+    "submitUrlPlaceholder": "Pega una URL de video de YouTube aquí...",
     "submitVideoButton": "Enviar un Video",
-    "exploreCategoriesButton": "Explorar Categorías",
-    "videosCount": "{{count}} videos",
-    "contributorsCount": "{{count}} contribuidores"
+    "error": {
+      "invalidUrl": "Formato de URL inválido.",
+      "notYoutubeUrl": "Solo se aceptan URLs de videos de YouTube.",
+      "emptyUrl": "Por favor, pega una URL de video de YouTube."
+    }
   },
   "auth": {
     "loginTitle": "Inicia sesión en tu cuenta",
@@ -78,6 +82,20 @@
     "forgotPasswordLink": "¿Olvidaste tu contraseña?",
     "sendResetLinkButton": "Enviar Enlace de Restablecimiento",
     "backToLogin": "Volver al Inicio de Sesión",
+    "resetPassword": {
+      "title": "Establecer Nueva Contraseña",
+      "description": "Introduce tu nueva contraseña a continuación",
+      "newPassword": "Nueva contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "submit": "Restablecer Contraseña",
+      "success": "¡Contraseña restablecida con éxito!",
+      "successTitle": "Contraseña Actualizada",
+      "redirecting": "Redirigiendo a la página de inicio de sesión...",
+      "error": {
+        "generic": "Error al restablecer la contraseña",
+        "passwordMismatch": "Las contraseñas no coinciden"
+      }
+    },
     "error": {
       "validationTitle": "Error de Validación",
       "loginGeneric": "Error al iniciar sesión",
@@ -186,14 +204,19 @@
     "categoriesDescription": "Explorar por tema",
     "viewAll": "Ver todos",
     "featuredTitle": "Destacados",
-    "featuredDescription": "Seleccionados por curación",
+    "featuredDescription": "Clasificados por interacción real",
     "noFeaturedVideos": "Aún no hay videos destacados.",
     "recentTitle": "Recientes",
     "recentDescription": "Últimos videos enviados",
     "noRecentVideos": "Aún no hay videos recientes. ¡Sé el primero en enviar uno!",
     "ctaTitle": "¿Conoces un video que merece ser preservado?",
     "ctaDescription": "Comparte con la comunidad y ayuda a construir el archivo más grande de videos valiosos en internet.",
-    "ctaButton": "Enviar Video"
+    "ctaButton": "Enviar Video",
+    "playlistsTitle": "Listas de Reproducción Recientes",
+    "playlistsDescription": "Rutas de aprendizaje y colecciones creadas por la comunidad",
+    "noPlaylistsTitle": "No se encontraron listas de reproducción públicas.",
+    "noPlaylistsDescription": "¡Sé el primero en crear una lista de reproducción y organizar el conocimiento!",
+    "createFirstPlaylist": "Crear tu primera lista de reproducción"
   },
   "notFound": {
     "title": "404",
@@ -204,7 +227,12 @@
     "title": "Comunidad",
     "description": "Conéctate con otros curadores y entusiastas de videos.",
     "totalContributors": "Total de Contribuidores",
-    "contributorsCount": "{{count}} usuarios"
+    "contributorsCount": "{{count}} usuarios",
+    "allUsers": "Todos los Usuarios",
+    "submissionsCount": "{{count}} envíos",
+    "loadUsersError": "Error al cargar usuarios de la comunidad. Por favor, inténtalo de nuevo más tarde.",
+    "noUsersFoundTitle": "No se encontraron usuarios.",
+    "noUsersFoundDescription": "Parece que aún no hay usuarios en la comunidad. ¡Sé el primero en unirte!"
   },
   "playlists": {
     "title": "Listas de Reproducción",
@@ -225,6 +253,45 @@
       "all": "Todas las Listas",
       "myPlaylists": "Mis Listas",
       "collaborating": "Colaborando"
+    },
+    "import": {
+      "button": "Importar de YouTube",
+      "title": "Importar Lista de Reproducción de YouTube",
+      "description": "Pega una URL de una lista de reproducción de YouTube para importarla como una nueva lista de reproducción, incluyendo todos sus videos.",
+      "form": {
+        "urlLabel": "URL de la Lista de Reproducción de YouTube",
+        "urlPlaceholder": "https://www.youtube.com/playlist?list=...",
+        "nameLabel": "Nombre de la Lista de Reproducción",
+        "namePlaceholder": "Nombre para tu nueva lista de reproducción",
+        "defaultPlaylistName": "Lista de Reproducción Importada de YouTube",
+        "importButton": "Importar Lista de Reproducción",
+        "importingButton": "Importando..."
+      },
+      "error": {
+        "invalidUrl": "Por favor, introduce una URL de lista de reproducción de YouTube válida.",
+        "notYoutubePlaylistUrl": "Solo se aceptan URLs de listas de reproducción de YouTube.",
+        "nameMinLength": "El nombre de la lista de reproducción debe tener al menos 3 caracteres.",
+        "nameMaxLength": "El nombre de la lista de reproducción no puede exceder los 100 caracteres.",
+        "notLoggedIn": "Debes iniciar sesión para importar listas de reproducción.",
+        "noPlaylistId": "No se pudo extraer un ID de lista de reproducción de la URL proporcionada.",
+        "generic": "Ocurrió un error durante la importación de la lista de reproducción. Por favor, inténtalo de nuevo.",
+        "maxRetriesReached": "No se pudo crear la lista de reproducción después de varios intentos debido a un conflicto de slug. Por favor, intenta con un nombre de playlist diferente.",
+        "youtubeApiFetchFailed": "Error al obtener los detalles de la lista de reproducción de YouTube. Por favor, verifica la URL o inténtalo de nuevo más tarde.",
+        "videoProcessingFailed": "Error al procesar el video '{{title}}': {{error}}",
+        "youtubeApiKeyMissing": "La clave de API de YouTube no está configurada o es inválida en el servidor. Por favor, contacta a soporte."
+      },
+      "success": {
+        "playlistCreated": "¡Lista de reproducción '{{name}}' creada con éxito!",
+        "videoAdded": "Video '{{title}}' añadido a Monynha Fun.",
+        "allVideosProcessed": "Se importaron {{count}} videos a la lista de reproducción con éxito."
+      },
+      "info": {
+        "videoAlreadyExists": "El video '{{title}}' ya existe en Monynha Fun. Se omite la creación."
+      },
+      "warning": {
+        "noVideosFoundInPlaylist": "No se encontraron videos en la lista de reproducción de YouTube. Se creará una lista de reproducción vacía."
+      },
+      "apiLimitationInfo": "Monynha Fun utiliza un servicio de backend para obtener videos de listas de reproducción de YouTube, pero depende de la API de datos de YouTube, que tiene cuotas y puede que no siempre devuelva todos los videos para listas de reproducción muy grandes. Para obtener resultados óptimos, asegúrate de que la lista de reproducción sea pública."
     }
   },
   "playlistDetails": {
@@ -339,6 +406,23 @@
     "noPlaylistsTitle": "Aún no hay listas de reproducción creadas.",
     "noPlaylistsDescription": "Este usuario aún no ha creado ninguna lista de reproducción.",
     "createFirstPlaylist": "Crea tu primera lista de reproducción",
+    "avatar": {
+      "upload": "Subir Foto",
+      "remove": "Eliminar",
+      "hint": "JPG, PNG, WebP o GIF. Máx. 5MB.",
+      "invalidType": "Por favor, selecciona un archivo de imagen válido (JPG, PNG, WebP o GIF).",
+      "fileTooLarge": "El tamaño del archivo debe ser inferior a 5MB.",
+      "uploadSuccess": "¡Avatar subido con éxito!",
+      "uploadError": "Error al subir el avatar. Por favor, inténtalo de nuevo.",
+      "removeSuccess": "¡Avatar eliminado con éxito!",
+      "removeError": "Error al eliminar el avatar. Por favor, inténtalo de nuevo.",
+      "cropTitle": "Recortar Avatar",
+      "cropDescription": "Ajusta el área de recorte y el zoom para tu avatar.",
+      "zoom": "Zoom",
+      "rotate": "Rotar",
+      "cropAndUpload": "Recortar y Subir",
+      "cropError": "Error al recortar la imagen. Por favor, inténtalo de nuevo."
+    },
     "edit": {
       "title": "Editar Perfil",
       "description": "Actualiza tu información pública.",
@@ -350,7 +434,6 @@
         "displayNamePlaceholder": "Tu nombre o apodo",
         "avatarUrlLabel": "URL del Avatar",
         "avatarUrlPlaceholder": "https://ejemplo.com/tu-foto.jpg",
-        "avatarUrlHint": "Enlace directo a tu imagen de perfil.",
         "bioLabel": "Biografía",
         "bioPlaceholder": "Cuéntanos un poco sobre ti...",
         "savingButton": "Guardando...",
@@ -361,25 +444,131 @@
         "displayNameMaxLength": "El nombre a mostrar no puede exceder los 50 caracteres",
         "invalidAvatarUrl": "URL de avatar inválida",
         "bioMaxLength": "La biografía no puede exceder los 300 caracteres",
-        "notLoggedInTitle": "Error",
-        "notLoggedInDescription": "Debes iniciar sesión para modificar tu perfil."
+      "notLoggedInTitle": "Error",
+      "notLoggedInDescription": "Debes iniciar sesión para modificar tu perfil."
+      }
+    },
+    "social": {
+      "title": "Cuentas Sociales",
+      "addAccount": "Añadir Cuenta Social",
+      "editAccount": "Editar Cuenta Social",
+      "dialogDescription": "Añade o edita tus enlaces de redes sociales. Estos serán visibles en tu perfil público.",
+      "noAccounts": "Aún no se han añadido cuentas sociales.",
+      "form": {
+        "platformLabel": "Plataforma",
+        "platformPlaceholder": "Selecciona una plataforma",
+        "urlLabel": "URL",
+        "urlPlaceholder": "https://...",
+        "platformRequired": "La plataforma es obligatoria.",
+        "invalidUrl": "Por favor, introduce una URL válida.",
+        "saving": "Guardando...",
+        "saveChanges": "Guardar Cambios",
+        "add": "Añadir Cuenta"
+      },
+      "platform": {
+        "instagram": "Instagram",
+        "github": "GitHub",
+        "youtube": "Canal de YouTube",
+        "twitter": "Twitter (X)",
+        "linkedin": "LinkedIn",
+        "facebook": "Facebook",
+        "website": "Sitio Web Personal"
+      },
+      "error": {
+        "notLoggedIn": "Debes iniciar sesión para gestionar las cuentas sociales."
       }
     }
   },
   "about": {
-    "title": "Acerca de Nosotros",
-    "description": "Aprende más sobre la misión y visión de Monynha Fun."
+    "title": "Sobre Nós",
+    "description": "Saiba mais sobre a missão e a visión da Monynha Fun.",
+    "missionTitle": "Nuestra Misión",
+    "missionDescription": "Monynha Fun es una plataforma de video impulsada por Monynha Softwares, creada para celebrar contenido valioso y atemporal y promover la inclusión tecnológica. Nuestra misión es democratizar el acceso a videos culturales y educativos, curando contenido que eleva a comunidades a menudo ignoradas por las plataformas principales.",
+    "founderTitle": "Sobre el Fundador",
+    "founderName": "Marcelo Santos",
+    "founderDescription": "Ingeniero de Software y fundador de Monynha Softwares. Apasionado por el código abierto, la automatización y las experiencias digitales inclusivas.",
+    "valuesTitle": "Valores",
+    "value1": "Orgullo",
+    "value2": "Honestidad",
+    "value3": "Humildad",
+    "value4": "Resiliencia",
+    "value5": "Acogida",
+    "philosophyTitle": "Filosofía",
+    "philosophyDescription": "Construido con accesibilidad, transparencia y una fuerte voz social. Inspirado por el orgullo LGBTQIA+ y los movimientos de tecnología abierta."
   },
   "rules": {
-    "title": "Reglas de la Comunidad",
-    "description": "Directrices para mantener un ambiente positivo y productivo."
+    "title": "Diretrizes da Plataforma",
+    "description": "Diretrizes para manter um ambiente positivo e produtivo.",
+    "rule1": "Respeta las identidades, culturas y orígenes de los demás.",
+    "rule2": "Sin discurso de odio, acoso o desinformación.",
+    "rule3": "Solo se permiten enlaces de YouTube en las publicaciones.",
+    "rule4": "Los videos deben reflejar un valor genuino: cultural, educativo, histórico o artístico.",
+    "rule5": "El equipo de moderación puede eliminar contenido inapropiado o de baja calidad.",
+    "rule6": "Sé amable. Este espacio está hecho para elevar, no para excluir.",
+    "rule7": "Monynha Fun se basa en ideales de código abierto. Los comentarios de la comunidad son bienvenidos."
   },
   "contact": {
-    "title": "Contacto",
-    "description": "Ponte en contacto con nosotros para preguntas, sugerencias o soporte."
+    "title": "Entre em Contato",
+    "description": "Entre em contato conosco para dudas, sugerencias o soporte.",
+    "form": {
+      "nameLabel": "Nombre",
+      "namePlaceholder": "Tu nombre",
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "tu@correo.com",
+      "subjectLabel": "Asunto",
+      "subjectPlaceholder": "Asunto de tu mensaje",
+      "messageLabel": "Mensaje",
+      "messagePlaceholder": "Tu mensaje...",
+      "sendButton": "Enviar Mensaje"
+    },
+    "directEmailLabel": "Correo electrónico para Contacto Directo",
+    "locationLabel": "Ubicación",
+    "locationValue": "Faro, Portugal",
+    "responseTimeLabel": "Tiempo de Respuesta",
+    "responseTimeValue": "Respondemos en 2-5 días hábiles.",
+    "feedbackTitle": "Comentarios y Sugerencias",
+    "feedbackDescription": "Estamos abiertos a escuchar a creadores, colaboradores y mentes curiosas.",
+    "successMessage": "¡Tu mensaje ha sido enviado con éxito! Nos pondremos en contacto contigo en breve.",
+    "errorMessage": "Ocurrió un error al enviar tu mensaje. Por favor, inténtalo de nuevo."
   },
   "faq": {
-    "title": "Preguntas Frecuentes",
-    "description": "Encuentra respuestas a las preguntas más comunes sobre la plataforma."
+    "title": "FAQ – Perguntas Frequentes",
+    "description": "Encuentra respuestas para las preguntas más comunes sobre la plataforma.",
+    "q1": {
+      "question": "Posso fazer upload dos meus próprios vídeos?",
+      "answer": "No directamente. Puedes enviar enlaces a videos de YouTube. Nuestro sistema enriquece automáticamente los metadatos y los hace públicos."
+    },
+    "q2": {
+      "question": "Existen restrições de conteúdo?",
+      "answer": "Sí. Nos centramos en videos con valor duradero — educativo, artístico o históricamente relevante. Contenido inapropiado o spam será filtrado."
+    },
+    "q3": {
+      "question": "Esta plataforma es de código abierto?",
+      "answer": "Absolutamente. Puedes acceder al código fuente en https://github.com/Monynha-Softwares/video-vault."
+    },
+    "q4": {
+      "question": "Posso contribuir?",
+      "answer": "¡Sí! Revisa nuestro repositorio de GitHub, sugiere características o envía solicitudes de extracción."
+    },
+    "q5": {
+      "question": "¿Quién administra la Monynha Fun?",
+      "answer": "Es desarrollada por Monynha Softwares, un estudio de tecnología inclusivo fundado por Marcelo Santos, con el apoyo de la comunidad open-source."
+    }
+  },
+  "comments": {
+    "title": "Comentarios",
+    "form": {
+      "placeholder": "Añade un comentario...",
+      "submitButton": "Comentar",
+      "submitting": "Enviando...",
+      "contentRequired": "El comentario no puede estar vacío.",
+      "contentMaxLength": "El comentario no puede exceder los 500 caracteres."
+    },
+    "loginToComment": "Debes iniciar sesión para comentar.",
+    "loginToCommentPrompt": "Inicia sesión para añadir tu comentario.",
+    "loginAction": "Iniciar Sesión",
+    "noComments": "Aún no hay comentarios. ¡Sé el primero en comentar!",
+    "loadError": "Error al cargar comentarios.",
+    "deleteError": "Error al eliminar el comentario."
   }
 }

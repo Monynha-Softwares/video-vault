@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/features/auth/useAuth';
 import { useCategories } from '@/features/categories/queries/useCategories';
 import { useYouTubeMetadata } from '@/features/submit/useYouTubeMetadata';
@@ -15,9 +15,11 @@ import { submitVideoSchema, SubmitVideoFormValues } from '@/features/submit/subm
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Footer } from '@/components/Footer'; // Added missing import
 
 export default function Submit() {
   const { t } = useTranslation();
+  const location = useLocation();
   
   const { user, loading: authLoading } = useAuth();
   const { data: categories } = useCategories();
@@ -46,6 +48,19 @@ export default function Submit() {
       navigate('/auth');
     }
   }, [user, authLoading, navigate]);
+
+  // Effect to pre-fill YouTube URL from navigation state or local storage
+  useEffect(() => {
+    const prefillUrl = location.state?.prefillVideoUrl || localStorage.getItem('prefillVideoUrl');
+    if (prefillUrl) {
+      setValue('youtubeUrl', prefillUrl);
+      // Clear from local storage after use
+      localStorage.removeItem('prefillVideoUrl');
+      // Clear from state to prevent re-filling on subsequent visits
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, location.pathname, setValue, navigate]);
+
 
   const onSubmit = async (values: SubmitVideoFormValues) => {
     if (!metadata) {
@@ -314,6 +329,7 @@ export default function Submit() {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

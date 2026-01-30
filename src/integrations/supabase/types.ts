@@ -98,6 +98,48 @@ export type Database = {
         }
         Relationships: []
       }
+      comments: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          updated_at: string | null
+          user_id: string
+          video_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          updated_at?: string | null
+          user_id: string
+          video_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          updated_at?: string | null
+          user_id?: string
+          video_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "videos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       favorites: {
         Row: {
           created_at: string
@@ -164,13 +206,6 @@ export type Database = {
             referencedRelation: "playlists"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "playlist_collaborators_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
       playlist_progress: {
@@ -216,13 +251,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "playlist_progress_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "playlist_progress_video_id_fkey"
             columns: ["video_id"]
             isOneToOne: false
@@ -261,13 +289,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "playlist_videos_added_by_fkey"
-            columns: ["added_by"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "playlist_videos_playlist_id_fkey"
             columns: ["playlist_id"]
             isOneToOne: false
@@ -296,8 +317,10 @@ export type Database = {
           name: string
           slug: string
           thumbnail_url: string | null
+          total_duration_seconds: number | null
           unit_code: string | null
           updated_at: string | null
+          video_count: number | null
         }
         Insert: {
           author_id: string
@@ -311,8 +334,10 @@ export type Database = {
           name: string
           slug: string
           thumbnail_url?: string | null
+          total_duration_seconds?: number | null
           unit_code?: string | null
           updated_at?: string | null
+          video_count?: number | null
         }
         Update: {
           author_id?: string
@@ -326,8 +351,10 @@ export type Database = {
           name?: string
           slug?: string
           thumbnail_url?: string | null
+          total_duration_seconds?: number | null
           unit_code?: string | null
           updated_at?: string | null
+          video_count?: number | null
         }
         Relationships: [
           {
@@ -341,6 +368,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          avatar_path: string | null
           avatar_url: string | null
           bio: string | null
           created_at: string
@@ -351,6 +379,7 @@ export type Database = {
           username: string | null
         }
         Insert: {
+          avatar_path?: string | null
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
@@ -361,6 +390,7 @@ export type Database = {
           username?: string | null
         }
         Update: {
+          avatar_path?: string | null
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
@@ -372,6 +402,68 @@ export type Database = {
         }
         Relationships: []
       }
+      user_social_accounts: {
+        Row: {
+          created_at: string | null
+          id: string
+          platform: string
+          updated_at: string | null
+          url: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          platform: string
+          updated_at?: string | null
+          url: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          platform?: string
+          updated_at?: string | null
+          url?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      video_view_events: {
+        Row: {
+          created_at: string
+          id: string
+          session_id: string | null
+          user_id: string | null
+          video_id: string
+          viewed_on: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          session_id?: string | null
+          user_id?: string | null
+          video_id: string
+          viewed_on?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          session_id?: string | null
+          user_id?: string | null
+          video_id?: string
+          viewed_on?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_view_events_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "videos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       videos: {
         Row: {
           category_id: string | null
@@ -379,9 +471,11 @@ export type Database = {
           created_at: string
           description: string | null
           duration_seconds: number | null
+          favorites_count: number
           id: string
           is_featured: boolean
           language: string
+          playlist_add_count: number
           submitted_by: string | null
           thumbnail_url: string
           title: string
@@ -395,9 +489,11 @@ export type Database = {
           created_at?: string
           description?: string | null
           duration_seconds?: number | null
+          favorites_count?: number
           id?: string
           is_featured?: boolean
           language?: string
+          playlist_add_count?: number
           submitted_by?: string | null
           thumbnail_url: string
           title: string
@@ -411,9 +507,11 @@ export type Database = {
           created_at?: string
           description?: string | null
           duration_seconds?: number | null
+          favorites_count?: number
           id?: string
           is_featured?: boolean
           language?: string
+          playlist_add_count?: number
           submitted_by?: string | null
           thumbnail_url?: string
           title?: string
@@ -443,7 +541,53 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_video_view_count:
+        | { Args: { p_video_id: string }; Returns: number }
+        | {
+            Args: { p_session_id?: string; p_video_id: string }
+            Returns: number
+          }
+      list_featured_videos: {
+        Args: { p_limit?: number; p_offset?: number }
+        Returns: {
+          category: Json
+          category_id: string
+          channel_name: string
+          created_at: string
+          description: string
+          duration_seconds: number
+          favorites_count: number
+          featured_score: number
+          id: string
+          is_featured: boolean
+          language: string
+          playlist_add_count: number
+          submitted_by: string
+          thumbnail_url: string
+          title: string
+          updated_at: string
+          view_count: number
+          youtube_id: string
+        }[]
+      }
+      mark_top_videos_as_featured: {
+        Args: { p_limit?: number }
+        Returns: number
+      }
+      playlist_accessible_to_user:
+        | { Args: { p_playlist_id: string }; Returns: boolean }
+        | {
+            Args: { p_playlist_id: string; p_user_id: string }
+            Returns: boolean
+          }
+      update_playlist_derived_fields: {
+        Args: { p_playlist_id: string }
+        Returns: undefined
+      }
+      update_playlist_thumbnail_from_first_video: {
+        Args: { p_playlist_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
