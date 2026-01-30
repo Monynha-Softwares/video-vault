@@ -66,7 +66,25 @@ serve(async (req) => {
       });
     }
 
-    let allVideos: any[] = [];
+    interface YouTubePlaylistItem {
+      snippet?: {
+        title: string;
+        description: string;
+        channelTitle: string;
+        thumbnails?: {
+          maxres?: { url: string };
+          high?: { url: string };
+          medium?: { url: string };
+          default?: { url: string };
+        };
+        defaultLanguage?: string;
+      };
+      contentDetails?: {
+        videoId: string;
+      };
+    }
+
+    let allVideos: YouTubePlaylistItem[] = [];
     let nextPageToken: string | undefined = undefined;
 
     do {

@@ -163,7 +163,7 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
       return;
     }
 
-    let currentPlaylistName = values.playlistName;
+    const currentPlaylistName = values.playlistName;
     let currentSlug = generateSlug(currentPlaylistName);
     let retryCount = 0;
     const MAX_RETRIES = 3;
@@ -231,17 +231,18 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
               videoId: videoToAddToPlaylist.id,
             });
             // No toast here to avoid spamming, the playlist created toast is enough
-          } catch (videoError: any) {
+          } catch (videoError) {
             console.error(`[PlaylistImportDialog] Error processing video ${videoData.youtube_id}:`, videoError);
-            toast.error(t('playlists.import.error.videoProcessingFailed', { title: videoData.title, error: videoError.message }));
+            const errorMessage = videoError instanceof Error ? videoError.message : String(videoError);
+            toast.error(t('playlists.import.error.videoProcessingFailed', { title: videoData.title, error: errorMessage }));
           }
         }
 
         toast.success(t('playlists.import.success.allVideosProcessed', { count: videosToImport.length }));
         setOpen(false);
         return; // Exit on success
-      } catch (error: any) {
-        if (error.code === '23505' && error.message.includes('playlists_slug_key')) {
+      } catch (error) {
+        if (error && typeof error === 'object' && 'code' in error && error.code === '23505' && 'message' in error && typeof error.message === 'string' && error.message.includes('playlists_slug_key')) {
           retryCount++;
           const randomSuffix = Math.random().toString(36).substring(2, 8);
           currentSlug = generateSlug(currentPlaylistName, randomSuffix);
