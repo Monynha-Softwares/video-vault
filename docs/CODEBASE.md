@@ -370,7 +370,7 @@ export const VideoCard = ({ video }) => (
 ### Form Pattern (react-hook-form + Zod)
 ```typescript
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from '@hookform/resolvers/dist/zod.mjs';
 import { z } from 'zod';
 
 const schema = z.object({
