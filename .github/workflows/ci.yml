@@ -25,28 +25,27 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: bun install
 
       - name: Lint
-        run: pnpm run lint
+        run: bun run lint
 
       - name: Type check
-        run: pnpm run typecheck
+        run: bun run typecheck
 
       - name: Test
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
-        run: pnpm run test
+        run: bun run test
 
       - name: Build
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
-        run: pnpm run build
+        run: bun run build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
