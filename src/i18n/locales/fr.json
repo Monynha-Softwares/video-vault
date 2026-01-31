@@ -470,14 +470,15 @@
       }
     }
   },
-  "about": {
-    "title": "Sobre Nós",
-    "description": "Saiba mais sobre a missão e a visión da Monynha Fun.",
+  "aboutPage": {
     "missionTitle": "Nuestra Misión",
     "missionDescription": "Monynha Fun es una plataforma de video impulsada por Monynha Softwares, creada para celebrar contenido valioso y atemporal y promover la inclusión tecnológica. Nuestra misión es democratizar el acceso a videos culturales y educativos, curando contenido que eleva a comunidades a menudo ignoradas por las plataformas principales.",
     "founderTitle": "Sobre el Fundador",
     "founderName": "Marcelo Santos",
     "founderDescription": "Ingeniero de Software y fundador de Monynha Softwares. Apasionado por el código abierto, la automatización y las experiencias digitales inclusivas.",
+    "founderRole": "Ingénieur Logiciel et Fondateur de Monynha Softwares",
+    "githubLink": "GitHub",
+    "websiteLink": "Site Web",
     "valuesTitle": "Valores",
     "value1": "Orgullo",
     "value2": "Honestidad",
@@ -487,9 +488,7 @@
     "philosophyTitle": "Filosofía",
     "philosophyDescription": "Construido con accesibilidad, transparencia y una fuerte voz social. Inspirado por el orgullo LGBTQIA+ y los movimientos de tecnología abierta."
   },
-  "rules": {
-    "title": "Diretrizes da Plataforma",
-    "description": "Diretrizes para manter um ambiente positivo e produtivo.",
+  "rulesPage": {
     "rule1": "Respeta las identidades, culturas y orígenes de los demás.",
     "rule2": "Sin discurso de odio, acoso o desinformación.",
     "rule3": "Solo se permiten enlaces de YouTube en las publicaciones.",
@@ -498,9 +497,7 @@
     "rule6": "Sé amable. Este espacio está hecho para elevar, no para excluir.",
     "rule7": "Monynha Fun se basa en ideales de código abierto. Los comentarios de la comunidad son bienvenidos."
   },
-  "contact": {
-    "title": "Entre em Contato",
-    "description": "Entre em contato conosco para dudas, sugerencias o soporte.",
+  "contactPage": {
     "form": {
       "nameLabel": "Nombre",
       "namePlaceholder": "Tu nombre",
@@ -522,9 +519,7 @@
     "successMessage": "¡Tu mensaje ha sido enviado con éxito! Nos pondremos en contacto contigo en breve.",
     "errorMessage": "Ocurrió un error al enviar tu mensaje. Por favor, inténtalo de nuevo."
   },
-  "faq": {
-    "title": "FAQ – Perguntas Frequentes",
-    "description": "Encuentra respuestas para las preguntas más comunes sobre la plataforma.",
+  "faqPage": {
     "q1": {
       "question": "Posso fazer upload dos meus próprios vídeos?",
       "answer": "No directamente. Puedes enviar enlaces a videos de YouTube. Nuestro sistema enriquece automáticamente los metadatos y los hace públicos."

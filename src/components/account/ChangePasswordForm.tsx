@@ -11,11 +11,12 @@ import { Lock, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { updateUserPassword, reauthenticateUser } from '@/features/auth/auth.api';
 import { useAuth } from '@/features/auth/useAuth';
+import { passwordSchema } from '@/shared/lib/validation';
 
 const changePasswordSchema = z.object({
   currentPassword: z.string().min(1, 'account.settings.error.currentPasswordRequired'),
-  newPassword: z.string().min(6, 'auth.error.passwordMinLength'),
-  confirmPassword: z.string().min(6, 'auth.error.passwordMinLength'),
+  newPassword: passwordSchema,
+  confirmPassword: passwordSchema,
 }).refine((data) => data.newPassword === data.confirmPassword, {
   message: 'account.settings.error.passwordMismatch',
   path: ['confirmPassword'],

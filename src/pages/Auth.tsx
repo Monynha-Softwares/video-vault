@@ -13,21 +13,22 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { ResetPasswordForm } from '@/components/auth/ResetPasswordForm';
+import { emailSchema, passwordSchema, optionalUsernameSchema } from '@/shared/lib/validation';
 
-// Define Zod schemas for validation
+// Define Zod schemas for validation using shared validators
 const loginSchema = z.object({
-  email: z.string().email('auth.error.invalidEmail'),
-  password: z.string().min(6, 'auth.error.passwordMinLength'),
+  email: emailSchema,
+  password: passwordSchema,
 });
 
 const signupSchema = z.object({
-  username: z.string().min(3, 'auth.error.usernameMinLength').optional().or(z.literal('')),
-  email: z.string().email('auth.error.invalidEmail'),
-  password: z.string().min(6, 'auth.error.passwordMinLength'),
+  username: optionalUsernameSchema,
+  email: emailSchema,
+  password: passwordSchema,
 });
 
 const forgotPasswordSchema = z.object({
-  email: z.string().email('auth.error.invalidEmail'),
+  email: emailSchema,
 });
 
 export default function Auth() {

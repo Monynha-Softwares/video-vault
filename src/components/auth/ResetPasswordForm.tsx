@@ -2,21 +2,15 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Lock, KeyRound, Loader2, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { updateUserPassword } from '@/features/auth/auth.api';
+import { createPasswordConfirmationSchema } from '@/shared/lib/validation';
 
-const resetPasswordSchema = z.object({
-  password: z.string().min(6, 'auth.error.passwordMinLength'),
-  confirmPassword: z.string().min(6, 'auth.error.passwordMinLength'),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'auth.resetPassword.error.passwordMismatch',
-  path: ['confirmPassword'],
-});
+const resetPasswordSchema = createPasswordConfirmationSchema('auth.resetPassword.error.passwordMismatch');
 
 type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
 

@@ -52,7 +52,7 @@ const About = () => {
               />
               <div>
                 <h3 className="text-xl font-semibold">{t('aboutPage.founderName')}</h3>
-                <p className="text-muted-foreground text-sm">Software Engineer & Founder of Monynha Softwares</p>
+                <p className="text-muted-foreground text-sm">{t('aboutPage.founderRole')}</p>
               </div>
             </div>
             <p className="text-muted-foreground leading-relaxed">
@@ -65,7 +65,7 @@ const About = () => {
                 rel="noopener noreferrer" 
                 className="text-primary hover:underline text-sm"
               >
-                GitHub
+                {t('aboutPage.githubLink')}
               </a>
               <a 
                 href="https://marcelo.monynha.com" 
@@ -73,7 +73,7 @@ const About = () => {
                 rel="noopener noreferrer" 
                 className="text-primary hover:underline text-sm"
               >
-                Website
+                {t('aboutPage.websiteLink')}
               </a>
             </div>
           </div>

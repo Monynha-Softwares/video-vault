@@ -12,9 +12,10 @@ import { toast } from 'sonner';
 import { updateUserEmail } from '@/features/auth/auth.api';
 import { useAuth } from '@/features/auth/useAuth';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { emailSchema } from '@/shared/lib/validation';
 
 const changeEmailSchema = z.object({
-  newEmail: z.string().email('auth.error.invalidEmail'),
+  newEmail: emailSchema,
 });
 
 type ChangeEmailFormValues = z.infer<typeof changeEmailSchema>;
