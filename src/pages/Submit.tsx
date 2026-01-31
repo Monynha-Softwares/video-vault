@@ -10,17 +10,25 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
-import { ArrowLeft, Link as LinkIcon, Loader2, Play, CheckCircle, AlertCircle } from 'lucide-react';
 import { submitVideoSchema, SubmitVideoFormValues } from '@/features/submit/submitVideoSchema';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Header } from '@/components/layout/Header'; // Added missing import
 import { Footer } from '@/components/layout/Footer';
+import { getIcon } from '@/flyweights/IconFactory';
+import { DEFAULT_LANGUAGE, getSupportedLanguages } from '@/flyweights/LanguageFlyweight';
 
 export default function Submit() {
   const { t } = useTranslation();
   const location = useLocation();
+  const ArrowLeftIcon = getIcon('ArrowLeft');
+  const LinkIcon = getIcon('Link');
+  const LoaderIcon = getIcon('Loader2');
+  const PlayIcon = getIcon('Play');
+  const CheckIcon = getIcon('CheckCircle');
+  const AlertIcon = getIcon('AlertCircle');
+  const supportedLanguages = getSupportedLanguages();
   
   const { user, loading: authLoading } = useAuth();
   const { data: categories } = useCategories();
@@ -32,7 +40,7 @@ export default function Submit() {
     defaultValues: {
       youtubeUrl: '',
       description: '',
-      language: 'pt',
+      language: DEFAULT_LANGUAGE,
       categoryId: '',
     },
   });
@@ -122,7 +130,7 @@ export default function Submit() {
   if (authLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <LoaderIcon className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -137,12 +145,12 @@ export default function Submit() {
             onClick={() => navigate('/')}
             className="text-muted-foreground hover:text-foreground"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeftIcon className="w-4 h-4 mr-2" />
             {t('common.back')}
           </Button>
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <Play className="w-4 h-4 text-primary-foreground fill-current" />
+              <PlayIcon className="w-4 h-4 text-primary-foreground fill-current" />
             </div>
             <span className="font-bold text-lg">
               Monynha<span className="text-primary">Fun</span>
@@ -179,13 +187,13 @@ export default function Submit() {
                       aria-invalid={errors.youtubeUrl ? "true" : "false"}
                     />
                     {metadataLoading && (
-                      <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-muted-foreground" />
+                      <LoaderIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-muted-foreground" />
                     )}
                     {metadata && !metadataError && !metadataLoading && (
-                      <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-green-500" />
+                      <CheckIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-green-500" />
                     )}
                     {(metadataError || errors.youtubeUrl) && !metadataLoading && (
-                      <AlertCircle className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-destructive" />
+                      <AlertIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-destructive" />
                     )}
                   </div>
                   {errors.youtubeUrl && (
@@ -223,10 +231,11 @@ export default function Submit() {
                       <SelectValue placeholder={t('submit.form.languagePlaceholder')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="pt">{t('common.language.pt')}</SelectItem>
-                      <SelectItem value="en">{t('common.language.en')}</SelectItem>
-                      <SelectItem value="es">{t('common.language.es')}</SelectItem>
-                      <SelectItem value="fr">{t('common.language.fr')}</SelectItem>
+                      {supportedLanguages.map((languageOption) => (
+                        <SelectItem key={languageOption.code} value={languageOption.code}>
+                          {t(`common.language.${languageOption.code}`)}
+                        </SelectItem>
+                      ))}
                       <SelectItem value="other">{t('common.language.other')}</SelectItem>
                     </SelectContent>
                   </Select>
@@ -264,7 +273,7 @@ export default function Submit() {
                 >
                   {submitVideoMutation.isPending ? (
                     <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      <LoaderIcon className="w-4 h-4 mr-2 animate-spin" />
                       {t('submit.form.submittingButton')}
                     </>
                   ) : (
@@ -299,7 +308,7 @@ export default function Submit() {
                     />
                     <div className="absolute inset-0 bg-foreground/10 flex items-center justify-center">
                       <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center shadow-lg">
-                        <Play className="w-7 h-7 text-primary-foreground ml-1" fill="currentColor" />
+                        <PlayIcon className="w-7 h-7 text-primary-foreground ml-1" fill="currentColor" />
                       </div>
                     </div>
                   </div>
@@ -312,7 +321,7 @@ export default function Submit() {
                 </div>
               ) : (
                 <div className="bg-muted/50 border border-dashed border-border rounded-2xl aspect-video flex flex-col items-center justify-center text-muted-foreground">
-                  <Play className="w-12 h-12 mb-3 opacity-30" />
+                  <PlayIcon className="w-12 h-12 mb-3 opacity-30" />
                   <p className="text-sm">{t('submit.previewPlaceholder')}</p>
                 </div>
               )}

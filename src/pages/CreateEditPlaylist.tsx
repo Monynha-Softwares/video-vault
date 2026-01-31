@@ -9,7 +9,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
-import { ArrowLeft, ListVideo, Loader2, Save, BookOpen, Code, Globe, Image, GraduationCap } from 'lucide-react';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
@@ -18,6 +17,8 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { generateSlug } from '@/shared/lib/slug'; // Import generateSlug
+import { getIcon } from '@/flyweights/IconFactory';
+import { DEFAULT_LANGUAGE, getSupportedLanguages } from '@/flyweights/LanguageFlyweight';
 
 const playlistSchema = z.object({
   name: z.string().min(3, 'createEditPlaylist.error.nameMinLength').max(100, 'createEditPlaylist.error.nameMaxLength'),
@@ -38,6 +39,14 @@ export default function CreateEditPlaylist() {
   const navigate = useNavigate();
   const { playlistId } = useParams<{ playlistId: string }>();
   const isEditing = !!playlistId;
+  const ArrowLeftIcon = getIcon('ArrowLeft');
+  const ListVideoIcon = getIcon('ListVideo');
+  const LoaderIcon = getIcon('Loader2');
+  const SaveIcon = getIcon('Save');
+  const BookOpenIcon = getIcon('BookOpen');
+  const CodeIcon = getIcon('Code');
+  const ImageIcon = getIcon('Image');
+  const supportedLanguages = getSupportedLanguages();
 
   const { user, loading: authLoading } = useAuth();
   const { data: existingPlaylist, isLoading: playlistLoading, isError: playlistLoadError } = usePlaylistById(playlistId);
@@ -53,7 +62,7 @@ export default function CreateEditPlaylist() {
       thumbnail_url: '',
       course_code: '',
       unit_code: '',
-      language: 'pt',
+      language: DEFAULT_LANGUAGE,
       is_public: true,
       is_ordered: true,
     },
@@ -134,7 +143,7 @@ export default function CreateEditPlaylist() {
   if (authLoading || playlistLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <LoaderIcon className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -149,7 +158,7 @@ export default function CreateEditPlaylist() {
             {t('createEditPlaylist.loadErrorDescription')}
           </p>
           <Button onClick={() => navigate('/playlists')}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeftIcon className="w-4 h-4 mr-2" />
             {t('createEditPlaylist.backToPlaylists')}
           </Button>
         </main>
@@ -168,12 +177,12 @@ export default function CreateEditPlaylist() {
             onClick={() => navigate(isEditing ? `/playlists/${playlistId}` : '/playlists')}
             className="text-muted-foreground hover:text-foreground"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeftIcon className="w-4 h-4 mr-2" />
             {t('common.back')}
           </Button>
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <ListVideo className="w-4 h-4 text-primary-foreground fill-current" />
+              <ListVideoIcon className="w-4 h-4 text-primary-foreground fill-current" />
             </div>
             <span className="font-bold text-lg">
               Monynha<span className="text-primary">Fun</span>
@@ -248,7 +257,7 @@ export default function CreateEditPlaylist() {
               <div className="space-y-2">
                 <Label htmlFor="thumbnail-url">{t('createEditPlaylist.form.thumbnailUrlLabel')}</Label>
                 <div className="relative">
-                  <Image className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
                     id="thumbnail-url"
                     type="url"
@@ -268,7 +277,7 @@ export default function CreateEditPlaylist() {
               <div className="space-y-2">
                 <Label htmlFor="course-code">{t('createEditPlaylist.form.courseCodeLabel')}</Label>
                 <div className="relative">
-                  <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <BookOpenIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
                     id="course-code"
                     type="text"
@@ -288,7 +297,7 @@ export default function CreateEditPlaylist() {
               <div className="space-y-2">
                 <Label htmlFor="unit-code">{t('createEditPlaylist.form.unitCodeLabel')}</Label>
                 <div className="relative">
-                  <Code className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <CodeIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
                     id="unit-code"
                     type="text"
@@ -312,10 +321,11 @@ export default function CreateEditPlaylist() {
                     <SelectValue placeholder={t('createEditPlaylist.form.languagePlaceholder')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="pt">{t('common.language.pt')}</SelectItem>
-                    <SelectItem value="en">{t('common.language.en')}</SelectItem>
-                    <SelectItem value="es">{t('common.language.es')}</SelectItem>
-                    <SelectItem value="fr">{t('common.language.fr')}</SelectItem>
+                    {supportedLanguages.map((languageOption) => (
+                      <SelectItem key={languageOption.code} value={languageOption.code}>
+                        {t(`common.language.${languageOption.code}`)}
+                      </SelectItem>
+                    ))}
                     <SelectItem value="other">{t('common.language.other')}</SelectItem>
                   </SelectContent>
                 </Select>
@@ -367,12 +377,12 @@ export default function CreateEditPlaylist() {
               >
                 {createPlaylistMutation.isPending || updatePlaylistMutation.isPending ? (
                   <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    <LoaderIcon className="w-4 h-4 mr-2 animate-spin" />
                     {t('createEditPlaylist.form.submittingButton')}
                   </>
                 ) : (
                   <>
-                    <Save className="w-4 h-4 mr-2" />
+                    <SaveIcon className="w-4 h-4 mr-2" />
                     {isEditing ? t('createEditPlaylist.form.saveButton') : t('createEditPlaylist.form.createButton')}
                   </>
                 )}

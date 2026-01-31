@@ -5,16 +5,17 @@ import { Footer } from '@/components/layout/Footer';
 import { VideoCard } from '@/components/video/VideoCard';
 import { useAuth } from '@/features/auth/useAuth';
 import { useFavorites } from '@/features/favorites/queries/useFavorites';
-import { Skeleton } from '@/components/ui/skeleton';
-import { HeartCrack, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { getIcon } from '@/flyweights/IconFactory';
 
 const Favorites = () => {
   const { t } = useTranslation(); // Initialize useTranslation
   const { user, loading: authLoading } = useAuth();
   const { data: favorites, isLoading: favoritesLoading, isError: favoritesError } = useFavorites();
   const navigate = useNavigate();
+  const HeartCrackIcon = getIcon('HeartCrack');
+  const LoaderIcon = getIcon('Loader2');
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -27,7 +28,7 @@ const Favorites = () => {
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-1 container py-8 flex items-center justify-center">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          <LoaderIcon className="w-8 h-8 animate-spin text-primary" />
         </main>
         <Footer />
       </div>
@@ -77,7 +78,7 @@ const Favorites = () => {
           </div>
         ) : (
           <div className="text-center py-12 text-muted-foreground flex flex-col items-center justify-center">
-            <HeartCrack className="w-16 h-16 mb-4 opacity-50" />
+            <HeartCrackIcon className="w-16 h-16 mb-4 opacity-50" />
             <p className="text-lg font-medium mb-2">{t('favorites.noFavoritesTitle')}</p>
             <p className="mb-6">{t('favorites.noFavoritesDescription')}</p>
             <Button onClick={() => navigate('/videos')}>{t('favorites.exploreVideos')}</Button>

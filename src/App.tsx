@@ -18,39 +18,44 @@ import EditProfile from "./pages/EditProfile";
 import AccountSettings from "./pages/AccountSettings";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
+import { useCategories } from "@/features/categories/queries/useCategories";
 
-const App = () => (
-  <BrowserRouter
-    future={{
-      v7_startTransition: true,
-      v7_relativeSplatPath: true,
-    }}
-  >
-    <ScrollToTop />
-    <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/auth" element={<Auth />} />
-      <Route path="/submit" element={<Submit />} />
-      <Route path="/videos/:videoId" element={<VideoDetails />} />
-      <Route path="/videos" element={<Videos />} />
-      <Route path="/favorites" element={<Favorites />} />
-      <Route path="/community" element={<Community />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/rules" element={<Rules />} />
-      <Route path="/contact" element={<Contact />} />
-      <Route path="/faq" element={<FAQ />} />
-      <Route path="/playlists" element={<Playlists />} />
-      <Route path="/playlists/new" element={<CreateEditPlaylist />} />
-      <Route path="/playlists/:playlistId" element={<PlaylistDetails />} />
-      <Route path="/playlists/:playlistId/edit" element={<CreateEditPlaylist />} />
-      <Route path="/profile/:username" element={<Profile />} />
-      <Route path="/profile/edit" element={<EditProfile />} />
-      <Route path="/account/settings" element={<AccountSettings />} />
-      <Route path="/:username" element={<Profile />} />
-      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  </BrowserRouter>
-);
+const App = () => {
+  useCategories();
+
+  return (
+    <BrowserRouter
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}
+    >
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/submit" element={<Submit />} />
+        <Route path="/videos/:videoId" element={<VideoDetails />} />
+        <Route path="/videos" element={<Videos />} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/community" element={<Community />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/rules" element={<Rules />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/playlists" element={<Playlists />} />
+        <Route path="/playlists/new" element={<CreateEditPlaylist />} />
+        <Route path="/playlists/:playlistId" element={<PlaylistDetails />} />
+        <Route path="/playlists/:playlistId/edit" element={<CreateEditPlaylist />} />
+        <Route path="/profile/:username" element={<Profile />} />
+        <Route path="/profile/edit" element={<EditProfile />} />
+        <Route path="/account/settings" element={<AccountSettings />} />
+        <Route path="/:username" element={<Profile />} />
+        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
 export default App;

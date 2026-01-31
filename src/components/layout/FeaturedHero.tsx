@@ -1,11 +1,11 @@
 import type { VideoWithCategory } from "@/entities/video/video.types";
 import { formatDuration, formatViewCount } from "@/shared/lib/format";
-import { Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { useVideoViewIncrement } from '@/shared/hooks/useVideoViewIncrement';
+import { getIcon } from "@/flyweights/IconFactory";
 
 interface FeaturedHeroProps {
   video: VideoWithCategory;
@@ -15,6 +15,7 @@ export const FeaturedHero = ({ video }: FeaturedHeroProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { viewCount, showPlus, handleViewIncrement } = useVideoViewIncrement(video.view_count || 0, 900);
+  const PlayIcon = getIcon('Play');
 
   const handleClick = () => {
     handleViewIncrement(video.id);
@@ -54,7 +55,7 @@ export const FeaturedHero = ({ video }: FeaturedHeroProps) => {
             <div className="mt-4 flex items-center gap-4">
               {video.duration_seconds && video.duration_seconds > 0 && (
                 <div className="flex items-center gap-2 text-sm text-white/90">
-                  <Play className="w-4 h-4" />
+                  <PlayIcon className="w-4 h-4" />
                   <span>{formatDuration(video.duration_seconds)}</span>
                 </div>
               )}

@@ -15,16 +15,20 @@ import {
   AlertDialogHeader, 
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { AlertTriangle, Loader2, Trash2, HeartCrack } from 'lucide-react';
 import { toast } from 'sonner';
 import { deleteUserAccount } from '@/features/auth/auth.api';
 import { useAuth } from '@/features/auth/useAuth';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { getIcon } from '@/flyweights/IconFactory';
 
 export const DeleteAccount: React.FC = () => {
   const { t } = useTranslation();
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const AlertIcon = getIcon('AlertTriangle');
+  const LoaderIcon = getIcon('Loader2');
+  const TrashIcon = getIcon('Trash2');
+  const HeartCrackIcon = getIcon('HeartCrack');
   const [showDialog, setShowDialog] = useState(false);
   const [confirmText, setConfirmText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
@@ -70,7 +74,7 @@ export const DeleteAccount: React.FC = () => {
       <Card className="border-destructive">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-destructive">
-            <AlertTriangle className="w-5 h-5" />
+            <AlertIcon className="w-5 h-5" />
             {t('account.settings.deleteAccount.title')}
           </CardTitle>
           <CardDescription>
@@ -79,7 +83,7 @@ export const DeleteAccount: React.FC = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <Alert variant="destructive">
-            <AlertTriangle className="h-4 w-4" />
+            <AlertIcon className="h-4 w-4" />
             <AlertDescription>
               {t('account.settings.deleteAccount.warning')}
             </AlertDescription>
@@ -103,7 +107,7 @@ export const DeleteAccount: React.FC = () => {
             onClick={() => setShowDialog(true)}
             className="w-full"
           >
-            <Trash2 className="w-4 h-4 mr-2" />
+            <TrashIcon className="w-4 h-4 mr-2" />
             {t('account.settings.deleteAccount.button')}
           </Button>
         </CardContent>
@@ -113,7 +117,7 @@ export const DeleteAccount: React.FC = () => {
         <AlertDialogContent className="max-w-md">
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
-              <HeartCrack className="w-6 h-6 text-destructive" />
+              <HeartCrackIcon className="w-6 h-6 text-destructive" />
               {t('account.settings.deleteAccount.dialog.title')}
             </AlertDialogTitle>
             <AlertDialogDescription className="space-y-4 pt-4">
@@ -140,7 +144,7 @@ export const DeleteAccount: React.FC = () => {
               </div>
 
               <Alert variant="destructive">
-                <AlertTriangle className="h-4 w-4" />
+                <AlertIcon className="h-4 w-4" />
                 <AlertDescription className="text-xs">
                   {t('account.settings.deleteAccount.dialog.finalWarning')}
                 </AlertDescription>
@@ -161,12 +165,12 @@ export const DeleteAccount: React.FC = () => {
             >
               {isDeleting ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <LoaderIcon className="w-4 h-4 mr-2 animate-spin" />
                   {t('account.settings.deleteAccount.dialog.deleting')}
                 </>
               ) : (
                 <>
-                  <Trash2 className="w-4 h-4 mr-2" />
+                  <TrashIcon className="w-4 h-4 mr-2" />
                   {t('account.settings.deleteAccount.dialog.confirm')}
                 </>
               )}

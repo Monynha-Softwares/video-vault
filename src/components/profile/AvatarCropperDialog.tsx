@@ -6,8 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { getCroppedImg } from '@/shared/lib/image';
-import { Crop, RotateCcw, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { getIcon } from '@/flyweights/IconFactory';
 
 interface AvatarCropperDialogProps {
   imageSrc: string;
@@ -18,6 +18,9 @@ interface AvatarCropperDialogProps {
 
 export function AvatarCropperDialog({ imageSrc, open, onClose, onCropComplete }: AvatarCropperDialogProps) {
   const { t } = useTranslation();
+  const CropIcon = getIcon('Crop');
+  const RotateIcon = getIcon('RotateCcw');
+  const LoaderIcon = getIcon('Loader2');
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
@@ -93,7 +96,7 @@ export function AvatarCropperDialog({ imageSrc, open, onClose, onCropComplete }:
       <DialogContent className="sm:max-w-xl flex flex-col h-[90vh] max-h-[600px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Crop className="w-5 h-5" />
+            <CropIcon className="w-5 h-5" />
             {t('profile.avatar.cropTitle')}
           </DialogTitle>
           <DialogDescription>
@@ -141,7 +144,7 @@ export function AvatarCropperDialog({ imageSrc, open, onClose, onCropComplete }:
               className="flex-1"
             />
             <Button variant="outline" size="icon" onClick={() => setRotation(0)} className="shrink-0">
-              <RotateCcw className="w-4 h-4" />
+              <RotateIcon className="w-4 h-4" />
             </Button>
           </div>
         </div>
@@ -152,9 +155,9 @@ export function AvatarCropperDialog({ imageSrc, open, onClose, onCropComplete }:
           </Button>
           <Button onClick={showCroppedImage} disabled={isCropping}>
             {isCropping ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              <LoaderIcon className="w-4 h-4 mr-2 animate-spin" />
             ) : (
-              <Crop className="w-4 h-4 mr-2" />
+              <CropIcon className="w-4 h-4 mr-2" />
             )}
             {t('profile.avatar.cropAndUpload')}
           </Button>

@@ -1,32 +1,22 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Instagram,
-  Github,
-  Youtube,
-  Globe,
-  Twitter,
-  Linkedin,
-  Facebook,
-  Link as LinkIcon,
-  LucideIcon,
-} from 'lucide-react';
 import { UserSocialAccount } from '@/features/user_social_accounts';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { getIcon, type IconName } from '@/flyweights/IconFactory';
 
 interface SocialAccountsDisplayProps {
   socialAccounts: UserSocialAccount[];
 }
 
-const platformIconMap: Record<string, LucideIcon> = {
-  instagram: Instagram,
-  github: Github,
-  youtube: Youtube,
-  twitter: Twitter,
-  linkedin: Linkedin,
-  facebook: Facebook,
-  website: Globe,
+const platformIconMap: Record<string, IconName> = {
+  instagram: 'Instagram',
+  github: 'Github',
+  youtube: 'Youtube',
+  twitter: 'Twitter',
+  linkedin: 'Linkedin',
+  facebook: 'Facebook',
+  website: 'Globe',
 };
 
 const getPlatformName = (platform: string, t: (key: string) => string) => {
@@ -53,7 +43,7 @@ export const SocialAccountsDisplay: React.FC<SocialAccountsDisplayProps> = ({ so
     <div className="flex flex-wrap gap-3">
       <TooltipProvider>
         {socialAccounts.map((account) => {
-          const Icon = platformIconMap[account.platform] || LinkIcon;
+          const Icon = getIcon(platformIconMap[account.platform] ?? 'Link');
           const platformName = getPlatformName(account.platform, t);
 
           return (

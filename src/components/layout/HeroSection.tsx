@@ -1,15 +1,15 @@
-import { ArrowRight, Sparkles, Youtube, Loader2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuth } from '@/features/auth/useAuth';
 import { extractYouTubeId } from '@/shared/lib/youtube';
 import { toast } from 'sonner';
+import { getIcon } from "@/flyweights/IconFactory";
 
 // Define Zod schema for the YouTube URL input
 const heroSubmitSchema = z.object({
@@ -28,6 +28,11 @@ export const HeroSection = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
+  const ArrowRightIcon = getIcon('ArrowRight');
+  const SparklesIcon = getIcon('Sparkles');
+  const YoutubeIcon = getIcon('Youtube');
+  const LoaderIcon = getIcon('Loader2');
+  const AlertIcon = getIcon('AlertCircle');
   const [isSubmittingForm, setIsSubmittingForm] = useState(false);
 
   const { register, handleSubmit, formState: { errors }, setValue } = useForm<HeroSubmitFormValues>({
@@ -96,7 +101,7 @@ export const HeroSection = () => {
         <div className="max-w-3xl mx-auto text-center space-y-8">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium animate-fade-up">
-            <Sparkles className="w-4 h-4" />
+            <SparklesIcon className="w-4 h-4" />
             <span>{t('hero.badge')}</span>
           </div>
 
@@ -119,7 +124,7 @@ export const HeroSection = () => {
           >
             <div className="flex gap-2">
               <div className="relative flex-1">
-                <Youtube className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <YoutubeIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   id="youtube-url-hero"
                   type="url"
@@ -129,14 +134,14 @@ export const HeroSection = () => {
                   aria-invalid={errors.youtubeUrl ? "true" : "false"}
                 />
                 {errors.youtubeUrl && (
-                  <AlertCircle className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-destructive" />
+                  <AlertIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-destructive" />
                 )}
               </div>
               <Button type="submit" className="px-6" variant="hero" disabled={isSubmittingForm || authLoading}>
                 {isSubmittingForm || authLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <LoaderIcon className="w-4 h-4 animate-spin" />
                 ) : (
-                  <ArrowRight className="w-5 h-5" />
+                  <ArrowRightIcon className="w-5 h-5" />
                 )}
               </Button>
             </div>
@@ -163,7 +168,7 @@ export const HeroSection = () => {
               onClick={() => navigate('/videos')}
             >
               {t('hero.exploreVideosButton')}
-              <ArrowRight className="w-5 h-5 ml-1" />
+              <ArrowRightIcon className="w-5 h-5 ml-1" />
             </Button>
           </div>
         </div>

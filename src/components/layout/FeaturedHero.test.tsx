@@ -3,6 +3,7 @@ import { screen } from '@testing-library/react';
 import { FeaturedHero } from './FeaturedHero';
 import { renderWithProviders } from '@/shared/test/renderWithProviders';
 import type { VideoWithCategory } from '@/entities/video/video.types';
+import { getLanguage } from '@/flyweights/LanguageFlyweight';
 
 const incrementVideoViewCount = vi.fn().mockResolvedValue({ data: 1201 });
 
@@ -19,7 +20,7 @@ const sampleVideo: VideoWithCategory = {
   duration_seconds: 125,
   favorites_count: 10,
   thumbnail_url: 'https://example.com/thumb.jpg',
-  language: 'en',
+  language: getLanguage('en').code,
   playlist_add_count: 3,
   category_id: 'cat-1',
   submitted_by: 'user-1',

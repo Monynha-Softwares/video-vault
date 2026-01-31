@@ -5,11 +5,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Loader2, Send } from 'lucide-react';
 import { useCreateComment } from '@/features/comments/queries/useComments';
 import { toast } from 'sonner';
 import { useAuth } from '@/features/auth/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { getIcon } from '@/flyweights/IconFactory';
 
 interface CommentFormProps {
   videoId: string;
@@ -26,6 +26,8 @@ export const CommentForm: React.FC<CommentFormProps> = ({ videoId }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const createCommentMutation = useCreateComment();
+  const LoaderIcon = getIcon('Loader2');
+  const SendIcon = getIcon('Send');
 
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<CommentFormValues>({
     resolver: zodResolver(commentFormSchema),
@@ -74,12 +76,12 @@ export const CommentForm: React.FC<CommentFormProps> = ({ videoId }) => {
       >
         {isSubmitting ? (
           <>
-            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            <LoaderIcon className="w-4 h-4 mr-2 animate-spin" />
             {t('comments.form.submitting')}
           </>
         ) : (
           <>
-            <Send className="w-4 h-4 mr-2" />
+            <SendIcon className="w-4 h-4 mr-2" />
             {t('comments.form.submitButton')}
           </>
         )}

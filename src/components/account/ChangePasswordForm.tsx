@@ -7,11 +7,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Lock, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { updateUserPassword, reauthenticateUser } from '@/features/auth/auth.api';
 import { useAuth } from '@/features/auth/useAuth';
 import { passwordSchema } from '@/shared/lib/validation';
+import { getIcon } from '@/flyweights/IconFactory';
 
 const changePasswordSchema = z.object({
   currentPassword: z.string().min(1, 'account.settings.error.currentPasswordRequired'),
@@ -30,6 +30,8 @@ type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>;
 export const ChangePasswordForm: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const LockIcon = getIcon('Lock');
+  const LoaderIcon = getIcon('Loader2');
 
   const {
     register,
@@ -84,7 +86,7 @@ export const ChangePasswordForm: React.FC = () => {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Lock className="w-5 h-5" />
+          <LockIcon className="w-5 h-5" />
           {t('account.settings.passwordSection.title')}
         </CardTitle>
         <CardDescription>
@@ -141,7 +143,7 @@ export const ChangePasswordForm: React.FC = () => {
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <LoaderIcon className="w-4 h-4 mr-2 animate-spin" />
                 {t('auth.submittingButton')}
               </>
             ) : (

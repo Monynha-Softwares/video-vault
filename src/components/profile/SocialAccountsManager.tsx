@@ -4,21 +4,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import {
-  Instagram,
-  Github,
-  Youtube,
-  Globe,
-  Twitter,
-  Linkedin,
-  Facebook,
-  Link as LinkIcon,
-  Plus,
-  Edit,
-  Trash2,
-  Loader2,
-  LucideIcon,
-} from 'lucide-react';
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -45,6 +30,7 @@ import {
 } from '@/features/user_social_accounts';
 import { useAuth } from '@/features/auth/useAuth';
 import { toast } from 'sonner';
+import { getIcon, type IconName } from '@/flyweights/IconFactory';
 
 interface SocialAccountsManagerProps {
   userId: string;
@@ -57,29 +43,34 @@ const socialAccountSchema = z.object({
 
 type SocialAccountFormValues = z.infer<typeof socialAccountSchema>;
 
-const platformOptions = [
-  { value: 'instagram', labelKey: 'profile.social.platform.instagram', icon: Instagram },
-  { value: 'github', labelKey: 'profile.social.platform.github', icon: Github },
-  { value: 'youtube', labelKey: 'profile.social.platform.youtube', icon: Youtube },
-  { value: 'twitter', labelKey: 'profile.social.platform.twitter', icon: Twitter },
-  { value: 'linkedin', labelKey: 'profile.social.platform.linkedin', icon: Linkedin },
-  { value: 'facebook', labelKey: 'profile.social.platform.facebook', icon: Facebook },
-  { value: 'website', labelKey: 'profile.social.platform.website', icon: Globe },
+const platformOptions: Array<{ value: string; labelKey: string; iconName: IconName }> = [
+  { value: 'instagram', labelKey: 'profile.social.platform.instagram', iconName: 'Instagram' },
+  { value: 'github', labelKey: 'profile.social.platform.github', iconName: 'Github' },
+  { value: 'youtube', labelKey: 'profile.social.platform.youtube', iconName: 'Youtube' },
+  { value: 'twitter', labelKey: 'profile.social.platform.twitter', iconName: 'Twitter' },
+  { value: 'linkedin', labelKey: 'profile.social.platform.linkedin', iconName: 'Linkedin' },
+  { value: 'facebook', labelKey: 'profile.social.platform.facebook', iconName: 'Facebook' },
+  { value: 'website', labelKey: 'profile.social.platform.website', iconName: 'Globe' },
 ];
 
-const platformIconMap: Record<string, LucideIcon> = {
-  instagram: Instagram,
-  github: Github,
-  youtube: Youtube,
-  twitter: Twitter,
-  linkedin: Linkedin,
-  facebook: Facebook,
-  website: Globe,
+const platformIconMap: Record<string, IconName> = {
+  instagram: 'Instagram',
+  github: 'Github',
+  youtube: 'Youtube',
+  twitter: 'Twitter',
+  linkedin: 'Linkedin',
+  facebook: 'Facebook',
+  website: 'Globe',
 };
 
 export const SocialAccountsManager: React.FC<SocialAccountsManagerProps> = ({ userId }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const PlusIcon = getIcon('Plus');
+  const EditIcon = getIcon('Edit');
+  const TrashIcon = getIcon('Trash2');
+  const LoaderIcon = getIcon('Loader2');
+  const LinkIcon = getIcon('Link');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingAccount, setEditingAccount] = useState<UserSocialAccount | null>(null);
 
@@ -165,7 +156,7 @@ export const SocialAccountsManager: React.FC<SocialAccountsManagerProps> = ({ us
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button variant="outline" size="sm" onClick={() => setEditingAccount(null)}> {/* Set editingAccount to null for new */}
-              <Plus className="w-4 h-4 mr-2" />
+              <PlusIcon className="w-4 h-4 mr-2" />
               {t('profile.social.addAccount')}
             </Button>
           </DialogTrigger>
@@ -193,7 +184,10 @@ export const SocialAccountsManager: React.FC<SocialAccountsManagerProps> = ({ us
                     {platformOptions.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
                         <span className="flex items-center gap-2">
-                          <option.icon className="w-4 h-4" />
+                          {(() => {
+                            const OptionIcon = getIcon(option.iconName);
+                            return <OptionIcon className="w-4 h-4" />;
+                          })()}
                           {t(option.labelKey)}
                         </span>
                       </SelectItem>
@@ -227,7 +221,7 @@ export const SocialAccountsManager: React.FC<SocialAccountsManagerProps> = ({ us
                 <Button type="submit" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      <LoaderIcon className="w-4 h-4 mr-2 animate-spin" />
                       {t('profile.social.form.saving')}
                     </>
                   ) : (
@@ -242,12 +236,12 @@ export const SocialAccountsManager: React.FC<SocialAccountsManagerProps> = ({ us
 
       {accountsLoading ? (
         <div className="flex justify-center py-4">
-          <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+          <LoaderIcon className="w-6 h-6 animate-spin text-muted-foreground" />
         </div>
       ) : socialAccounts && socialAccounts.length > 0 ? (
         <div className="space-y-2">
           {socialAccounts.map((account) => {
-            const Icon = platformIconMap[account.platform] || LinkIcon;
+            const Icon = getIcon(platformIconMap[account.platform] ?? 'Link');
             return (
               <div
                 key={account.id}
@@ -274,7 +268,7 @@ export const SocialAccountsManager: React.FC<SocialAccountsManagerProps> = ({ us
                       setIsDialogOpen(true); // Manually open the dialog
                     }}
                   >
-                    <Edit className="w-4 h-4" />
+                    <EditIcon className="w-4 h-4" />
                   </Button>
                   <Button
                     variant="ghost"
@@ -283,7 +277,7 @@ export const SocialAccountsManager: React.FC<SocialAccountsManagerProps> = ({ us
                     onClick={() => handleDelete(account.id)}
                     disabled={deleteMutation.isPending}
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <TrashIcon className="w-4 h-4" />
                   </Button>
                 </div>
               </div>

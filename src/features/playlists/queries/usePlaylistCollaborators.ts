@@ -8,6 +8,7 @@ import {
   removeCollaborator,
   updateCollaboratorRole,
 } from '@/entities/playlist/playlist.api';
+import { getRole, type RoleId } from '@/flyweights/RoleFlyweight';
 
 export function usePlaylistCollaborators(playlistId: string | undefined) {
   return useQuery<PlaylistCollaborator[], Error>({
@@ -22,9 +23,10 @@ export function usePlaylistCollaborators(playlistId: string | undefined) {
 
 export function useAddCollaborator() {
   const queryClient = useQueryClient();
+  const editorRole = getRole('editor');
 
-  return useMutation<PlaylistCollaborator, Error, { playlistId: string; userId: string; role?: 'editor' | 'viewer' }>({
-    mutationFn: async ({ playlistId, userId, role = 'editor' }) => {
+  return useMutation<PlaylistCollaborator, Error, { playlistId: string; userId: string; role?: RoleId }>({
+    mutationFn: async ({ playlistId, userId, role = editorRole.id }) => {
       return addCollaborator({ playlistId, userId, role });
     },
     onSuccess: (_, variables) => {
@@ -41,7 +43,7 @@ export function useAddCollaborator() {
 export function useUpdateCollaboratorRole() {
   const queryClient = useQueryClient();
 
-  return useMutation<void, Error, { playlistId: string; userId: string; role: 'editor' | 'viewer' }>({
+  return useMutation<void, Error, { playlistId: string; userId: string; role: RoleId }>({
     mutationFn: async ({ playlistId, userId, role }) => {
       return updateCollaboratorRole({ playlistId, userId, role });
     },

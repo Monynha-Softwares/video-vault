@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, Search, Check, Loader2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -14,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { useAddVideoToPlaylist, PlaylistVideo } from '@/features/playlists';
 import { useVideos } from '@/features/videos/queries/useVideos';
 import { toast } from 'sonner';
+import { getIcon } from '@/flyweights/IconFactory';
 
 interface AddVideoDialogProps {
   playlistId: string;
@@ -22,6 +22,10 @@ interface AddVideoDialogProps {
 
 export function AddVideoDialog({ playlistId, existingVideos }: AddVideoDialogProps) {
   const { t } = useTranslation();
+  const PlusIcon = getIcon('Plus');
+  const SearchIcon = getIcon('Search');
+  const CheckIcon = getIcon('Check');
+  const LoaderIcon = getIcon('Loader2');
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const addVideoMutation = useAddVideoToPlaylist();
@@ -47,7 +51,7 @@ export function AddVideoDialog({ playlistId, existingVideos }: AddVideoDialogPro
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="gap-2">
-          <Plus className="w-4 h-4" />
+          <PlusIcon className="w-4 h-4" />
           {t('playlistDetails.addVideos')}
         </Button>
       </DialogTrigger>
@@ -60,7 +64,7 @@ export function AddVideoDialog({ playlistId, existingVideos }: AddVideoDialogPro
         </DialogHeader>
 
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder={t('playlistDetails.searchVideosPlaceholder')}
             value={searchQuery}
@@ -72,7 +76,7 @@ export function AddVideoDialog({ playlistId, existingVideos }: AddVideoDialogPro
         <div className="max-h-80 overflow-y-auto space-y-2 mt-2">
           {isLoading ? (
             <div className="flex justify-center py-8">
-              <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+              <LoaderIcon className="w-6 h-6 animate-spin text-muted-foreground" />
             </div>
           ) : videos && videos.length > 0 ? (
             videos.map((video) => {
@@ -102,12 +106,12 @@ export function AddVideoDialog({ playlistId, existingVideos }: AddVideoDialogPro
                   >
                     {isAdded ? (
                       <>
-                        <Check className="w-3 h-3" />
+                        <CheckIcon className="w-3 h-3" />
                         {t('playlistDetails.added')}
                       </>
                     ) : (
                       <>
-                        <Plus className="w-3 h-3" />
+                        <PlusIcon className="w-3 h-3" />
                         {t('playlistDetails.add')}
                       </>
                     )}

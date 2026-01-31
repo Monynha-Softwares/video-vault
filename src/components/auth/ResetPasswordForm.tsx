@@ -5,10 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Lock, KeyRound, Loader2, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { updateUserPassword } from '@/features/auth/auth.api';
 import { createPasswordConfirmationSchema } from '@/shared/lib/validation';
+import { getIcon } from '@/flyweights/IconFactory';
 
 const resetPasswordSchema = createPasswordConfirmationSchema('auth.resetPassword.error.passwordMismatch');
 
@@ -21,6 +21,10 @@ interface ResetPasswordFormProps {
 export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onSuccess }) => {
   const { t } = useTranslation();
   const [isSuccess, setIsSuccess] = React.useState(false);
+  const LockIcon = getIcon('Lock');
+  const KeyRoundIcon = getIcon('KeyRound');
+  const LoaderIcon = getIcon('Loader2');
+  const CheckIcon = getIcon('CheckCircle');
 
   const {
     register,
@@ -64,7 +68,7 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onSuccess 
     return (
       <div className="text-center space-y-4 py-8">
         <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto">
-          <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
+          <CheckIcon className="w-8 h-8 text-green-600 dark:text-green-400" />
         </div>
         <h3 className="text-xl font-semibold text-foreground">{t('auth.resetPassword.successTitle')}</h3>
         <p className="text-muted-foreground">{t('auth.resetPassword.redirecting')}</p>
@@ -76,7 +80,7 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onSuccess 
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       <div className="text-center mb-6">
         <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-          <KeyRound className="w-6 h-6 text-primary" />
+          <KeyRoundIcon className="w-6 h-6 text-primary" />
         </div>
         <h2 className="text-xl font-semibold text-foreground">{t('auth.resetPassword.title')}</h2>
         <p className="text-muted-foreground mt-2">{t('auth.resetPassword.description')}</p>
@@ -87,7 +91,7 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onSuccess 
           {t('auth.resetPassword.newPassword')}
         </Label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+          <LockIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <Input
             id="password"
             type="password"
@@ -106,7 +110,7 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onSuccess 
           {t('auth.resetPassword.confirmPassword')}
         </Label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+          <LockIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <Input
             id="confirmPassword"
             type="password"
@@ -128,7 +132,7 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onSuccess 
       >
         {isSubmitting ? (
           <>
-            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            <LoaderIcon className="w-4 h-4 mr-2 animate-spin" />
             {t('auth.submittingButton')}
           </>
         ) : (

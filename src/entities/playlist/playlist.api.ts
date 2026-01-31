@@ -7,6 +7,7 @@ import type {
   PlaylistUpdate,
   PlaylistVideo,
 } from './playlist.types';
+import { getRole, type RoleId } from '@/flyweights/RoleFlyweight';
 
 export interface ListPlaylistsParams {
   authorId?: string;
@@ -193,13 +194,13 @@ export async function listPlaylistCollaborators(playlistId: string) {
   })) as PlaylistCollaborator[];
 }
 
-export async function addCollaborator(payload: { playlistId: string; userId: string; role?: 'editor' | 'viewer' }) {
+export async function addCollaborator(payload: { playlistId: string; userId: string; role?: RoleId }) {
   const { data, error } = await supabase
     .from('playlist_collaborators')
     .upsert({
       playlist_id: payload.playlistId,
       user_id: payload.userId,
-      role: payload.role ?? 'editor',
+      role: payload.role ?? getRole('editor').id,
     }, {
       onConflict: 'playlist_id,user_id', // Specify the unique constraint to handle conflicts
     })
@@ -210,7 +211,7 @@ export async function addCollaborator(payload: { playlistId: string; userId: str
   return data as PlaylistCollaborator;
 }
 
-export async function updateCollaboratorRole(payload: { playlistId: string; userId: string; role: 'editor' | 'viewer' }) {
+export async function updateCollaboratorRole(payload: { playlistId: string; userId: string; role: RoleId }) {
   const { error } = await supabase
     .from('playlist_collaborators')
     .update({ role: payload.role })

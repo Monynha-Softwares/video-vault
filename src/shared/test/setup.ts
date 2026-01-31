@@ -2,8 +2,9 @@ import '@testing-library/jest-dom/vitest';
 import { afterAll, afterEach, beforeAll, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import { server } from './mswServer';
+import { getLanguage } from '@/flyweights/LanguageFlyweight';
 
-localStorage.setItem('i18nextLng', 'en');
+localStorage.setItem('i18nextLng', getLanguage('en').code);
 
 class ResizeObserverMock {
   observe() {}

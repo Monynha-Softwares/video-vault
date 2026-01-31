@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Progress } from '@/components/ui/progress';
-import { CheckCircle2 } from 'lucide-react';
+import { getIcon } from '@/flyweights/IconFactory';
 
 interface PlaylistProgressBarProps {
   watched: number;
@@ -10,6 +10,7 @@ interface PlaylistProgressBarProps {
 
 export function PlaylistProgressBar({ watched, total, className }: PlaylistProgressBarProps) {
   const { t } = useTranslation();
+  const CheckIcon = getIcon('CheckCircle2');
   const percent = total > 0 ? (watched / total) * 100 : 0;
   const isComplete = watched === total && total > 0;
 
@@ -20,7 +21,7 @@ export function PlaylistProgressBar({ watched, total, className }: PlaylistProgr
           {t('playlistDetails.yourProgress')}
         </span>
         <span className="font-medium flex items-center gap-1">
-          {isComplete && <CheckCircle2 className="w-4 h-4 text-green-500" />}
+          {isComplete && <CheckIcon className="w-4 h-4 text-green-500" />}
           {watched}/{total} {t('playlistDetails.videosWatched')}
         </span>
       </div>

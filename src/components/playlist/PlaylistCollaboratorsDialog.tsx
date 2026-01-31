@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Users, UserPlus, X, Shield, Eye, Loader2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -28,6 +27,8 @@ import {
   useRemoveCollaborator,
 } from '@/features/playlists';
 import { findProfileByUsername } from '@/entities/profile/profile.api';
+import { getIcon } from '@/flyweights/IconFactory';
+import { getRole, type RoleId } from '@/flyweights/RoleFlyweight';
 
 interface PlaylistCollaboratorsDialogProps {
   playlistId: string;
@@ -36,6 +37,14 @@ interface PlaylistCollaboratorsDialogProps {
 
 export function PlaylistCollaboratorsDialog({ playlistId, isAuthor }: PlaylistCollaboratorsDialogProps) {
   const { t } = useTranslation();
+  const UsersIcon = getIcon('Users');
+  const UserPlusIcon = getIcon('UserPlus');
+  const CloseIcon = getIcon('X');
+  const ShieldIcon = getIcon('Shield');
+  const EyeIcon = getIcon('Eye');
+  const LoaderIcon = getIcon('Loader2');
+  const editorRole = getRole('editor');
+  const viewerRole = getRole('viewer');
   const [open, setOpen] = useState(false);
   const [username, setUsername] = useState('');
   const [searchLoading, setSearchLoading] = useState(false);
@@ -67,7 +76,7 @@ export function PlaylistCollaboratorsDialog({ playlistId, isAuthor }: PlaylistCo
       await addMutation.mutateAsync({
         playlistId,
         userId: profile.id,
-        role: 'editor',
+        role: editorRole.id,
       });
 
       toast.success(t('playlistDetails.collaborators.addedSuccess'));
@@ -79,7 +88,7 @@ export function PlaylistCollaboratorsDialog({ playlistId, isAuthor }: PlaylistCo
     }
   };
 
-  const handleRoleChange = async (userId: string, role: 'editor' | 'viewer') => {
+  const handleRoleChange = async (userId: string, role: RoleId) => {
     try {
       await updateRoleMutation.mutateAsync({ playlistId, userId, role });
       toast.success(t('playlistDetails.collaborators.roleUpdated'));
@@ -101,7 +110,7 @@ export function PlaylistCollaboratorsDialog({ playlistId, isAuthor }: PlaylistCo
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm" className="gap-2">
-          <Users className="w-4 h-4" />
+          <UsersIcon className="w-4 h-4" />
           {t('playlistDetails.collaborators.manage')}
           {collaborators && collaborators.length > 0 && (
             <span className="ml-1 px-1.5 py-0.5 bg-primary/10 text-primary text-xs rounded-full">
@@ -113,7 +122,7 @@ export function PlaylistCollaboratorsDialog({ playlistId, isAuthor }: PlaylistCo
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Users className="w-5 h-5" />
+            <UsersIcon className="w-5 h-5" />
             {t('playlistDetails.collaborators.title')}
           </DialogTitle>
           <DialogDescription>
@@ -136,9 +145,9 @@ export function PlaylistCollaboratorsDialog({ playlistId, isAuthor }: PlaylistCo
               size="icon"
             >
               {searchLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <LoaderIcon className="w-4 h-4 animate-spin" />
               ) : (
-                <UserPlus className="w-4 h-4" />
+                <UserPlusIcon className="w-4 h-4" />
               )}
             </Button>
           </div>
@@ -148,7 +157,7 @@ export function PlaylistCollaboratorsDialog({ playlistId, isAuthor }: PlaylistCo
         <div className="space-y-3 max-h-64 overflow-y-auto">
           {isLoading ? (
             <div className="flex justify-center py-4">
-              <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+              <LoaderIcon className="w-6 h-6 animate-spin text-muted-foreground" />
             </div>
           ) : collaborators && collaborators.length > 0 ? (
             collaborators.map((collab) => (
@@ -178,20 +187,20 @@ export function PlaylistCollaboratorsDialog({ playlistId, isAuthor }: PlaylistCo
                     <>
                       <Select
                         value={collab.role}
-                        onValueChange={(value: 'editor' | 'viewer') => handleRoleChange(collab.user_id, value)}
+                        onValueChange={(value: RoleId) => handleRoleChange(collab.user_id, value)}
                       >
                         <SelectTrigger className="w-24 h-8">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="editor">
+                          <SelectItem value={editorRole.id}>
                             <span className="flex items-center gap-1">
-                              <Shield className="w-3 h-3" /> {t('playlistDetails.collaborators.roleEditor')}
+                              <ShieldIcon className="w-3 h-3" /> {t('playlistDetails.collaborators.roleEditor')}
                             </span>
                           </SelectItem>
-                          <SelectItem value="viewer">
+                          <SelectItem value={viewerRole.id}>
                             <span className="flex items-center gap-1">
-                              <Eye className="w-3 h-3" /> {t('playlistDetails.collaborators.roleViewer')}
+                              <EyeIcon className="w-3 h-3" /> {t('playlistDetails.collaborators.roleViewer')}
                             </span>
                           </SelectItem>
                         </SelectContent>
@@ -202,18 +211,18 @@ export function PlaylistCollaboratorsDialog({ playlistId, isAuthor }: PlaylistCo
                         className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
                         onClick={() => handleRemove(collab.user_id)}
                       >
-                        <X className="w-4 h-4" />
+                        <CloseIcon className="w-4 h-4" />
                       </Button>
                     </>
                   ) : (
                     <span className="text-xs text-muted-foreground flex items-center gap-1">
-                      {collab.role === 'editor' ? (
+                      {collab.role === editorRole.id ? (
                         <>
-                          <Shield className="w-3 h-3" /> {t('playlistDetails.collaborators.roleEditor')}
+                          <ShieldIcon className="w-3 h-3" /> {t('playlistDetails.collaborators.roleEditor')}
                         </>
                       ) : (
                         <>
-                          <Eye className="w-3 h-3" /> {t('playlistDetails.collaborators.roleViewer')}
+                          <EyeIcon className="w-3 h-3" /> {t('playlistDetails.collaborators.roleViewer')}
                         </>
                       )}
                     </span>

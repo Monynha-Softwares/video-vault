@@ -5,18 +5,19 @@ import translation_en from './locales/en.json';
 import translation_es from './locales/es.json';
 import translation_fr from './locales/fr.json';
 import translation_pt from './locales/pt.json';
+import { DEFAULT_LANGUAGE, getLanguage } from '@/flyweights/LanguageFlyweight';
 
 export const resources = {
-  en: {
+  [getLanguage('en').code]: {
     translation: translation_en,
   },
-  es: {
+  [getLanguage('es').code]: {
     translation: translation_es,
   },
-  fr: {
+  [getLanguage('fr').code]: {
     translation: translation_fr,
   },
-  pt: {
+  [getLanguage('pt').code]: {
     translation: translation_pt,
   },
 };
@@ -25,8 +26,8 @@ i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: localStorage.getItem('i18nextLng') || 'pt', // default language
-    fallbackLng: 'en', // fallback language if translation is not found
+    lng: localStorage.getItem('i18nextLng') || DEFAULT_LANGUAGE, // default language
+    fallbackLng: getLanguage('en').code, // fallback language if translation is not found
 
     interpolation: {
       escapeValue: false, // react already safes from xss

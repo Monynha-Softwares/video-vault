@@ -4,6 +4,7 @@ import { CategorySection } from './CategorySection';
 import { renderWithProviders } from '@/shared/test/renderWithProviders';
 import type { Category } from '@/entities/category/category.types';
 import type { VideoWithCategory } from '@/entities/video/video.types';
+import { getLanguage } from '@/flyweights/LanguageFlyweight';
 
 const useCategoriesMock = vi.fn();
 const useVideosMock = vi.fn();
@@ -45,7 +46,7 @@ const sampleVideos: VideoWithCategory[] = [
     duration_seconds: 125,
     favorites_count: 10,
     thumbnail_url: 'https://example.com/thumb.jpg',
-    language: 'en',
+    language: getLanguage('en').code,
     playlist_add_count: 3,
     category_id: 'cat-1',
     submitted_by: 'user-1',
@@ -71,7 +72,7 @@ const sampleVideos: VideoWithCategory[] = [
     duration_seconds: 300,
     favorites_count: 5,
     thumbnail_url: 'https://example.com/thumb2.jpg',
-    language: 'en',
+    language: getLanguage('en').code,
     playlist_add_count: 2,
     category_id: 'cat-1',
     submitted_by: 'user-2',

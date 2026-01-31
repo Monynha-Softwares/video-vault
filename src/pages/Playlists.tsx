@@ -4,7 +4,6 @@ import { usePlaylists } from '@/features/playlists/queries/usePlaylists';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Plus, ListVideo, Search, Filter, Youtube } from 'lucide-react'; // Import Youtube icon
 import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
@@ -12,11 +11,17 @@ import { PlaylistCard } from '@/components/playlist/PlaylistCard';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/features/auth/useAuth';
 import { PlaylistImportDialog } from '@/components/playlist/PlaylistImportDialog'; // Import PlaylistImportDialog
+import { getIcon } from '@/flyweights/IconFactory';
 
 const Playlists = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const PlusIcon = getIcon('Plus');
+  const ListVideoIcon = getIcon('ListVideo');
+  const SearchIcon = getIcon('Search');
+  const FilterIcon = getIcon('Filter');
+  const YoutubeIcon = getIcon('Youtube');
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filter, setFilter] = useState<'all' | 'my' | 'collaborating'>('all');
@@ -77,7 +82,7 @@ const Playlists = () => {
           </div>
           <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type="search"
                 placeholder={t('playlists.searchPlaceholder')}
@@ -88,7 +93,7 @@ const Playlists = () => {
             </div>
             <Select value={filter} onValueChange={(value: 'all' | 'my' | 'collaborating') => setFilter(value)}>
               <SelectTrigger className="w-full sm:w-[180px] bg-muted/50 border-0 focus:ring-primary/30">
-                <Filter className="w-4 h-4 mr-2 text-muted-foreground" />
+                <FilterIcon className="w-4 h-4 mr-2 text-muted-foreground" />
                 <SelectValue placeholder={t('playlists.filter.all')} />
               </SelectTrigger>
               <SelectContent>
@@ -103,12 +108,12 @@ const Playlists = () => {
             </Select>
             <PlaylistImportDialog>
               <Button variant="outline" className="gap-2 w-full sm:w-auto">
-                <Youtube className="w-4 h-4" />
+                <YoutubeIcon className="w-4 h-4" />
                 {t('playlists.import.button')}
               </Button>
             </PlaylistImportDialog>
             <Button onClick={() => navigate('/playlists/new')} className="gap-2 w-full sm:w-auto">
-              <Plus className="w-4 h-4" />
+              <PlusIcon className="w-4 h-4" />
               {t('playlists.createPlaylist')}
             </Button>
           </div>
@@ -122,7 +127,7 @@ const Playlists = () => {
           </div>
         ) : (
           <div className="text-center py-12 text-muted-foreground">
-            <ListVideo className="w-16 h-16 mb-4 opacity-50 mx-auto" />
+            <ListVideoIcon className="w-16 h-16 mb-4 opacity-50 mx-auto" />
             <p className="text-lg font-medium mb-2">{t('playlists.noPlaylistsTitle')}</p>
             <p className="mb-6">{t('playlists.noPlaylistsDescription')}</p>
             <Button onClick={() => navigate('/playlists/new')}>{t('playlists.createFirstPlaylist')}</Button>

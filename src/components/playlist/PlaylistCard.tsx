@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ListVideo, BookOpen, Code, Globe, Lock, Users, GraduationCap } from 'lucide-react';
 import { Playlist, usePlaylistProgress, usePlaylistVideos } from '@/features/playlists';
 import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/features/auth/useAuth';
 import { Skeleton } from '@/components/ui/skeleton'; // Import Skeleton for loading states
+import { getIcon } from '@/flyweights/IconFactory';
+import { getLanguage } from '@/flyweights/LanguageFlyweight';
 
 interface PlaylistCardProps {
   playlist: Playlist;
@@ -14,6 +15,13 @@ interface PlaylistCardProps {
 export function PlaylistCard({ playlist, index = 0 }: PlaylistCardProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const ListVideoIcon = getIcon('ListVideo');
+  const BookOpenIcon = getIcon('BookOpen');
+  const CodeIcon = getIcon('Code');
+  const GlobeIcon = getIcon('Globe');
+  const LockIcon = getIcon('Lock');
+  const GraduationIcon = getIcon('GraduationCap');
+  const language = getLanguage(playlist.language ?? '');
   
   // Only fetch videos and progress for authenticated users or public playlists
   const shouldFetchData = user || playlist.is_public;
@@ -50,7 +58,7 @@ export function PlaylistCard({ playlist, index = 0 }: PlaylistCardProps) {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <ListVideo className="w-12 h-12 text-muted-foreground/50" />
+            <ListVideoIcon className="w-12 h-12 text-muted-foreground/50" />
           </div>
         )}
         
@@ -63,12 +71,12 @@ export function PlaylistCard({ playlist, index = 0 }: PlaylistCardProps) {
           }`}>
             {playlist.is_ordered ? (
               <>
-                <GraduationCap className="w-3 h-3" />
+                <GraduationIcon className="w-3 h-3" />
                 {t('playlists.learningPath')}
               </>
             ) : (
               <>
-                <ListVideo className="w-3 h-3" />
+                <ListVideoIcon className="w-3 h-3" />
                 {t('playlists.collection')}
               </>
             )}
@@ -79,7 +87,7 @@ export function PlaylistCard({ playlist, index = 0 }: PlaylistCardProps) {
         {!playlist.is_public && (
           <div className="absolute top-2 right-2">
             <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-yellow-500/90 text-yellow-950">
-              <Lock className="w-3 h-3" />
+              <LockIcon className="w-3 h-3" />
             </span>
           </div>
         )}
@@ -120,16 +128,16 @@ export function PlaylistCard({ playlist, index = 0 }: PlaylistCardProps) {
         <div className="flex flex-wrap gap-2 text-xs text-muted-foreground mt-auto">
           {playlist.course_code && (
             <span className="flex items-center gap-1 px-2 py-1 rounded-full bg-muted/50">
-              <BookOpen className="w-3 h-3" /> {playlist.course_code}
+              <BookOpenIcon className="w-3 h-3" /> {playlist.course_code}
             </span>
           )}
           {playlist.unit_code && (
             <span className="flex items-center gap-1 px-2 py-1 rounded-full bg-muted/50">
-              <Code className="w-3 h-3" /> {playlist.unit_code}
+              <CodeIcon className="w-3 h-3" /> {playlist.unit_code}
             </span>
           )}
           <span className="flex items-center gap-1 px-2 py-1 rounded-full bg-muted/50 uppercase">
-            <Globe className="w-3 h-3" /> {playlist.language}
+            <GlobeIcon className="w-3 h-3" /> {language.label}
           </span>
         </div>
       </div>

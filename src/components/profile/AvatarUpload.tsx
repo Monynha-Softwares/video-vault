@@ -2,10 +2,10 @@ import { useState, useRef, useCallback } from 'react';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { User, Upload, Loader2, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { AvatarCropperDialog } from './AvatarCropperDialog'; // Import the new cropper dialog
+import { getIcon } from '@/flyweights/IconFactory';
 
 interface AvatarUploadProps {
   userId: string;
@@ -25,6 +25,10 @@ export function AvatarUpload({
   onUploadComplete,
 }: AvatarUploadProps) {
   const { t } = useTranslation();
+  const UserIcon = getIcon('User');
+  const UploadIcon = getIcon('Upload');
+  const LoaderIcon = getIcon('Loader2');
+  const CloseIcon = getIcon('X');
   const [isUploading, setIsUploading] = useState(false);
   const [imageToCrop, setImageToCrop] = useState<string | null>(null); // State for image to be cropped
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -123,13 +127,13 @@ export function AvatarUpload({
         <Avatar className="w-24 h-24 border-2 border-primary">
           <AvatarImage src={displayedUrl || undefined} alt={displayName || username || 'User'} />
           <AvatarFallback className="bg-primary/20 text-primary text-3xl font-semibold">
-            {fallbackChar || <User className="w-12 h-12" />}
+            {fallbackChar || <UserIcon className="w-12 h-12" />}
           </AvatarFallback>
         </Avatar>
         
         {isUploading && (
           <div className="absolute inset-0 flex items-center justify-center bg-background/80 rounded-full">
-            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            <LoaderIcon className="w-8 h-8 animate-spin text-primary" />
           </div>
         )}
       </div>
@@ -151,7 +155,7 @@ export function AvatarUpload({
           onClick={() => fileInputRef.current?.click()}
           disabled={isUploading}
         >
-          <Upload className="w-4 h-4 mr-2" />
+          <UploadIcon className="w-4 h-4 mr-2" />
           {t('profile.avatar.upload')}
         </Button>
 
@@ -163,7 +167,7 @@ export function AvatarUpload({
             onClick={handleRemoveAvatar}
             disabled={isUploading}
           >
-            <X className="w-4 h-4 mr-2" />
+            <CloseIcon className="w-4 h-4 mr-2" />
             {t('profile.avatar.remove')}
           </Button>
         )}

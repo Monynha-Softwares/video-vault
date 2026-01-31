@@ -2,6 +2,7 @@ import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { screen } from '@testing-library/react';
 import Playlists from './Playlists';
 import { renderWithProviders } from '@/shared/test/renderWithProviders';
+import { getLanguage } from '@/flyweights/LanguageFlyweight';
 
 const usePlaylistsMock = vi.fn();
 const useAuthMock = vi.fn();
@@ -43,7 +44,7 @@ beforeEach(() => {
         thumbnail_url: null,
         course_code: null,
         unit_code: null,
-        language: 'en',
+        language: getLanguage('en').code,
         is_public: true,
         is_ordered: true,
         created_at: new Date().toISOString(),

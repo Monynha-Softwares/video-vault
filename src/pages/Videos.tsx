@@ -8,14 +8,17 @@ import { useCategories } from '@/features/categories/queries/useCategories';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Search, X, Loader2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { getIcon } from '@/flyweights/IconFactory';
+import { getSupportedLanguages } from '@/flyweights/LanguageFlyweight';
 
 const Videos = () => {
   const { t } = useTranslation(); // Initialize useTranslation
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const SearchIcon = getIcon('Search');
+  const ClearIcon = getIcon('X');
 
   const initialSearchQuery = searchParams.get('query') || '';
   const initialCategoryId = searchParams.get('category') || '';
@@ -54,10 +57,10 @@ const Videos = () => {
   };
 
   const availableLanguages = [
-    { value: 'pt', label: t('common.language.pt') },
-    { value: 'en', label: t('common.language.en') },
-    { value: 'es', label: t('common.language.es') },
-    { value: 'fr', label: t('common.language.fr') },
+    ...getSupportedLanguages().map((language) => ({
+      value: language.code,
+      label: t(`common.language.${language.code}`),
+    })),
     { value: 'other', label: t('common.language.other') },
   ];
 
@@ -75,7 +78,7 @@ const Videos = () => {
         {/* Search and Filter Controls */}
         <div className="flex flex-col md:flex-row gap-4 mb-8">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
               placeholder={t('videos.searchPlaceholder')}
@@ -128,7 +131,7 @@ const Videos = () => {
 
           {(searchQuery || selectedCategory || selectedLanguage) && (
             <Button variant="outline" onClick={handleClearFilters} className="gap-2" disabled={isFeatured}>
-              <X className="w-4 h-4" />
+              <ClearIcon className="w-4 h-4" />
               {t('videos.clearFilters')}
             </Button>
           )}

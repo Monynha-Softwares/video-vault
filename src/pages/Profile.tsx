@@ -9,17 +9,23 @@ import { useMetaTags } from '@/shared/hooks/useMetaTags';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { CalendarDays, User as UserIcon, Video as VideoIcon, ListVideo, ArrowLeft, Edit } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/features/auth/useAuth';
 import { VideoCard } from '@/components/video/VideoCard';
 import { SocialAccountsDisplay } from '@/components/profile/SocialAccountsDisplay'; // Import the new component
+import { getIcon } from '@/flyweights/IconFactory';
 
 const Profile = () => {
   const { t } = useTranslation();
   const { username } = useParams<{ username: string }>();
   const navigate = useNavigate();
   const { user: authUser, loading: authLoading } = useAuth();
+  const CalendarIcon = getIcon('CalendarDays');
+  const UserIcon = getIcon('User');
+  const VideoIcon = getIcon('Video');
+  const ListVideoIcon = getIcon('ListVideo');
+  const ArrowLeftIcon = getIcon('ArrowLeft');
+  const EditIcon = getIcon('Edit');
 
   const { data: profile, isLoading: profileLoading, isError: profileError } = useProfileByUsername(username);
   const isCurrentUser = authUser && profile && authUser.id === profile.id;
@@ -76,7 +82,7 @@ const Profile = () => {
             {t('profile.notFoundDescription')}
           </p>
           <Button onClick={() => navigate('/')}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeftIcon className="w-4 h-4 mr-2" />
             {t('common.backToHome')}
           </Button>
         </main>
@@ -94,7 +100,7 @@ const Profile = () => {
           onClick={() => navigate(-1)}
           className="text-muted-foreground hover:text-foreground mb-6"
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
+          <ArrowLeftIcon className="w-4 h-4 mr-2" />
           {t('common.back')}
         </Button>
 
@@ -110,7 +116,7 @@ const Profile = () => {
             <h1 className="text-3xl font-bold">{profile.display_name || profile.username}</h1>
             <p className="text-muted-foreground text-lg">@{profile.username}</p>
             <div className="flex items-center justify-center sm:justify-start gap-2 text-sm text-muted-foreground mt-2">
-              <CalendarDays className="w-4 h-4" />
+              <CalendarIcon className="w-4 h-4" />
               <span>{t('profile.joinedOn', { date: new Date(profile.created_at).toLocaleDateString() })}</span>
             </div>
             {profile.bio && (
@@ -125,7 +131,7 @@ const Profile = () => {
             )}
             {isCurrentUser && (
               <Button onClick={() => navigate('/profile/edit')} className="mt-4 gap-2">
-                <Edit className="w-4 h-4" />
+                <EditIcon className="w-4 h-4" />
                 {t('profile.editProfile')}
               </Button>
             )}
@@ -168,7 +174,7 @@ const Profile = () => {
 
         {/* User Playlists */}
         <h2 className="text-2xl font-bold mt-12 mb-6 flex items-center gap-2">
-          <ListVideo className="w-6 h-6 text-accent" />
+          <ListVideoIcon className="w-6 h-6 text-accent" />
           {t('profile.createdPlaylists')}
         </h2>
         {playlistsLoading ? (
@@ -188,7 +194,7 @@ const Profile = () => {
               >
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                    <ListVideo className="w-6 h-6" />
+                    <ListVideoIcon className="w-6 h-6" />
                   </div>
                   <div>
                     <h2 className="font-semibold text-lg group-hover:text-primary transition-colors line-clamp-1">{playlist.name}</h2>
@@ -205,7 +211,7 @@ const Profile = () => {
           </div>
         ) : (
           <div className="text-center py-12 text-muted-foreground">
-            <ListVideo className="w-16 h-16 mb-4 opacity-50 mx-auto" />
+            <ListVideoIcon className="w-16 h-16 mb-4 opacity-50 mx-auto" />
             <p className="text-lg font-medium mb-2">{t('profile.noPlaylistsTitle')}</p>
             <p className="mb-6">{t('profile.noPlaylistsDescription')}</p>
             {isCurrentUser && (

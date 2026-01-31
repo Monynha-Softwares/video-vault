@@ -12,11 +12,12 @@ import { VideoCard } from '@/components/video/VideoCard';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge'; // Import Badge component
-import { Eye, Clock, Folder, ArrowLeft, Heart as HeartIcon, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { CommentsSection } from '@/components/comment/CommentsSection'; // Import CommentsSection
+import { getCategoryById } from '@/flyweights/CategoryFlyweight';
+import { getIcon } from '@/flyweights/IconFactory';
 
 const VideoDetails = () => {
   const { t } = useTranslation();
@@ -29,6 +30,14 @@ const VideoDetails = () => {
     video?.id || '', 
     video?.category_id || null
   );
+  const cachedCategory = getCategoryById(video?.category?.id ?? video?.category_id);
+  const category = cachedCategory ?? video?.category ?? null;
+  const ArrowLeftIcon = getIcon('ArrowLeft');
+  const EyeIcon = getIcon('Eye');
+  const ClockIcon = getIcon('Clock');
+  const FolderIcon = getIcon('Folder');
+  const HeartIcon = getIcon('Heart');
+  const LoaderIcon = getIcon('Loader2');
 
   const { data: isFavorited, isLoading: isFavoritedLoading } = useIsFavorited(video?.id);
   const addFavoriteMutation = useAddFavorite();
@@ -106,7 +115,7 @@ const VideoDetails = () => {
             {t('videoDetails.videoNotFoundDescription')}
           </p>
           <Button onClick={() => navigate('/')}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeftIcon className="w-4 h-4 mr-2" />
             {t('common.backToHome')}
           </Button>
         </main>
@@ -124,7 +133,7 @@ const VideoDetails = () => {
           onClick={() => navigate(-1)} // Navigates back to the previous page
           className="text-muted-foreground hover:text-foreground mb-6"
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
+          <ArrowLeftIcon className="w-4 h-4 mr-2" />
           {t('common.back')}
         </Button>
 
@@ -154,7 +163,7 @@ const VideoDetails = () => {
                   className="text-muted-foreground hover:text-primary"
                 >
                   {isFavoritedLoading || addFavoriteMutation.isPending || removeFavoriteMutation.isPending ? (
-                    <Loader2 className="w-6 h-6 animate-spin" />
+                    <LoaderIcon className="w-6 h-6 animate-spin" />
                   ) : (
                     <HeartIcon className={`w-6 h-6 ${isFavorited ? 'fill-primary text-primary' : ''}`} />
                   )}
@@ -173,23 +182,23 @@ const VideoDetails = () => {
               </p>
               <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
-                  <Eye className="w-4 h-4" />
+                  <EyeIcon className="w-4 h-4" />
                   <span>{formatViewCount(video.view_count)} {t('videoDetails.viewsLabel')}</span>
                 </div>
                 {video.duration_seconds && video.duration_seconds > 0 && (
                   <div className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
+                    <ClockIcon className="w-4 h-4" />
                     <span>{formatDuration(video.duration_seconds)}</span>
                   </div>
                 )}
-                {video.category && (
+                {category && (
                   <Badge 
                     variant="outline" 
                     className="text-sm px-2.5 py-1 flex items-center gap-1"
-                    style={{ borderColor: video.category.color, color: video.category.color }}
+                    style={{ borderColor: category.color, color: category.color }}
                   >
-                    <Folder className="w-3.5 h-3.5" />
-                    {video.category.name}
+                    <FolderIcon className="w-3.5 h-3.5" />
+                    {category.name}
                   </Badge>
                 )}
               </div>

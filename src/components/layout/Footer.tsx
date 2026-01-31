@@ -1,9 +1,12 @@
-import { Github, Globe, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
+import { getIcon } from "@/flyweights/IconFactory";
 
 export const Footer = () => {
   const { t } = useTranslation();
+  const GithubIcon = getIcon('Github');
+  const GlobeIcon = getIcon('Globe');
+  const HeartIcon = getIcon('Heart');
 
   return (
     <footer className="border-t border-border/50 bg-muted/30">
@@ -51,7 +54,7 @@ export const Footer = () => {
         {/* Bottom */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-8 mt-8 border-t border-border/50">
           <p className="text-sm text-muted-foreground flex items-center gap-1">
-            {t('footer.madeWithLove')} <Heart className="w-4 h-4 text-primary fill-primary inline-block" />{" "}
+            {t('footer.madeWithLove')} <HeartIcon className="w-4 h-4 text-primary fill-primary inline-block" />{" "}
             <a 
               href="https://monynha.com" 
               target="_blank" 
@@ -63,10 +66,10 @@ export const Footer = () => {
           </p>
           <div className="flex items-center gap-4">
             <a href="https://monynha.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-              <Globe className="w-5 h-5" />
+              <GlobeIcon className="w-5 h-5" />
             </a>
             <a href="https://github.com/Monynha-Softwares/video-vault" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-              <Github className="w-5 h-5" />
+              <GithubIcon className="w-5 h-5" />
             </a>
           </div>
         </div>

@@ -10,7 +10,6 @@ import { VideoCard } from '@/components/video/VideoCard';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge'; // Import Badge component
-import { ArrowLeft, ListVideo, BookOpen, Code, Globe, Trash2, Edit, Loader2, Plus, Search, XCircle, Lock, GraduationCap } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/features/auth/useAuth';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
@@ -22,12 +21,27 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { PlaylistProgressBar } from '@/components/playlist/PlaylistProgressBar';
 import { SortableVideoList } from '@/components/playlist/SortableVideoList';
 import { PlaylistCollaboratorsDialog } from '@/components/playlist/PlaylistCollaboratorsDialog';
+import { getIcon } from '@/flyweights/IconFactory';
+import { getLanguage } from '@/flyweights/LanguageFlyweight';
 
 const PlaylistDetails = () => {
   const { t } = useTranslation();
   const { playlistId } = useParams<{ playlistId: string }>();
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
+  const ArrowLeftIcon = getIcon('ArrowLeft');
+  const ListVideoIcon = getIcon('ListVideo');
+  const BookOpenIcon = getIcon('BookOpen');
+  const CodeIcon = getIcon('Code');
+  const GlobeIcon = getIcon('Globe');
+  const TrashIcon = getIcon('Trash2');
+  const EditIcon = getIcon('Edit');
+  const LoaderIcon = getIcon('Loader2');
+  const PlusIcon = getIcon('Plus');
+  const SearchIcon = getIcon('Search');
+  const ClearIcon = getIcon('XCircle');
+  const LockIcon = getIcon('Lock');
+  const GraduationIcon = getIcon('GraduationCap');
 
   const { data: playlist, isLoading: playlistLoading, isError: playlistError } = usePlaylistById(playlistId);
   const { data: playlistVideos, isLoading: videosLoading, isError: videosError } = usePlaylistVideos(playlistId);
@@ -38,6 +52,7 @@ const PlaylistDetails = () => {
 
   const isAuthor = useIsPlaylistAuthor(playlist);
   const canEdit = useCanEditPlaylist(playlist);
+  const playlistLanguage = getLanguage(playlist?.language ?? '');
 
   // Set dynamic meta tags for social media sharing
   useMetaTags({
@@ -125,7 +140,7 @@ const PlaylistDetails = () => {
             {t('playlistDetails.notFoundDescription')}
           </p>
           <Button onClick={() => navigate('/playlists')}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeftIcon className="w-4 h-4 mr-2" />
             {t('playlistDetails.backToPlaylists')}
           </Button>
         </main>
@@ -142,13 +157,13 @@ const PlaylistDetails = () => {
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-1 container py-16 text-center">
-          <Lock className="w-16 h-16 mb-4 opacity-50 mx-auto" />
+          <LockIcon className="w-16 h-16 mb-4 opacity-50 mx-auto" />
           <h1 className="text-3xl font-bold mb-4">{t('playlistDetails.privateTitle')}</h1>
           <p className="text-muted-foreground mb-8">
             {t('playlistDetails.privateDescription')}
           </p>
           <Button onClick={() => navigate('/playlists')}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeftIcon className="w-4 h-4 mr-2" />
             {t('playlistDetails.backToPlaylists')}
           </Button>
         </main>
@@ -168,7 +183,7 @@ const PlaylistDetails = () => {
           onClick={() => navigate('/playlists')}
           className="text-muted-foreground hover:text-foreground mb-6"
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
+          <ArrowLeftIcon className="w-4 h-4 mr-2" />
           {t('playlistDetails.backToPlaylists')}
         </Button>
 
@@ -187,16 +202,16 @@ const PlaylistDetails = () => {
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               {playlist.is_ordered ? (
                 <Badge variant="secondary" className="gap-1">
-                  <GraduationCap className="w-3 h-3" /> {t('playlists.learningPath')}
+                  <GraduationIcon className="w-3 h-3" /> {t('playlists.learningPath')}
                 </Badge>
               ) : (
                 <Badge variant="secondary" className="gap-1">
-                  <ListVideo className="w-3 h-3" /> {t('playlists.collection')}
+                  <ListVideoIcon className="w-3 h-3" /> {t('playlists.collection')}
                 </Badge>
               )}
               {!playlist.is_public && (
                 <Badge variant="outline" className="gap-1 text-yellow-700 border-yellow-500 bg-yellow-500/10">
-                  <Lock className="w-3 h-3" /> {t('playlistDetails.privateTitle')}
+                  <LockIcon className="w-3 h-3" /> {t('playlistDetails.privateTitle')}
                 </Badge>
               )}
             </div>
@@ -210,16 +225,16 @@ const PlaylistDetails = () => {
             <div className="flex flex-wrap gap-3 pt-2">
               {playlist.course_code && (
                 <Badge variant="outline" className="gap-1">
-                  <BookOpen className="w-3.5 h-3.5" /> {playlist.course_code}
+                  <BookOpenIcon className="w-3.5 h-3.5" /> {playlist.course_code}
                 </Badge>
               )}
               {playlist.unit_code && (
                 <Badge variant="outline" className="gap-1">
-                  <Code className="w-3.5 h-3.5" /> {playlist.unit_code}
+                  <CodeIcon className="w-3.5 h-3.5" /> {playlist.unit_code}
                 </Badge>
               )}
               <Badge variant="outline" className="gap-1 uppercase">
-                <Globe className="w-3.5 h-3.5" /> {playlist.language}
+                <GlobeIcon className="w-3.5 h-3.5" /> {playlistLanguage.label}
               </Badge>
             </div>
           </div>
@@ -237,12 +252,12 @@ const PlaylistDetails = () => {
           {canEdit && (
             <>
               <Button variant="outline" size="sm" className="gap-2" onClick={() => navigate(`/playlists/${playlist.id}/edit`)}>
-                <Edit className="w-4 h-4" /> {t('playlistDetails.editPlaylist')}
+                <EditIcon className="w-4 h-4" /> {t('playlistDetails.editPlaylist')}
               </Button>
               <Dialog open={isAddVideoDialogOpen} onOpenChange={setIsAddVideoDialogOpen}>
                 <DialogTrigger asChild>
                   <Button variant="secondary" size="sm" className="gap-2">
-                    <Plus className="w-4 h-4" /> {t('playlistDetails.addVideos')}
+                    <PlusIcon className="w-4 h-4" /> {t('playlistDetails.addVideos')}
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[600px] h-[80vh] flex flex-col">
@@ -251,7 +266,7 @@ const PlaylistDetails = () => {
                     <DialogDescription>{t('playlistDetails.addVideoDialogDescription')}</DialogDescription>
                   </DialogHeader>
                   <div className="relative mb-4">
-                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       placeholder={t('playlistDetails.searchVideosPlaceholder')}
                       value={addVideoSearchQuery}
@@ -265,7 +280,7 @@ const PlaylistDetails = () => {
                         className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 text-muted-foreground"
                         onClick={() => setAddVideoSearchQuery('')}
                       >
-                        <XCircle className="h-4 w-4" />
+                        <ClearIcon className="h-4 w-4" />
                       </Button>
                     )}
                   </div>
@@ -295,7 +310,7 @@ const PlaylistDetails = () => {
                                 disabled={isAlreadyInPlaylist || addVideoToPlaylistMutation.isPending}
                               >
                                 {addVideoToPlaylistMutation.isPending && addVideoToPlaylistMutation.variables?.videoId === video.id ? (
-                                  <Loader2 className="w-4 h-4 animate-spin" />
+                                  <LoaderIcon className="w-4 h-4 animate-spin" />
                                 ) : (
                                   isAlreadyInPlaylist ? t('playlistDetails.added') : t('playlistDetails.add')
                                 )}
@@ -317,7 +332,7 @@ const PlaylistDetails = () => {
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="destructive" size="sm" className="gap-2">
-                      <Trash2 className="w-4 h-4" /> {t('playlistDetails.deletePlaylist')}
+                      <TrashIcon className="w-4 h-4" /> {t('playlistDetails.deletePlaylist')}
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
@@ -330,7 +345,7 @@ const PlaylistDetails = () => {
                     <AlertDialogFooter>
                       <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
                       <AlertDialogAction onClick={handleDeletePlaylist} disabled={deletePlaylistMutation.isPending}>
-                        {deletePlaylistMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                        {deletePlaylistMutation.isPending ? <LoaderIcon className="w-4 h-4 animate-spin mr-2" /> : null}
                         {t('common.delete')}
                       </AlertDialogAction>
                     </AlertDialogFooter>
@@ -345,7 +360,7 @@ const PlaylistDetails = () => {
 
         {videosError ? (
           <div className="text-center py-12 text-muted-foreground">
-            <ListVideo className="w-16 h-16 mb-4 opacity-50 mx-auto" />
+            <ListVideoIcon className="w-16 h-16 mb-4 opacity-50 mx-auto" />
             <p className="text-lg font-medium mb-2">{t('playlistDetails.videosLoadErrorTitle')}</p>
             <p className="mb-6">{t('playlistDetails.videosLoadErrorDescription')}</p>
           </div>
@@ -359,7 +374,7 @@ const PlaylistDetails = () => {
           />
         ) : (
           <div className="text-center py-12 text-muted-foreground">
-            <ListVideo className="w-16 h-16 mb-4 opacity-50 mx-auto" />
+            <ListVideoIcon className="w-16 h-16 mb-4 opacity-50 mx-auto" />
             <p className="text-lg font-medium mb-2">{t('playlistDetails.noVideosTitle')}</p>
             <p className="mb-6">{t('playlistDetails.noVideosDescription')}</p>
             {canEdit && (

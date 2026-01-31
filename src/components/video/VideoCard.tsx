@@ -1,11 +1,13 @@
 import type { VideoWithCategory } from "@/entities/video/video.types";
 import { formatDuration, formatViewCount } from "@/shared/lib/format";
-import { Play, Eye } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useTranslation } from 'react-i18next';
 import { useVideoViewIncrement } from '@/shared/hooks/useVideoViewIncrement';
+import { getCategoryById } from "@/flyweights/CategoryFlyweight";
+import { getIcon } from "@/flyweights/IconFactory";
+import { getLanguage } from "@/flyweights/LanguageFlyweight";
 
 interface VideoCardProps {
   video: VideoWithCategory;
@@ -17,6 +19,11 @@ export const VideoCard = ({ video, onClick, variant = 'default' }: VideoCardProp
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { viewCount, showPlus, handleViewIncrement } = useVideoViewIncrement(video.view_count || 0);
+  const cachedCategory = getCategoryById(video.category?.id ?? video.category_id);
+  const category = cachedCategory ?? video.category ?? null;
+  const PlayIcon = getIcon('Play');
+  const EyeIcon = getIcon('Eye');
+  const language = getLanguage(video.language ?? '');
 
   const handleClick = () => {
     handleViewIncrement(video.id);
@@ -69,7 +76,7 @@ export const VideoCard = ({ video, onClick, variant = 'default' }: VideoCardProp
             "rounded-full bg-primary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100 shadow-lg",
             variant === 'default' ? "w-14 h-14" : "w-10 h-10"
           )}>
-            <Play className={cn(
+            <PlayIcon className={cn(
               "text-primary-foreground ml-1",
               variant === 'default' ? "w-6 h-6" : "w-4 h-4"
             )} fill="currentColor" />
@@ -91,7 +98,7 @@ export const VideoCard = ({ video, onClick, variant = 'default' }: VideoCardProp
             variant === 'compact' && "hidden"
           )}
         >
-          {video.language}
+          {language.label}
         </Badge>
       </div>
 
@@ -120,19 +127,19 @@ export const VideoCard = ({ video, onClick, variant = 'default' }: VideoCardProp
           variant === 'default' && "mt-auto"
         )}>
           <div className="flex items-center gap-1 relative">
-            <Eye className="w-3.5 h-3.5" />
+            <EyeIcon className="w-3.5 h-3.5" />
             <span>{formatViewCount(viewCount)}</span>
             {showPlus && (
               <span className="absolute -right-6 -top-1 text-xs text-green-400 font-semibold animate-pop">+1</span>
             )}
           </div>
-          {video.category && (
+          {category && (
             <Badge 
               variant="outline" 
               className="text-xs px-2 py-0.5"
-              style={{ borderColor: video.category.color, color: video.category.color }}
+              style={{ borderColor: category.color, color: category.color }}
             >
-              {video.category.name}
+              {category.name}
             </Badge>
           )}
         </div>

@@ -7,12 +7,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Mail, Loader2, Info } from 'lucide-react';
 import { toast } from 'sonner';
 import { updateUserEmail } from '@/features/auth/auth.api';
 import { useAuth } from '@/features/auth/useAuth';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { emailSchema } from '@/shared/lib/validation';
+import { getIcon } from '@/flyweights/IconFactory';
 
 const changeEmailSchema = z.object({
   newEmail: emailSchema,
@@ -23,6 +23,9 @@ type ChangeEmailFormValues = z.infer<typeof changeEmailSchema>;
 export const ChangeEmailForm: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const MailIcon = getIcon('Mail');
+  const LoaderIcon = getIcon('Loader2');
+  const InfoIcon = getIcon('Info');
 
   const {
     register,
@@ -71,7 +74,7 @@ export const ChangeEmailForm: React.FC = () => {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Mail className="w-5 h-5" />
+          <MailIcon className="w-5 h-5" />
           {t('account.settings.emailSection.title')}
         </CardTitle>
         <CardDescription>
@@ -85,7 +88,7 @@ export const ChangeEmailForm: React.FC = () => {
         </div>
 
         <Alert>
-          <Info className="h-4 w-4" />
+          <InfoIcon className="h-4 w-4" />
           <AlertDescription>
             {t('account.settings.emailSection.changeInfo')}
           </AlertDescription>
@@ -110,7 +113,7 @@ export const ChangeEmailForm: React.FC = () => {
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <LoaderIcon className="w-4 h-4 mr-2 animate-spin" />
                 {t('auth.submittingButton')}
               </>
             ) : (

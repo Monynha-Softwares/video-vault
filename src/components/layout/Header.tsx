@@ -1,5 +1,4 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Plus, Menu, LogOut, Heart, Globe, ListVideo, User as UserIcon, Settings, Home, Info, BookOpen, Mail, HelpCircle, Users, KeyRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
@@ -15,9 +14,24 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { NavLink } from "@/components/NavLink";
 import { Label } from "@/components/ui/label";
+import { getIcon } from "@/flyweights/IconFactory";
+import { getSupportedLanguages } from "@/flyweights/LanguageFlyweight";
+import { getStyle } from "@/flyweights/StyleFlyweight";
 
 export const Header = () => {
   const { t } = useTranslation();
+  const SearchIcon = getIcon('Search');
+  const PlusIcon = getIcon('Plus');
+  const MenuIcon = getIcon('Menu');
+  const LogOutIcon = getIcon('LogOut');
+  const HeartIcon = getIcon('Heart');
+  const GlobeIcon = getIcon('Globe');
+  const ListVideoIcon = getIcon('ListVideo');
+  const UserIcon = getIcon('User');
+  const SettingsIcon = getIcon('Settings');
+  const KeyRoundIcon = getIcon('KeyRound');
+  const navLinkStyle = getStyle('navLink');
+  const supportedLanguages = getSupportedLanguages();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { user, signOut } = useAuth();
@@ -44,15 +58,15 @@ export const Header = () => {
   };
 
   const navLinks = [
-    { to: "/", label: t('header.home'), icon: Home },
-    { to: "/videos", label: t('header.videos'), icon: ListVideo },
-    { to: "/playlists", label: t('header.playlists'), icon: ListVideo },
-    { to: "/community", label: t('footer.community'), icon: Users },
-    { to: "/about", label: t('footer.about'), icon: Info },
-    { to: "/rules", label: t('footer.rules'), icon: BookOpen },
-    { to: "/contact", label: t('footer.contact'), icon: Mail },
-    { to: "/faq", label: t('footer.faq'), icon: HelpCircle },
-  ];
+    { to: "/", label: t('header.home'), iconName: 'Home' },
+    { to: "/videos", label: t('header.videos'), iconName: 'ListVideo' },
+    { to: "/playlists", label: t('header.playlists'), iconName: 'ListVideo' },
+    { to: "/community", label: t('footer.community'), iconName: 'Users' },
+    { to: "/about", label: t('footer.about'), iconName: 'Info' },
+    { to: "/rules", label: t('footer.rules'), iconName: 'BookOpen' },
+    { to: "/contact", label: t('footer.contact'), iconName: 'Mail' },
+    { to: "/faq", label: t('footer.faq'), iconName: 'HelpCircle' },
+  ] as const;
 
   // Filter navLinks for desktop display
   const desktopNavLinks = navLinks.filter(link => 
@@ -80,7 +94,7 @@ export const Header = () => {
             <NavLink
               key={link.to}
               to={link.to}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className={navLinkStyle.className}
               activeClassName="text-primary"
             >
               {link.label}
@@ -91,7 +105,7 @@ export const Header = () => {
         {/* Search Bar - Desktop */}
         <form onSubmit={handleSearchSubmit} className="hidden md:flex flex-1 max-w-xl ml-auto mr-8">
           <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
               placeholder={t('header.searchPlaceholder')}
@@ -113,7 +127,7 @@ export const Header = () => {
                 className="hidden sm:flex gap-2 text-muted-foreground hover:text-foreground"
                 onClick={() => navigate('/favorites')}
               >
-                <Heart className="h-4 w-4" />
+                <HeartIcon className="h-4 w-4" />
                 <span className="hidden lg:inline">{t('header.favorites')}</span>
               </Button>
               <Button
@@ -122,7 +136,7 @@ export const Header = () => {
                 className="hidden sm:flex gap-2"
                 onClick={() => navigate('/submit')}
               >
-                <Plus className="h-4 w-4" />
+                <PlusIcon className="h-4 w-4" />
                 <span className="hidden lg:inline">{t('header.submitVideo')}</span>
               </Button>
 
@@ -140,7 +154,7 @@ export const Header = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
-                    <Settings className="h-5 w-5" />
+                    <SettingsIcon className="h-5 w-5" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -154,16 +168,16 @@ export const Header = () => {
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => { navigate('/profile/edit'); setIsSheetOpen(false); }}>
-                    <Settings className="mr-2 h-4 w-4" />
+                    <SettingsIcon className="mr-2 h-4 w-4" />
                     <span>{t('header.editProfile')}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => { navigate('/account/settings'); setIsSheetOpen(false); }}>
-                    <KeyRound className="mr-2 h-4 w-4" />
+                    <KeyRoundIcon className="mr-2 h-4 w-4" />
                     <span>{t('header.accountSettings')}</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
-                    <LogOut className="mr-2 h-4 w-4" />
+                    <LogOutIcon className="mr-2 h-4 w-4" />
                     <span>{t('header.logout')}</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -177,7 +191,7 @@ export const Header = () => {
                 className="hidden sm:flex gap-2"
                 onClick={() => navigate('/submit')}
               >
-                <Plus className="h-4 w-4" />
+                <PlusIcon className="h-4 w-4" />
                 <span className="hidden lg:inline">{t('header.submitVideo')}</span>
               </Button>
               <Button
@@ -194,14 +208,15 @@ export const Header = () => {
           {/* Language Switcher - Desktop */}
           <Select value={i18n.language} onValueChange={changeLanguage}>
             <SelectTrigger className="w-[100px] h-9 bg-muted/50 border-0 focus:ring-primary/30 hidden sm:flex">
-              <Globe className="w-4 h-4 mr-2 text-muted-foreground" />
+              <GlobeIcon className="w-4 h-4 mr-2 text-muted-foreground" />
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="pt">PT</SelectItem>
-              <SelectItem value="en">EN</SelectItem>
-              <SelectItem value="es">ES</SelectItem>
-              <SelectItem value="fr">FR</SelectItem>
+              {supportedLanguages.map((language) => (
+                <SelectItem key={language.code} value={language.code}>
+                  {language.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
@@ -213,7 +228,7 @@ export const Header = () => {
                 size="icon"
                 className="md:hidden"
               >
-                <Menu className="h-5 w-5" />
+                <MenuIcon className="h-5 w-5" />
                 <span className="sr-only">{t('header.toggleMenu')}</span>
               </Button>
             </SheetTrigger>
@@ -302,7 +317,7 @@ export const Header = () => {
                         activeClassName="bg-muted text-foreground"
                         onClick={() => setIsSheetOpen(false)}
                       >
-                        <Heart className="h-4 w-4" />
+                        <HeartIcon className="h-4 w-4" />
                         <span>{t('header.favorites')}</span>
                       </NavLink>
                       <Button
@@ -310,7 +325,7 @@ export const Header = () => {
                         className="w-full justify-center gap-2 mt-2"
                         onClick={() => { navigate('/submit'); setIsSheetOpen(false); }}
                       >
-                        <Plus className="h-4 w-4" />
+                        <PlusIcon className="h-4 w-4" />
                         {t('header.submitVideo')}
                       </Button>
                       <Button
@@ -318,7 +333,7 @@ export const Header = () => {
                         className="w-full justify-center gap-2 mt-2"
                         onClick={handleSignOut}
                       >
-                        <LogOut className="h-4 w-4" />
+                        <LogOutIcon className="h-4 w-4" />
                         {t('header.logout')}
                       </Button>
                     </div>
@@ -329,7 +344,7 @@ export const Header = () => {
                         className="w-full justify-start gap-2 text-muted-foreground hover:text-foreground"
                         onClick={() => { navigate('/playlists'); setIsSheetOpen(false); }}
                       >
-                        <ListVideo className="h-4 w-4" />
+                        <ListVideoIcon className="h-4 w-4" />
                         {t('header.playlists')}
                       </Button>
                       <Button
@@ -337,7 +352,7 @@ export const Header = () => {
                         className="w-full justify-center gap-2"
                         onClick={() => { navigate('/submit'); setIsSheetOpen(false); }}
                       >
-                        <Plus className="h-4 w-4" />
+                        <PlusIcon className="h-4 w-4" />
                         {t('header.submitVideo')}
                       </Button>
                       <Button
@@ -362,7 +377,10 @@ export const Header = () => {
                         activeClassName="bg-muted text-foreground"
                         onClick={() => setIsSheetOpen(false)}
                       >
-                        <link.icon className="h-4 w-4" />
+                        {(() => {
+                          const NavIcon = getIcon(link.iconName);
+                          return <NavIcon className="h-4 w-4" />;
+                        })()}
                         <span>{link.label}</span>
                       </NavLink>
                     ))}
@@ -377,14 +395,15 @@ export const Header = () => {
                     </Label>
                     <Select value={i18n.language} onValueChange={changeLanguage}>
                       <SelectTrigger id="mobile-language-switcher" className="w-full h-9 bg-muted/50 border-0 focus:ring-primary/30">
-                        <Globe className="w-4 h-4 mr-2 text-muted-foreground" />
+                        <GlobeIcon className="w-4 h-4 mr-2 text-muted-foreground" />
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="pt">PT</SelectItem>
-                        <SelectItem value="en">EN</SelectItem>
-                        <SelectItem value="es">ES</SelectItem>
-                        <SelectItem value="fr">FR</SelectItem>
+                        {supportedLanguages.map((language) => (
+                          <SelectItem key={language.code} value={language.code}>
+                            {language.label}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>

@@ -1,10 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageSquare } from 'lucide-react';
 import { CommentForm } from './CommentForm';
 import { CommentItem } from './CommentItem';
 import { useComments } from '@/features/comments/queries/useComments';
 import { Skeleton } from '@/components/ui/skeleton';
+import { getIcon } from '@/flyweights/IconFactory';
 
 interface CommentsSectionProps {
   videoId: string;
@@ -13,11 +13,12 @@ interface CommentsSectionProps {
 export const CommentsSection: React.FC<CommentsSectionProps> = ({ videoId }) => {
   const { t } = useTranslation();
   const { data: comments, isLoading, isError } = useComments(videoId);
+  const MessageIcon = getIcon('MessageSquare');
 
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold flex items-center gap-2">
-        <MessageSquare className="w-6 h-6 text-primary" />
+        <MessageIcon className="w-6 h-6 text-primary" />
         {t('comments.title')} ({comments?.length || 0})
       </h2>
 

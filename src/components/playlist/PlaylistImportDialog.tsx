@@ -14,7 +14,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, Youtube, ListVideo, Info, CheckCircle, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/features/auth/useAuth';
 import { extractYouTubePlaylistId } from '@/shared/lib/youtube';
@@ -23,6 +22,8 @@ import { createVideo, findVideoByYoutubeId } from '@/entities/video/video.api';
 import { invokeEdgeFunction } from '@/shared/api/supabase/edgeFunctions';
 import type { VideoInsert } from '@/entities/video/video.types';
 import { generateSlug } from '@/shared/lib/slug'; // Import generateSlug
+import { getIcon } from '@/flyweights/IconFactory';
+import { DEFAULT_LANGUAGE } from '@/flyweights/LanguageFlyweight';
 
 interface PlaylistImportDialogProps {
   children: React.ReactNode;
@@ -41,6 +42,12 @@ type ImportFormValues = z.infer<typeof importSchema>;
 export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ children }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const LoaderIcon = getIcon('Loader2');
+  const YoutubeIcon = getIcon('Youtube');
+  const ListVideoIcon = getIcon('ListVideo');
+  const InfoIcon = getIcon('Info');
+  const CheckIcon = getIcon('CheckCircle');
+  const AlertIcon = getIcon('AlertCircle');
   const [open, setOpen] = useState(false);
   const createPlaylistMutation = useCreatePlaylist();
   const addVideoMutation = useAddVideoToPlaylist();
@@ -179,7 +186,7 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
           slug: currentSlug,
           description: `Imported from YouTube playlist: ${values.playlistUrl}`,
           thumbnail_url: videosToImport.length > 0 ? videosToImport[0].thumbnail_url : null,
-          language: 'pt', // Default language, could be made configurable
+          language: DEFAULT_LANGUAGE, // Default language, could be made configurable
           is_public: true,
           is_ordered: true,
           course_code: null,
@@ -206,7 +213,7 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
                 channel_name: videoData.channel_name,
                 thumbnail_url: videoData.thumbnail_url,
                 duration_seconds: videoData.duration_seconds, // Use duration from API if available, otherwise null
-                language: videoData.language || 'pt', // Use language from API if available, otherwise default
+                language: videoData.language || DEFAULT_LANGUAGE, // Use language from API if available, otherwise default
                 submitted_by: user.id,
               });
               toast.success(t('playlists.import.success.videoAdded', { title: videoData.title }));
@@ -256,7 +263,7 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Youtube className="w-5 h-5 text-red-500" />
+            <YoutubeIcon className="w-5 h-5 text-red-500" />
             {t('playlists.import.title')}
           </DialogTitle>
           <DialogDescription>
@@ -269,7 +276,7 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
           <div className="space-y-2">
             <Label htmlFor="playlistUrl">{t('playlists.import.form.urlLabel')} *</Label>
             <div className="relative">
-              <ListVideo className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+              <ListVideoIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <Input
                 id="playlistUrl"
                 type="url"
@@ -280,13 +287,13 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
                 disabled={isFormDisabled}
               />
               {isFetchingYoutube && (
-                <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-muted-foreground" />
+                <LoaderIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-muted-foreground" />
               )}
               {!isFetchingYoutube && !youtubeFetchError && playlistUrl.trim() !== '' && !errors.playlistUrl && (
-                <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-green-500" />
+                <CheckIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-green-500" />
               )}
               {(!isFetchingYoutube && (youtubeFetchError || errors.playlistUrl)) && (
-                <AlertCircle className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-destructive" />
+                <AlertIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-destructive" />
               )}
             </div>
             {errors.playlistUrl && (
@@ -322,12 +329,12 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
           >
             {isFormDisabled ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <LoaderIcon className="w-4 h-4 mr-2 animate-spin" />
                 {t('playlists.import.form.importingButton')}
               </>
             ) : (
               <>
-                <Youtube className="w-4 h-4 mr-2" />
+                <YoutubeIcon className="w-4 h-4 mr-2" />
                 {t('playlists.import.form.importButton')}
               </>
             )}
@@ -335,7 +342,7 @@ export const PlaylistImportDialog: React.FC<PlaylistImportDialogProps> = ({ chil
         </form>
 
         <div className="flex items-start gap-3 p-3 bg-blue-100/50 text-blue-800 rounded-lg text-sm mt-4">
-          <Info className="w-5 h-5 text-blue-600 flex-shrink-0" />
+          <InfoIcon className="w-5 h-5 text-blue-600 flex-shrink-0" />
           <p>{t('playlists.import.apiLimitationInfo')}</p>
         </div>
       </DialogContent>

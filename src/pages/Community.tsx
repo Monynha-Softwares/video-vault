@@ -1,16 +1,20 @@
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Users, User as UserIcon, Video } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate, Link } from 'react-router-dom';
 import { useContributorCount, useProfiles } from '@/features/profile/queries/useProfile';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { getIcon } from '@/flyweights/IconFactory';
 
 const Community = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const ArrowLeftIcon = getIcon('ArrowLeft');
+  const UsersIcon = getIcon('Users');
+  const UserIcon = getIcon('User');
+  const VideoIcon = getIcon('Video');
   const { data: contributorCount, isLoading: contributorCountLoading } = useContributorCount();
   const { data: profiles, isLoading: profilesLoading, isError: profilesError } = useProfiles();
 
@@ -24,7 +28,7 @@ const Community = () => {
             onClick={() => navigate('/')}
             className="text-muted-foreground hover:text-foreground mb-4"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeftIcon className="w-4 h-4 mr-2" />
             {t('common.back')}
           </Button>
           <h1 className="text-3xl font-bold">{t('community.title')}</h1>
@@ -33,7 +37,7 @@ const Community = () => {
         
         <div className="bg-card border border-border rounded-2xl p-6 shadow-sm flex items-center gap-4 mb-8">
           <div className="p-3 rounded-full bg-accent/10 text-accent">
-            <Users className="w-6 h-6" />
+            <UsersIcon className="w-6 h-6" />
           </div>
           <div>
             <h2 className="text-xl font-semibold">{t('community.totalContributors')}</h2>
@@ -92,7 +96,7 @@ const Community = () => {
                   )}
                   {profile.submissions_count > 0 && (
                     <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-                      <Video className="w-3 h-3" />
+                      <VideoIcon className="w-3 h-3" />
                       {t('community.submissionsCount', { count: profile.submissions_count })}
                     </p>
                   )}

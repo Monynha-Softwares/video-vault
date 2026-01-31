@@ -2,15 +2,19 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Mail, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { resendConfirmationEmail } from '@/features/auth/auth.api';
 import { useAuth } from '@/features/auth/useAuth';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { getIcon } from '@/flyweights/IconFactory';
 
 export const ResendConfirmationEmail: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const MailIcon = getIcon('Mail');
+  const LoaderIcon = getIcon('Loader2');
+  const CheckIcon = getIcon('CheckCircle');
+  const AlertIcon = getIcon('AlertCircle');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [lastSent, setLastSent] = useState<Date | null>(null);
 
@@ -60,7 +64,7 @@ export const ResendConfirmationEmail: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Mail className="w-5 h-5" />
+            <MailIcon className="w-5 h-5" />
             {t('account.settings.resendEmail.title')}
           </CardTitle>
           <CardDescription>
@@ -69,7 +73,7 @@ export const ResendConfirmationEmail: React.FC = () => {
         </CardHeader>
         <CardContent>
           <Alert>
-            <CheckCircle className="h-4 w-4 text-green-600" />
+            <CheckIcon className="h-4 w-4 text-green-600" />
             <AlertDescription>
               {t('account.settings.resendEmail.alreadyConfirmed')}
             </AlertDescription>
@@ -83,7 +87,7 @@ export const ResendConfirmationEmail: React.FC = () => {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Mail className="w-5 h-5" />
+          <MailIcon className="w-5 h-5" />
           {t('account.settings.resendEmail.title')}
         </CardTitle>
         <CardDescription>
@@ -92,7 +96,7 @@ export const ResendConfirmationEmail: React.FC = () => {
       </CardHeader>
       <CardContent className="space-y-4">
         <Alert>
-          <AlertCircle className="h-4 w-4" />
+          <AlertIcon className="h-4 w-4" />
           <AlertDescription>
             {t('account.settings.resendEmail.notConfirmedWarning')}
           </AlertDescription>
@@ -119,12 +123,12 @@ export const ResendConfirmationEmail: React.FC = () => {
           >
             {isSubmitting ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <LoaderIcon className="w-4 h-4 mr-2 animate-spin" />
                 {t('auth.submittingButton')}
               </>
             ) : (
               <>
-                <Mail className="w-4 h-4 mr-2" />
+                <MailIcon className="w-4 h-4 mr-2" />
                 {t('account.settings.resendEmail.button')}
               </>
             )}

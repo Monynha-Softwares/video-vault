@@ -1,13 +1,21 @@
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Sparkles, User, Heart, Lightbulb, ShieldCheck, Handshake, Scale } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { getIcon } from '@/flyweights/IconFactory';
 
 const About = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const ArrowLeftIcon = getIcon('ArrowLeft');
+  const SparklesIcon = getIcon('Sparkles');
+  const UserIcon = getIcon('User');
+  const HeartIcon = getIcon('Heart');
+  const LightbulbIcon = getIcon('Lightbulb');
+  const ShieldCheckIcon = getIcon('ShieldCheck');
+  const HandshakeIcon = getIcon('Handshake');
+  const ScaleIcon = getIcon('Scale');
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -19,7 +27,7 @@ const About = () => {
             onClick={() => navigate('/')}
             className="text-muted-foreground hover:text-foreground mb-4"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeftIcon className="w-4 h-4 mr-2" />
             {t('common.back')}
           </Button>
           <h1 className="text-3xl font-bold">{t('about.title')}</h1>
@@ -30,7 +38,7 @@ const About = () => {
           {/* Our Mission */}
           <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
             <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-              <Sparkles className="w-6 h-6 text-primary" />
+              <SparklesIcon className="w-6 h-6 text-primary" />
               {t('aboutPage.missionTitle')}
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -41,7 +49,7 @@ const About = () => {
           {/* About the Founder */}
           <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
             <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-              <User className="w-6 h-6 text-accent" />
+              <UserIcon className="w-6 h-6 text-accent" />
               {t('aboutPage.founderTitle')}
             </h2>
             <div className="flex items-center gap-4 mb-4">
@@ -81,22 +89,22 @@ const About = () => {
           {/* Values */}
           <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
             <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-              <Heart className="w-6 h-6 text-destructive" />
+              <HeartIcon className="w-6 h-6 text-destructive" />
               {t('aboutPage.valuesTitle')}
             </h2>
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-muted-foreground">
-              <li className="flex items-center gap-2"><Scale className="w-4 h-4 text-primary" /> {t('aboutPage.value1')}</li>
-              <li className="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-primary" /> {t('aboutPage.value2')}</li>
-              <li className="flex items-center gap-2"><Lightbulb className="w-4 h-4 text-primary" /> {t('aboutPage.value3')}</li>
-              <li className="flex items-center gap-2"><Handshake className="w-4 h-4 text-primary" /> {t('aboutPage.value4')}</li>
-              <li className="flex items-center gap-2"><Sparkles className="w-4 h-4 text-primary" /> {t('aboutPage.value5')}</li>
+              <li className="flex items-center gap-2"><ScaleIcon className="w-4 h-4 text-primary" /> {t('aboutPage.value1')}</li>
+              <li className="flex items-center gap-2"><ShieldCheckIcon className="w-4 h-4 text-primary" /> {t('aboutPage.value2')}</li>
+              <li className="flex items-center gap-2"><LightbulbIcon className="w-4 h-4 text-primary" /> {t('aboutPage.value3')}</li>
+              <li className="flex items-center gap-2"><HandshakeIcon className="w-4 h-4 text-primary" /> {t('aboutPage.value4')}</li>
+              <li className="flex items-center gap-2"><SparklesIcon className="w-4 h-4 text-primary" /> {t('aboutPage.value5')}</li>
             </ul>
           </div>
 
           {/* Philosophy */}
           <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
             <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-              <Lightbulb className="w-6 h-6 text-primary" />
+              <LightbulbIcon className="w-6 h-6 text-primary" />
               {t('aboutPage.philosophyTitle')}
             </h2>
             <p className="text-muted-foreground leading-relaxed">

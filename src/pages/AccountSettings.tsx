@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Settings, Shield } from 'lucide-react';
 import { useRequireAuth } from '@/shared/hooks/useRequireAuth';
 import { ChangeEmailForm } from '@/components/account/ChangeEmailForm';
 import { ChangePasswordForm } from '@/components/account/ChangePasswordForm';
@@ -11,11 +10,15 @@ import { ResendConfirmationEmail } from '@/components/account/ResendConfirmation
 import { DeleteAccount } from '@/components/account/DeleteAccount';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
+import { getIcon } from '@/flyweights/IconFactory';
 
 export default function AccountSettings() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, loading } = useRequireAuth();
+  const ArrowLeftIcon = getIcon('ArrowLeft');
+  const SettingsIcon = getIcon('Settings');
+  const ShieldIcon = getIcon('Shield');
 
   if (loading) {
     return (
@@ -52,13 +55,13 @@ export default function AccountSettings() {
                 onClick={() => navigate(-1)}
                 className="mb-4"
               >
-                <ArrowLeft className="w-4 h-4 mr-2" />
+                <ArrowLeftIcon className="w-4 h-4 mr-2" />
                 {t('common.back')}
               </Button>
               
               <div className="flex items-center gap-3">
                 <div className="p-3 rounded-xl bg-primary/10">
-                  <Settings className="w-6 h-6 text-primary" />
+                  <SettingsIcon className="w-6 h-6 text-primary" />
                 </div>
                 <div>
                   <h1 className="text-2xl md:text-3xl font-bold">{t('account.settings.title')}</h1>
@@ -69,7 +72,7 @@ export default function AccountSettings() {
 
             {/* Security Section Header */}
             <div className="flex items-center gap-2 mb-6">
-              <Shield className="w-5 h-5 text-muted-foreground" />
+              <ShieldIcon className="w-5 h-5 text-muted-foreground" />
               <h2 className="text-lg font-semibold">{t('account.settings.securityTitle')}</h2>
             </div>
 

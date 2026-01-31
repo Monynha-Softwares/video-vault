@@ -82,6 +82,42 @@ I chose a stack that's modern, scalable, and – honestly – a joy to work with
 
 ---
 
+## 🧠 Flyweight Architecture (Why + How)
+
+To keep memory usage and UI consistency predictable as the catalog grows, the app now uses the **Flyweight** pattern across the application layer. It centralizes immutable, shared data that used to be duplicated everywhere (icons, categories, languages, roles, and base Tailwind styles). This gives us:
+
+- **Less duplication** of immutable objects
+- **Consistent UI semantics** (same icon, same class string, same metadata)
+- **Predictable scaling** with more videos/categories/languages
+- **AI-friendly refactors** (explicit, centralized modules)
+
+### Where the flyweights live
+
+```
+src/flyweights/
+├── IconFactory.ts         # lucide-react icon registry + cache
+├── CategoryFlyweight.ts   # immutable category cache
+├── LanguageFlyweight.ts   # supported language definitions
+├── RoleFlyweight.ts       # collaborator role definitions
+└── StyleFlyweight.ts      # shared Tailwind class tokens
+```
+
+### How to use them
+
+- **Icons**: `getIcon('ArrowLeft')` (components should *not* import lucide-react directly)
+- **Categories**: `getCategoryById(id)` after categories are preloaded once
+- **Languages**: `getLanguage('pt')` / `getSupportedLanguages()` (single source of truth)
+- **Roles**: `getRole('editor')` (no raw role strings)
+- **Styles**: `getStyle('navLink').className` + `cn(...)` for composition
+
+More details live in:
+- [`docs/flyweights/intrinsic-extrinsic.md`](./docs/flyweights/intrinsic-extrinsic.md)
+- [`docs/flyweights/adding-flyweights.md`](./docs/flyweights/adding-flyweights.md)
+- [`docs/flyweights/anti-patterns.md`](./docs/flyweights/anti-patterns.md)
+- [`docs/flyweights/global-mutable-state.md`](./docs/flyweights/global-mutable-state.md)
+
+---
+
 ## 🎯 What Can You Do Here?
 
 ### 🔍 Discover Videos
@@ -170,6 +206,7 @@ src/
 │   ├── videos/             # Video management
 │   ├── playlists/          # Playlist management
 │   └── ...
+├── flyweights/             # Flyweight factories (icons, categories, languages, roles, styles)
 ├── entities/                # Domain entities
 │   ├── video/              # Video entity & API
 │   ├── playlist/           # Playlist entity & API

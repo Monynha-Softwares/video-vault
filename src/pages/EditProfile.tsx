@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
-import { ArrowLeft, User, Loader2, Save } from 'lucide-react';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { Header } from '@/components/layout/Header';
@@ -16,6 +15,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AvatarUpload } from '@/components/profile/AvatarUpload';
 import { SocialAccountsManager } from '@/components/profile/SocialAccountsManager'; // Import the new component
+import { getIcon } from '@/flyweights/IconFactory';
 
 const editProfileSchema = z.object({
   display_name: z.string().min(3, 'profile.edit.error.displayNameMinLength').max(50, 'profile.edit.error.displayNameMaxLength'),
@@ -32,6 +32,10 @@ export default function EditProfile() {
   const { user, loading: authLoading } = useAuth();
   const { data: profile, isLoading: profileLoading, isError: profileLoadError } = useProfileById(user?.id);
   const updateProfileMutation = useUpdateProfile();
+  const ArrowLeftIcon = getIcon('ArrowLeft');
+  const UserIcon = getIcon('User');
+  const LoaderIcon = getIcon('Loader2');
+  const SaveIcon = getIcon('Save');
 
   const { register, handleSubmit, watch, setValue, formState: { errors }, reset } = useForm<EditProfileFormValues>({
     resolver: zodResolver(editProfileSchema),
@@ -88,7 +92,7 @@ export default function EditProfile() {
   if (authLoading || profileLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <LoaderIcon className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -103,7 +107,7 @@ export default function EditProfile() {
             {t('profile.edit.loadErrorDescription')}
           </p>
           <Button onClick={() => navigate('/')}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeftIcon className="w-4 h-4 mr-2" />
             {t('common.backToHome')}
           </Button>
         </main>
@@ -122,12 +126,12 @@ export default function EditProfile() {
             onClick={() => navigate(`/profile/${profile.username}`)}
             className="text-muted-foreground hover:text-foreground"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeftIcon className="w-4 h-4 mr-2" />
             {t('common.back')}
           </Button>
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <User className="w-4 h-4 text-primary-foreground fill-current" />
+              <UserIcon className="w-4 h-4 text-primary-foreground fill-current" />
             </div>
             <span className="font-bold text-lg">
               Monynha<span className="text-primary">Fun</span>
@@ -213,12 +217,12 @@ export default function EditProfile() {
               >
                 {updateProfileMutation.isPending ? (
                   <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    <LoaderIcon className="w-4 h-4 mr-2 animate-spin" />
                     {t('profile.edit.form.savingButton')}
                   </>
                 ) : (
                   <>
-                    <Save className="w-4 h-4 mr-2" />
+                    <SaveIcon className="w-4 h-4 mr-2" />
                     {t('profile.edit.form.saveButton')}
                   </>
                 )}

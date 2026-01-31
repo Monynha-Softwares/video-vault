@@ -1,33 +1,14 @@
-import type { Category } from "@/entities/category/category.types";
-import { 
-  BookOpen, 
-  ChefHat, 
-  GraduationCap, 
-  Laugh, 
-  Music, 
-  Globe, 
-  HelpCircle,
-  LucideIcon
-} from "lucide-react";
+import type { CategoryFlyweight } from "@/flyweights/CategoryFlyweight";
+import { getIcon } from "@/flyweights/IconFactory";
 
 interface CategoryCardProps {
-  category: Category;
+  category: CategoryFlyweight;
   videoCount?: number;
   onClick?: () => void;
 }
 
-const iconMap: Record<string, LucideIcon> = {
-  BookOpen,
-  ChefHat,
-  GraduationCap,
-  Laugh,
-  Music,
-  Globe,
-  HelpCircle,
-};
-
 export const CategoryCard = ({ category, videoCount = 0, onClick }: CategoryCardProps) => {
-  const Icon = iconMap[category.icon] || HelpCircle;
+  const Icon = getIcon(category.icon);
   
   return (
     <button

@@ -1,14 +1,16 @@
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { getIcon } from '@/flyweights/IconFactory';
 
 const FAQ = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const ArrowLeftIcon = getIcon('ArrowLeft');
+  const HelpCircleIcon = getIcon('HelpCircle');
 
   const faqs = [
     {
@@ -43,7 +45,7 @@ const FAQ = () => {
             onClick={() => navigate('/')}
             className="text-muted-foreground hover:text-foreground mb-4"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeftIcon className="w-4 h-4 mr-2" />
             {t('common.back')}
           </Button>
           <h1 className="text-3xl font-bold">{t('faq.title')}</h1>
@@ -52,7 +54,7 @@ const FAQ = () => {
 
         <section className="bg-card border border-border rounded-2xl p-6 shadow-sm">
           <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-            <HelpCircle className="w-6 h-6 text-primary" />
+            <HelpCircleIcon className="w-6 h-6 text-primary" />
             {t('faq.title')}
           </h2 >
           <Accordion type="single" collapsible className="w-full">

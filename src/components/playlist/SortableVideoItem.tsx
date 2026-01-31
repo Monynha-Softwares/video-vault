@@ -4,11 +4,11 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { GripVertical, X, Check } from 'lucide-react';
 import type { PlaylistVideo } from '@/features/playlists';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { formatDuration } from '@/shared/lib/format'; // Import shared formatDuration
+import { getIcon } from '@/flyweights/IconFactory';
 
 interface SortableVideoItemProps {
   item: PlaylistVideo;
@@ -32,6 +32,9 @@ export function SortableVideoItem({
   onToggleWatched,
 }: SortableVideoItemProps) {
   const { t } = useTranslation();
+  const GripIcon = getIcon('GripVertical');
+  const CloseIcon = getIcon('X');
+  const CheckIcon = getIcon('Check');
   const {
     attributes,
     listeners,
@@ -63,7 +66,7 @@ export function SortableVideoItem({
           {...listeners}
           className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground transition-colors"
         >
-          <GripVertical className="w-5 h-5" />
+          <GripIcon className="w-5 h-5" />
         </div>
       )}
 
@@ -88,7 +91,7 @@ export function SortableVideoItem({
               : "border-muted-foreground/30 hover:border-primary/50"
           )}
         >
-          {isWatched && <Check className="w-4 h-4" />}
+          {isWatched && <CheckIcon className="w-4 h-4" />}
         </button>
       )}
 
@@ -141,7 +144,7 @@ export function SortableVideoItem({
           }}
           className="opacity-0 group-hover:opacity-100 transition-opacity text-destructive hover:text-destructive hover:bg-destructive/10"
         >
-          <X className="w-4 h-4" />
+          <CloseIcon className="w-4 h-4" />
         </Button>
       )}
     </div>

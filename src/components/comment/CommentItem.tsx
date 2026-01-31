@@ -4,23 +4,24 @@ import { formatDistanceToNow, type Locale } from 'date-fns';
 import { pt, enUS, es, fr } from 'date-fns/locale';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Trash2, User as UserIcon } from 'lucide-react';
 import type { Comment } from '@/entities/comment/comment.types';
 import { useAuth } from '@/features/auth/useAuth';
 import { useDeleteComment } from '@/features/comments/queries/useComments';
 import { toast } from 'sonner';
 import i18n from 'i18next';
 import { Link } from 'react-router-dom';
+import { getIcon } from '@/flyweights/IconFactory';
+import { getLanguage } from '@/flyweights/LanguageFlyweight';
 
 interface CommentItemProps {
   comment: Comment;
 }
 
 const localeMap: Record<string, Locale> = {
-  pt: pt,
-  en: enUS,
-  es: es,
-  fr: fr,
+  [getLanguage('pt').code]: pt,
+  [getLanguage('en').code]: enUS,
+  [getLanguage('es').code]: es,
+  [getLanguage('fr').code]: fr,
 };
 
 const parseContent = (content: string) => {
@@ -50,6 +51,8 @@ export const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
   const { user } = useAuth();
   const deleteCommentMutation = useDeleteComment();
   const isAuthor = user?.id === comment.user_id;
+  const TrashIcon = getIcon('Trash2');
+  const UserIcon = getIcon('User');
 
   const handleDelete = async () => {
     if (!comment.id || !comment.video_id) return;
@@ -88,7 +91,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
               onClick={handleDelete}
               disabled={deleteCommentMutation.isPending}
             >
-              <Trash2 className="w-4 h-4" />
+              <TrashIcon className="w-4 h-4" />
             </Button>
           )}
         </div>

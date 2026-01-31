@@ -1,17 +1,22 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, FolderX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { CategoryCard } from '@/components/video/CategoryCard';
 import { useCategories } from '@/features/categories/queries/useCategories';
 import { useVideos } from '@/features/videos/queries/useVideos';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { getIcon } from '@/flyweights/IconFactory';
+import { getStyle } from '@/flyweights/StyleFlyweight';
 
 export const CategorySection = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const ArrowRightIcon = getIcon('ArrowRight');
+  const FolderXIcon = getIcon('FolderX');
+  const sectionTitle = getStyle('sectionTitle');
+  const sectionDescription = getStyle('sectionDescription');
   const { data: categories, isLoading: categoriesLoading, isError: categoriesError } = useCategories();
   const { data: videos } = useVideos({ enabled: !!categories?.length });
 
@@ -38,8 +43,8 @@ export const CategorySection = () => {
       <div className="container">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold">{t('index.categoriesTitle')}</h2>
-            <p className="text-muted-foreground mt-1">{t('index.categoriesDescription')}</p>
+            <h2 className={sectionTitle.className}>{t('index.categoriesTitle')}</h2>
+            <p className={sectionDescription.className}>{t('index.categoriesDescription')}</p>
           </div>
           <Button
             variant="ghost"
@@ -47,7 +52,7 @@ export const CategorySection = () => {
             onClick={() => navigate('/videos')}
           >
             {t('index.viewAll')}
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            <ArrowRightIcon className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Button>
         </div>
 
@@ -62,7 +67,7 @@ export const CategorySection = () => {
           </ScrollArea>
         ) : categoriesError ? (
           <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
-            <FolderX className="w-16 h-16 mb-4 opacity-50" />
+            <FolderXIcon className="w-16 h-16 mb-4 opacity-50" />
             <p className="text-lg font-medium mb-2">{t('index.categoriesError')}</p>
           </div>
         ) : categories && categories.length > 0 ? (
@@ -82,7 +87,7 @@ export const CategorySection = () => {
           </ScrollArea>
         ) : (
           <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
-            <FolderX className="w-16 h-16 mb-4 opacity-50" />
+            <FolderXIcon className="w-16 h-16 mb-4 opacity-50" />
             <p className="text-lg font-medium mb-2">{t('index.noCategories')}</p>
           </div>
         )}

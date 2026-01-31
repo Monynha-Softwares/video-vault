@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import { Play, Mail, Lock, User, ArrowLeft } from 'lucide-react';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { requestPasswordReset } from '@/features/auth/auth.api';
@@ -14,6 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { ResetPasswordForm } from '@/components/auth/ResetPasswordForm';
 import { emailSchema, passwordSchema, optionalUsernameSchema } from '@/shared/lib/validation';
+import { getIcon } from '@/flyweights/IconFactory';
 
 // Define Zod schemas for validation using shared validators
 const loginSchema = z.object({
@@ -40,6 +40,11 @@ export default function Auth() {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
+  const ArrowLeftIcon = getIcon('ArrowLeft');
+  const PlayIcon = getIcon('Play');
+  const MailIcon = getIcon('Mail');
+  const LockIcon = getIcon('Lock');
+  const UserIcon = getIcon('User');
 
   // Form setup for login/signup
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset, watch } = useForm<z.infer<typeof loginSchema> | z.infer<typeof signupSchema>>({
@@ -194,7 +199,7 @@ export default function Auth() {
           onClick={() => navigate('/')}
           className="text-muted-foreground hover:text-foreground"
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
+          <ArrowLeftIcon className="w-4 h-4 mr-2" />
           {t('common.back')}
         </Button>
       </header>
@@ -206,7 +211,7 @@ export default function Auth() {
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-2 mb-4">
               <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
-                <Play className="w-6 h-6 text-primary-foreground fill-current" />
+                <PlayIcon className="w-6 h-6 text-primary-foreground fill-current" />
               </div>
             </div>
             <h1 className="text-3xl font-bold text-foreground">
@@ -230,7 +235,7 @@ export default function Auth() {
                     {t('auth.emailLabel')}
                   </Label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <MailIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <Input
                       id="forgot-email"
                       type="email"
@@ -276,7 +281,7 @@ export default function Auth() {
                       {t('auth.usernameLabel')}
                     </Label>
                     <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                      <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                       <Input
                         id="username"
                         type="text"
@@ -296,7 +301,7 @@ export default function Auth() {
                     {t('auth.emailLabel')}
                   </Label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <MailIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <Input
                       id="email"
                       type="email"
@@ -315,7 +320,7 @@ export default function Auth() {
                     {t('auth.passwordLabel')}
                   </Label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <LockIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <Input
                       id="password"
                       type="password"

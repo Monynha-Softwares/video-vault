@@ -1,7 +1,6 @@
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Mail, MapPin, Clock, Send, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,6 +12,7 @@ import { z } from 'zod';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { emailSchema } from '@/shared/lib/validation';
+import { getIcon } from '@/flyweights/IconFactory';
 
 // Define Zod schema for the contact form
 const contactFormSchema = z.object({
@@ -28,6 +28,12 @@ const Contact = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const ArrowLeftIcon = getIcon('ArrowLeft');
+  const MailIcon = getIcon('Mail');
+  const MapPinIcon = getIcon('MapPin');
+  const ClockIcon = getIcon('Clock');
+  const SendIcon = getIcon('Send');
+  const LoaderIcon = getIcon('Loader2');
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
@@ -63,7 +69,7 @@ const Contact = () => {
             onClick={() => navigate('/')}
             className="text-muted-foreground hover:text-foreground mb-4"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeftIcon className="w-4 h-4 mr-2" />
             {t('common.back')}
           </Button>
           <h1 className="text-3xl font-bold">{t('contact.title')}</h1>
@@ -135,12 +141,12 @@ const Contact = () => {
               <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
                 {isSubmitting ? (
                   <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    <LoaderIcon className="w-4 h-4 mr-2 animate-spin" />
                     {t('auth.submittingButton')}
                   </>
                 ) : (
                   <>
-                    <Send className="w-4 h-4 mr-2" />
+                    <SendIcon className="w-4 h-4 mr-2" />
                     {t('contactPage.form.sendButton')}
                   </>
                 )}
@@ -152,19 +158,19 @@ const Contact = () => {
           <div className="bg-card border border-border rounded-2xl p-6 shadow-sm space-y-6">
             <h2 className="text-2xl font-bold mb-4">{t('contactPage.directEmailLabel')}</h2>
             <div className="flex items-center gap-3 text-muted-foreground">
-              <Mail className="w-5 h-5 text-primary" />
+              <MailIcon className="w-5 h-5 text-primary" />
               <a href="mailto:hello@monynha.com" className="text-foreground hover:underline">hello@monynha.com</a>
             </div>
 
             <h2 className="text-2xl font-bold mb-4">{t('contactPage.locationLabel')}</h2>
             <div className="flex items-center gap-3 text-muted-foreground">
-              <MapPin className="w-5 h-5 text-accent" />
+              <MapPinIcon className="w-5 h-5 text-accent" />
               <p className="text-foreground">{t('contactPage.locationValue')}</p>
             </div>
 
             <h2 className="text-2xl font-bold mb-4">{t('contactPage.responseTimeLabel')}</h2>
             <div className="flex items-center gap-3 text-muted-foreground">
-              <Clock className="w-5 h-5 text-secondary-foreground" />
+              <ClockIcon className="w-5 h-5 text-secondary-foreground" />
               <p className="text-foreground">{t('contactPage.responseTimeValue')}</p>
             </div>
 

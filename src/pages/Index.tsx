@@ -4,7 +4,6 @@ import { VideoCard } from "@/components/video/VideoCard";
 import { Footer } from "@/components/layout/Footer";
 import { useFeaturedVideos, useRecentVideos } from "@/features/videos/queries/useVideos";
 import { usePlaylists } from "@/features/playlists/queries/usePlaylists";
-import { ArrowRight, TrendingUp, Clock, ListVideo } from "lucide-react";
 import { FeaturedHero } from "@/components/layout/FeaturedHero";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -12,9 +11,17 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { PlaylistCard } from "@/components/playlist/PlaylistCard";
 import { CategorySection } from "@/components/layout/CategorySection";
+import { getIcon } from "@/flyweights/IconFactory";
+import { getStyle } from "@/flyweights/StyleFlyweight";
 
 const Index = () => {
   const { t } = useTranslation();
+  const ArrowRightIcon = getIcon('ArrowRight');
+  const TrendingIcon = getIcon('TrendingUp');
+  const ClockIcon = getIcon('Clock');
+  const ListVideoIcon = getIcon('ListVideo');
+  const sectionTitle = getStyle('sectionTitle');
+  const sectionDescription = getStyle('sectionDescription');
   const { data: featuredVideos, isLoading: featuredLoading } = useFeaturedVideos(4);
   const { data: recentVideos, isLoading: recentLoading } = useRecentVideos(4);
   const { data: recentPlaylists, isLoading: playlistsLoading } = usePlaylists({ isPublic: true });
@@ -37,11 +44,11 @@ const Index = () => {
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-xl bg-primary/10">
-                  <Clock className="w-5 h-5 text-primary" />
+                  <ClockIcon className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h2 className="text-2xl md:text-3xl font-bold">{t('index.recentTitle')}</h2>
-                  <p className="text-muted-foreground mt-1">{t('index.recentDescription')}</p>
+                  <h2 className={sectionTitle.className}>{t('index.recentTitle')}</h2>
+                  <p className={sectionDescription.className}>{t('index.recentDescription')}</p>
                 </div>
               </div>
               <Button 
@@ -50,7 +57,7 @@ const Index = () => {
                 onClick={() => navigate('/videos?recent=true')}
               >
                 {t('index.viewAll')}
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                <ArrowRightIcon className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </div>
 
@@ -90,11 +97,11 @@ const Index = () => {
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-xl bg-primary/10">
-                  <TrendingUp className="w-5 h-5 text-primary" />
+                  <TrendingIcon className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h2 className="text-2xl md:text-3xl font-bold">{t('index.featuredTitle')}</h2>
-                  <p className="text-muted-foreground mt-1">{t('index.featuredDescription')}</p>
+                  <h2 className={sectionTitle.className}>{t('index.featuredTitle')}</h2>
+                  <p className={sectionDescription.className}>{t('index.featuredDescription')}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -104,7 +111,7 @@ const Index = () => {
                   onClick={() => navigate('/videos')} // Changed to navigate to /videos without filter
                 >
                   {t('index.viewAll')}
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  <ArrowRightIcon className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </div>
             </div>
@@ -158,11 +165,11 @@ const Index = () => {
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-xl bg-accent/10">
-                  <ListVideo className="w-5 h-5 text-accent" />
+                  <ListVideoIcon className="w-5 h-5 text-accent" />
                 </div>
                 <div>
-                  <h2 className="text-2xl md:text-3xl font-bold">{t('index.playlistsTitle')}</h2>
-                  <p className="text-muted-foreground mt-1">{t('index.playlistsDescription')}</p>
+                  <h2 className={sectionTitle.className}>{t('index.playlistsTitle')}</h2>
+                  <p className={sectionDescription.className}>{t('index.playlistsDescription')}</p>
                 </div>
               </div>
               <Button 
@@ -171,7 +178,7 @@ const Index = () => {
                 onClick={() => navigate('/playlists')}
               >
                 {t('index.viewAll')}
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                <ArrowRightIcon className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </div>
 
@@ -189,7 +196,7 @@ const Index = () => {
               </div>
             ) : (
               <div className="text-center py-12 text-muted-foreground">
-                <ListVideo className="w-16 h-16 mb-4 opacity-50 mx-auto" />
+                <ListVideoIcon className="w-16 h-16 mb-4 opacity-50 mx-auto" />
                 <p className="text-lg font-medium mb-2">{t('index.noPlaylistsTitle')}</p>
                 <p className="mb-6">{t('index.noPlaylistsDescription')}</p>
                 <Button onClick={() => navigate('/playlists/new')}>{t('index.createFirstPlaylist')}</Button>
@@ -210,7 +217,7 @@ const Index = () => {
               </p>
               <Button variant="hero" size="xl" className="gap-2" onClick={() => navigate('/submit')}>
                 {t('index.ctaButton')}
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRightIcon className="w-5 h-5" />
               </Button>
             </div>
           </div>
