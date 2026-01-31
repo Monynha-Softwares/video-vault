@@ -7,6 +7,7 @@ import { ArrowLeft, Settings, Shield } from 'lucide-react';
 import { useRequireAuth } from '@/shared/hooks/useRequireAuth';
 import { ChangeEmailForm } from '@/components/account/ChangeEmailForm';
 import { ChangePasswordForm } from '@/components/account/ChangePasswordForm';
+import { ResendConfirmationEmail } from '@/components/account/ResendConfirmationEmail';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function AccountSettings() {
@@ -72,6 +73,7 @@ export default function AccountSettings() {
 
             {/* Forms */}
             <div className="space-y-6">
+              <ResendConfirmationEmail />
               <ChangeEmailForm />
               <ChangePasswordForm />
             </div>

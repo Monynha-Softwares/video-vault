@@ -123,6 +123,62 @@
       "checkEmailForReset": "Revisa tu bandeja de entrada para el enlace de restablecimiento de contraseña."
     }
   },
+  "account": {
+    "settings": {
+      "title": "Configuración de Cuenta",
+      "description": "Gestiona la seguridad y credenciales de tu cuenta",
+      "securityTitle": "Seguridad y Autenticación",
+      "profileLinkDescription": "¿Quieres actualizar tu nombre, avatar o biografía?",
+      "emailSection": {
+        "title": "Dirección de Correo",
+        "description": "Actualiza tu dirección de correo. Se enviará una confirmación a tu nuevo correo.",
+        "current": "Correo actual",
+        "newEmail": "Nueva dirección de correo",
+        "confirmChange": "Actualizar Correo",
+        "changeInfo": "Recibirás un enlace de confirmación en tu nueva dirección de correo. El cambio surtirá efecto después de confirmar."
+      },
+      "passwordSection": {
+        "title": "Contraseña",
+        "description": "Cambia tu contraseña para mantener tu cuenta segura.",
+        "currentPassword": "Contraseña actual",
+        "newPassword": "Nueva contraseña",
+        "confirmPassword": "Confirmar nueva contraseña",
+        "update": "Actualizar Contraseña"
+      },
+      "success": {
+        "emailUpdated": "Solicitud de actualización de correo enviada. Revisa tu nuevo correo para confirmar.",
+        "passwordUpdated": "Contraseña actualizada exitosamente"
+      },
+      "error": {
+        "passwordMismatch": "Las contraseñas no coinciden",
+        "currentPasswordRequired": "La contraseña actual es obligatoria",
+        "samePassword": "La nueva contraseña debe ser diferente de la actual",
+        "sameEmail": "El nuevo correo es el mismo que el actual",
+        "notLoggedIn": "Debes iniciar sesión para acceder a la configuración",
+        "wrongCurrentPassword": "Contraseña actual incorrecta",
+        "passwordUpdateFailed": "Error al actualizar la contraseña",
+        "emailUpdateFailed": "Error al actualizar el correo"
+      },
+      "resendEmail": {
+        "title": "Confirmación de Correo",
+        "description": "Reenviar correo de confirmación si no lo has recibido o necesitas uno nuevo.",
+        "button": "Reenviar Confirmación",
+        "emailLabel": "Correo",
+        "lastSent": "Último envío",
+        "alreadyConfirmed": "Tu correo ya está confirmado.",
+        "notConfirmedWarning": "Tu correo aún no está confirmado. Algunas funciones pueden estar limitadas hasta que confirmes tu correo.",
+        "cooldownMessage": "Por favor, espera un minuto antes de solicitar otro correo.",
+        "success": {
+          "sent": "¡Correo de confirmación enviado!",
+          "checkInbox": "Revisa tu bandeja de entrada para el enlace de confirmación."
+        },
+        "error": {
+          "failed": "Error al enviar correo de confirmación",
+          "cooldown": "Por favor, espera antes de solicitar otro correo"
+        }
+      }
+    }
+  },
   "contact": {
     "title": "Contacto",
     "description": "Ponte en contacto con nosotros. Nos encantaría saber de ti."

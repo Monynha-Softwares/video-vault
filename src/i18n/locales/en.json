@@ -155,6 +155,24 @@
         "wrongCurrentPassword": "Current password is incorrect",
         "passwordUpdateFailed": "Failed to update password",
         "emailUpdateFailed": "Failed to update email"
+      },
+      "resendEmail": {
+        "title": "Email Confirmation",
+        "description": "Resend confirmation email if you haven't received it or need a new one.",
+        "button": "Resend Confirmation",
+        "emailLabel": "Email",
+        "lastSent": "Last sent",
+        "alreadyConfirmed": "Your email is already confirmed.",
+        "notConfirmedWarning": "Your email is not confirmed yet. Some features may be limited until you confirm your email.",
+        "cooldownMessage": "Please wait a minute before requesting another email.",
+        "success": {
+          "sent": "Confirmation email sent!",
+          "checkInbox": "Check your inbox for the confirmation link."
+        },
+        "error": {
+          "failed": "Failed to send confirmation email",
+          "cooldown": "Please wait before requesting another email"
+        }
       }
     }
   },

@@ -106,6 +106,62 @@
       "checkEmailForReset": "Verifique sua caixa de entrada para o link de redefinição de senha."
     }
   },
+  "account": {
+    "settings": {
+      "title": "Configurações da Conta",
+      "description": "Gerencie a segurança e credenciais da sua conta",
+      "securityTitle": "Segurança e Autenticação",
+      "profileLinkDescription": "Quer atualizar seu nome, avatar ou biografia?",
+      "emailSection": {
+        "title": "Endereço de E-mail",
+        "description": "Atualize seu endereço de e-mail. Uma confirmação será enviada para o seu novo e-mail.",
+        "current": "E-mail atual",
+        "newEmail": "Novo endereço de e-mail",
+        "confirmChange": "Atualizar E-mail",
+        "changeInfo": "Você receberá um link de confirmação no seu novo endereço de e-mail. A alteração terá efeito após a confirmação."
+      },
+      "passwordSection": {
+        "title": "Senha",
+        "description": "Altere sua senha para manter sua conta segura.",
+        "currentPassword": "Senha atual",
+        "newPassword": "Nova senha",
+        "confirmPassword": "Confirmar nova senha",
+        "update": "Atualizar Senha"
+      },
+      "success": {
+        "emailUpdated": "Solicitação de atualização de e-mail enviada. Verifique seu novo e-mail para confirmação.",
+        "passwordUpdated": "Senha atualizada com sucesso"
+      },
+      "error": {
+        "passwordMismatch": "As senhas não correspondem",
+        "currentPasswordRequired": "A senha atual é obrigatória",
+        "samePassword": "A nova senha deve ser diferente da atual",
+        "sameEmail": "O novo e-mail é o mesmo que o atual",
+        "notLoggedIn": "Você precisa estar logado para acessar as configurações",
+        "wrongCurrentPassword": "Senha atual incorreta",
+        "passwordUpdateFailed": "Falha ao atualizar a senha",
+        "emailUpdateFailed": "Falha ao atualizar o e-mail"
+      },
+      "resendEmail": {
+        "title": "Confirmação de E-mail",
+        "description": "Reenviar e-mail de confirmação caso não tenha recebido ou precise de um novo.",
+        "button": "Reenviar Confirmação",
+        "emailLabel": "E-mail",
+        "lastSent": "Último envio",
+        "alreadyConfirmed": "Seu e-mail já está confirmado.",
+        "notConfirmedWarning": "Seu e-mail ainda não está confirmado. Alguns recursos podem estar limitados até você confirmar seu e-mail.",
+        "cooldownMessage": "Por favor, aguarde um minuto antes de solicitar outro e-mail.",
+        "success": {
+          "sent": "E-mail de confirmação enviado!",
+          "checkInbox": "Verifique sua caixa de entrada para o link de confirmação."
+        },
+        "error": {
+          "failed": "Falha ao enviar e-mail de confirmação",
+          "cooldown": "Por favor, aguarde antes de solicitar outro e-mail"
+        }
+      }
+    }
+  },
   "contact": {
     "title": "Contato",
     "description": "Entre em contato conosco. Adoraríamos ouvir você."
