@@ -29,6 +29,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({ videoId }) => {
   const navigate = useNavigate();
   const createCommentMutation = useCreateComment();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const autocompleteRef = useRef<HTMLDivElement>(null);
   
   // Mention autocomplete state
   const [mentionQuery, setMentionQuery] = useState('');
@@ -168,7 +169,13 @@ export const CommentForm: React.FC<CommentFormProps> = ({ videoId }) => {
   // Close autocomplete when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (showMentions && textareaRef.current && !textareaRef.current.contains(e.target as Node)) {
+      if (
+        showMentions &&
+        textareaRef.current &&
+        autocompleteRef.current &&
+        !textareaRef.current.contains(e.target as Node) &&
+        !autocompleteRef.current.contains(e.target as Node)
+      ) {
         setShowMentions(false);
       }
     };
@@ -195,13 +202,15 @@ export const CommentForm: React.FC<CommentFormProps> = ({ videoId }) => {
           aria-describedby="comment-helper-text"
         />
         {showMentions && (
-          <MentionAutocomplete
-            users={mentionUsers}
-            isLoading={isLoadingMentions}
-            selectedIndex={selectedMentionIndex}
-            onSelect={insertMention}
-            position={mentionPosition}
-          />
+          <div ref={autocompleteRef}>
+            <MentionAutocomplete
+              users={mentionUsers}
+              isLoading={isLoadingMentions}
+              selectedIndex={selectedMentionIndex}
+              onSelect={insertMention}
+              position={mentionPosition}
+            />
+          </div>
         )}
       </div>
       <p id="comment-helper-text" className="text-xs text-muted-foreground">
