@@ -56,7 +56,7 @@ export const MentionLink: React.FC<MentionLinkProps> = ({ username }) => {
               </AvatarFallback>
             </Avatar>
             <div className="space-y-1">
-              <h4 className="text-sm font-semibold">{profile.display_name || profile.username}</h4>
+              <span className="text-sm font-semibold">{profile.display_name || profile.username}</span>
               {profile.username && <p className="text-xs text-muted-foreground">@{profile.username}</p>}
               {profile.bio && <p className="text-xs text-muted-foreground mt-2 line-clamp-2">{profile.bio}</p>}
             </div>

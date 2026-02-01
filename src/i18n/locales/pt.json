@@ -646,11 +646,13 @@
     "form": {
       "placeholder": "Adicione um comentário... Use @usuario para mencionar alguém.",
       "mentionHelper": "Dica: use @usuario para mencionar alguém.",
+      "mentionSuggestions": "Sugestões de usuários",
+      "searchingUsers": "Buscando usuários...",
+      "keyboardHint": "↑↓ para navegar, Enter para selecionar, Esc para fechar",
       "submitButton": "Comentar",
       "submitting": "Enviando...",
       "contentRequired": "O comentário não pode estar vazio.",
-      "contentMaxLength": "O comentário não pode exceder 500 caracteres.",
-      "searchMentionsPlaceholder": "Buscar usuários..."
+      "contentMaxLength": "O comentário não pode exceder 500 caracteres."
     },
     "loginToComment": "Você precisa estar logado para comentar.",
     "loginToCommentPrompt": "Faça login para adicionar seu comentário.",
