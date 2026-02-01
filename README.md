@@ -31,7 +31,7 @@ We're creating a space where **human taste matters**. A place where curators (li
 Your first impression matters, né? Clean hero section, easy access to what's hot right now, and categories that actually make sense. No fluff.
 
 ### Discover Videos 🔍
-![Video Discovery](./videos.png)
+![Video Discovery](./docs/videos.png)
 
 Browse through categories that real people organized. Search, filter, read about *why* someone added a video. Simple as that.
 
@@ -39,6 +39,11 @@ Browse through categories that real people organized. Search, filter, read about
 ![Playlists](./monynha-playlists.png)
 
 Build learning paths. Curate collections. Share with friends or the whole community. Your taste, your rules. You can even invite collaborators to help build something together.
+
+### Comments & Community Interaction 💬
+![Comments Preview](./docs/preview.png)
+
+Every video deserves thoughtful discussion. Leave comments, reply to curators, share why a video matters to you. Build real conversations around content that resonates. No algorithms deciding what's visible – comments stay honest and community-driven. Tag people profiles with a "@" + username.
 
 ### Your Profile 👤
 ![User Profile](./monynha-profile.png)
