@@ -2,7 +2,7 @@
 
 ![Monynha Fun Hero](./docs/placeholder.png)
 
-> *A passion project by **Marcelo Santos**, crafted with care to bring together the best of cultural video content that gets lost in the algorithmic noise.*
+> *A passion project by **Marcelo Santos**, crafted with care to bring together the best of cultural video content that gets lost in the algorithmic noise. Now with mention autocomplete because Marcelo got tired of copying usernames like it's 2005.*
 
 **🌐 Live Platform**: https://monynha.fun
 
@@ -43,7 +43,13 @@ Build learning paths. Curate collections. Share with friends or the whole commun
 ### Comments & Community Interaction 💬
 ![Comments Preview](./docs/preview.png)
 
-Every video deserves thoughtful discussion. Leave comments, reply to curators, share why a video matters to you. Build real conversations around content that resonates. No algorithms deciding what's visible – comments stay honest and community-driven. Tag people profiles with a "@" + username.
+Every video deserves thoughtful discussion. Leave comments, reply to curators, share why a video matters to you. Build real conversations around content that resonates.
+
+**✨ NEW**: Type `@` and watch the magic happen – autocomplete dropdown with user avatars, keyboard navigation (↑↓ to browse, Enter to select), and 300ms debouncing because we're not savages who spam the database. Works on mobile too. 📱
+
+**🌍 Public Comments**: Everyone can read comments now – even anonymous lurkers. Good discussions deserve an audience. (Don't worry, only logged-in folks can post. We're not *that* crazy.)
+
+No algorithms deciding what's visible – comments stay honest and community-driven. Tag people with `@username` and actually see their face pop up. Because UX matters, viu?
 
 ### Your Profile 👤
 ![User Profile](./monynha-profile.png)
@@ -108,7 +114,10 @@ See who else is curating. Check out their playlists. Learn from other people's t
 Found an amazing video the world should see? Add it to Monynha Fun. Our AI will help enrich it with metadata.
 
 ### 🌐 Multi-Language
-Portuguese, English – we're building for everyone. More languages coming.
+Portuguese, English, Spanish, French – we're building for everyone. More languages coming.
+
+### 💬 Smart Mentions
+Tag users in comments with autocomplete that actually works. Type `@` and boom – dropdown with avatars, display names, and keyboard navigation. No more copying usernames like a caveman. Fully internationalized in 4 languages because we're fancy like that. ✨
 
 ---
 
