@@ -53,7 +53,7 @@ export const CategorySection = () => {
 
         {categoriesLoading ? (
           <ScrollArea>
-            <div className="flex gap-4 pb-4">
+            <div className="flex gap-4 pb-4 items-center">
               {Array.from({ length: 4 }).map((_, i) => (
                 <Skeleton key={i} className="h-36 w-full min-w-[280px] rounded-2xl" />
               ))}
@@ -67,7 +67,7 @@ export const CategorySection = () => {
           </div>
         ) : categories && categories.length > 0 ? (
           <ScrollArea>
-            <div className="flex gap-4 pb-4">
+            <div className="flex gap-4 pb-4 items-center">
               {categories.map((category, index) => (
                 <CategoryCard
                   key={category.id}
