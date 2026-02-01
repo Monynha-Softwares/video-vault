@@ -101,7 +101,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
             </Button>
           )}
         </div>
-        <p className="text-sm text-foreground mt-1 whitespace-pre-wrap">
+        <div className="text-sm text-foreground mt-1 whitespace-pre-wrap">
           {contentParts.map((part, index) => (
             part.type === 'text' ? (
               <React.Fragment key={index}>{part.value}</React.Fragment>
@@ -109,7 +109,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
               <MentionLink key={index} username={part.value} />
             )
           ))}
-        </p>
+        </div>
       </div>
     </div>
   );
