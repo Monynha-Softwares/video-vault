@@ -459,9 +459,11 @@
       "isPublicHint": "Public playlists are visible to all users.",
       "playlistTypeLabel": "Playlist Type",
       "learningPath": "Learning Path",
-      "learningPathHint": "Videos are ordered and meant to be followed sequentially.",
+      "learningPathHint": "Videos are ordered and meant to be followed sequentially. FACODI fields will appear if selected.",
       "collection": "Collection",
       "collectionHint": "Videos are a curated set, order is not strictly enforced.",
+      "facodiFieldsTitle": "FACODI Course Details",
+      "facodiFieldsDescription": "These fields are for playlists that are part of a structured FACODI course.",
       "submittingButton": "Saving...",
       "saveButton": "Save Playlist",
       "createButton": "Create Playlist"

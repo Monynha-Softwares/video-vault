@@ -67,7 +67,7 @@ export default function CreateEditPlaylist() {
   const unitCode = watch('unit_code');
   const language = watch('language');
   const isPublic = watch('is_public');
-  const isOrdered = watch('is_ordered');
+  const isOrdered = watch('is_ordered'); // Watch the is_ordered state
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -98,6 +98,14 @@ export default function CreateEditPlaylist() {
     }
   }, [name, slug, isEditing, setValue]);
 
+  // Clear FACODI fields if playlist type changes to 'Collection'
+  useEffect(() => {
+    if (!isOrdered) {
+      setValue('course_code', '');
+      setValue('unit_code', '');
+    }
+  }, [isOrdered, setValue]);
+
   const onSubmit = async (values: PlaylistFormValues) => {
     if (!user) {
       toast.error(t('createEditPlaylist.error.notLoggedInTitle'), {
@@ -112,8 +120,9 @@ export default function CreateEditPlaylist() {
         slug: values.slug,
         description: values.description || null,
         thumbnail_url: values.thumbnail_url || null,
-        course_code: values.course_code || null,
-        unit_code: values.unit_code || null,
+        // Only include course_code and unit_code if is_ordered is true
+        course_code: values.is_ordered ? (values.course_code || null) : null,
+        unit_code: values.is_ordered ? (values.unit_code || null) : null,
         language: values.language,
         is_public: values.is_public,
         is_ordered: values.is_ordered,
@@ -169,7 +178,7 @@ export default function CreateEditPlaylist() {
             className="text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            {t('common.back')}
+            <span className="hidden sm:inline">{t('common.back')}</span>
           </Button>
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
@@ -264,46 +273,6 @@ export default function CreateEditPlaylist() {
                 <p className="text-xs text-muted-foreground">{t('createEditPlaylist.form.thumbnailUrlHint')}</p>
               </div>
 
-              {/* Course Code */}
-              <div className="space-y-2">
-                <Label htmlFor="course-code">{t('createEditPlaylist.form.courseCodeLabel')}</Label>
-                <div className="relative">
-                  <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                  <Input
-                    id="course-code"
-                    type="text"
-                    placeholder={t('createEditPlaylist.form.courseCodePlaceholder')}
-                    {...register('course_code')}
-                    className="pl-10"
-                    aria-invalid={errors.course_code ? "true" : "false"}
-                  />
-                </div>
-                {errors.course_code && (
-                  <p role="alert" className="text-sm text-destructive">{t(errors.course_code.message as string)}</p>
-                )}
-                <p className="text-xs text-muted-foreground">{t('createEditPlaylist.form.courseCodeHint')}</p>
-              </div>
-
-              {/* Unit Code */}
-              <div className="space-y-2">
-                <Label htmlFor="unit-code">{t('createEditPlaylist.form.unitCodeLabel')}</Label>
-                <div className="relative">
-                  <Code className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                  <Input
-                    id="unit-code"
-                    type="text"
-                    placeholder={t('createEditPlaylist.form.unitCodePlaceholder')}
-                    {...register('unit_code')}
-                    className="pl-10"
-                    aria-invalid={errors.unit_code ? "true" : "false"}
-                  />
-                </div>
-                {errors.unit_code && (
-                  <p role="alert" className="text-sm text-destructive">{t(errors.unit_code.message as string)}</p>
-                )}
-                <p className="text-xs text-muted-foreground">{t('createEditPlaylist.form.unitCodeHint')}</p>
-              </div>
-
               {/* Language */}
               <div className="space-y-2">
                 <Label htmlFor="language">{t('createEditPlaylist.form.languageLabel')} *</Label>
@@ -344,6 +313,56 @@ export default function CreateEditPlaylist() {
                   <p className="text-xs text-muted-foreground ml-6 -mt-1">{t('createEditPlaylist.form.collectionHint')}</p>
                 </RadioGroup>
               </div>
+
+              {/* FACODI Fields - Conditionally rendered */}
+              {isOrdered && (
+                <div className="space-y-6 border-t border-border/50 pt-6 animate-fade-in">
+                  <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <GraduationCap className="w-5 h-5 text-primary" />
+                    {t('createEditPlaylist.form.facodiFieldsTitle')}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">{t('createEditPlaylist.form.facodiFieldsDescription')}</p>
+                  {/* Course Code */}
+                  <div className="space-y-2">
+                    <Label htmlFor="course-code">{t('createEditPlaylist.form.courseCodeLabel')}</Label>
+                    <div className="relative">
+                      <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                      <Input
+                        id="course-code"
+                        type="text"
+                        placeholder={t('createEditPlaylist.form.courseCodePlaceholder')}
+                        {...register('course_code')}
+                        className="pl-10"
+                        aria-invalid={errors.course_code ? "true" : "false"}
+                      />
+                    </div>
+                    {errors.course_code && (
+                      <p role="alert" className="text-sm text-destructive">{t(errors.course_code.message as string)}</p>
+                    )}
+                    <p className="text-xs text-muted-foreground">{t('createEditPlaylist.form.courseCodeHint')}</p>
+                  </div>
+
+                  {/* Unit Code */}
+                  <div className="space-y-2">
+                    <Label htmlFor="unit-code">{t('createEditPlaylist.form.unitCodeLabel')}</Label>
+                    <div className="relative">
+                      <Code className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                      <Input
+                        id="unit-code"
+                        type="text"
+                        placeholder={t('createEditPlaylist.form.unitCodePlaceholder')}
+                        {...register('unit_code')}
+                        className="pl-10"
+                        aria-invalid={errors.unit_code ? "true" : "false"}
+                      />
+                    </div>
+                    {errors.unit_code && (
+                      <p role="alert" className="text-sm text-destructive">{t(errors.unit_code.message as string)}</p>
+                    )}
+                    <p className="text-xs text-muted-foreground">{t('createEditPlaylist.form.unitCodeHint')}</p>
+                  </div>
+                </div>
+              )}
 
               {/* Is Public Switch */}
               <div className="flex items-center justify-between space-x-2">
