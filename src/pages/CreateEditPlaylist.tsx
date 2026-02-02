@@ -60,6 +60,7 @@ export default function CreateEditPlaylist() {
   });
 
   const name = watch('name');
+  const slug = watch('slug');
   const description = watch('description');
   const thumbnailUrl = watch('thumbnail_url');
   const courseCode = watch('course_code');
@@ -227,7 +228,6 @@ export default function CreateEditPlaylist() {
                   type="text"
                   placeholder={t('createEditPlaylist.form.slugPlaceholder')}
                   {...register('slug')}
-                  className="pl-10"
                   aria-invalid={errors.slug ? "true" : "false"}
                 />
                 {errors.slug && (
