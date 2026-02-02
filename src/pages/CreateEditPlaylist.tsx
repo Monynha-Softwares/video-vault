@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '@/features/auth/useAuth';
 import { useCreatePlaylist, usePlaylistById, useUpdatePlaylist } from '@/features/playlists/queries/usePlaylists';
@@ -44,6 +44,8 @@ export default function CreateEditPlaylist() {
   const createPlaylistMutation = useCreatePlaylist();
   const updatePlaylistMutation = useUpdatePlaylist();
 
+  const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false); // New state to track manual slug edits
+
   const { register, handleSubmit, watch, setValue, formState: { errors }, reset } = useForm<PlaylistFormValues>({
     resolver: zodResolver(playlistSchema),
     defaultValues: {
@@ -60,7 +62,7 @@ export default function CreateEditPlaylist() {
   });
 
   const name = watch('name');
-  const slug = watch('slug');
+  const slug = watch('slug'); // Keep watching slug to check if it's empty
   const description = watch('description');
   const thumbnailUrl = watch('thumbnail_url');
   const courseCode = watch('course_code');
@@ -88,15 +90,17 @@ export default function CreateEditPlaylist() {
         is_public: existingPlaylist.is_public,
         is_ordered: existingPlaylist.is_ordered,
       });
+      // When editing, assume slug is already set and not auto-generated
+      setIsSlugManuallyEdited(true); 
     }
   }, [isEditing, existingPlaylist, reset]);
 
-  // Auto-generate slug from name if creating and slug is empty
+  // Auto-generate slug from name in real-time if not manually edited and creating
   useEffect(() => {
-    if (!isEditing && name && !slug) {
-      setValue('slug', generateSlug(name));
+    if (!isEditing && name && !isSlugManuallyEdited) {
+      setValue('slug', generateSlug(name), { shouldValidate: true });
     }
-  }, [name, slug, isEditing, setValue]);
+  }, [name, isEditing, isSlugManuallyEdited, setValue]);
 
   // Clear FACODI fields if playlist type changes to 'Collection'
   useEffect(() => {
@@ -225,7 +229,9 @@ export default function CreateEditPlaylist() {
                   id="slug"
                   type="text"
                   placeholder={t('createEditPlaylist.form.slugPlaceholder')}
-                  {...register('slug')}
+                  {...register('slug', {
+                    onChange: () => setIsSlugManuallyEdited(true), // Mark as manually edited on change
+                  })}
                   className="pl-10"
                   aria-invalid={errors.slug ? "true" : "false"}
                 />
