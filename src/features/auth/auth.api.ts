@@ -1,9 +1,10 @@
 import { supabase } from '@/shared/api/supabase/supabaseClient';
+import { AuthResponse } from '@supabase/supabase-js';
 
 export async function signUpWithEmail(email: string, password: string, username?: string) {
-  const redirectUrl = `${window.location.origin}/`;
+  const redirectUrl = `${window.location.origin}/auth/verify-email`;
 
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -14,12 +15,12 @@ export async function signUpWithEmail(email: string, password: string, username?
     },
   });
 
-  return { error: error as Error | null };
+  return { data, error: error as Error | null };
 }
 
 export async function signInWithEmail(email: string, password: string) {
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
-  return { error: error as Error | null };
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  return { data, error: error as Error | null };
 }
 
 export async function signOutUser() {
@@ -79,4 +80,3 @@ export async function deleteUserAccount() {
   
   return { error: error as Error | null };
 }
-

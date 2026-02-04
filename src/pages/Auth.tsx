@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { Play, Mail, Lock, User, ArrowLeft } from 'lucide-react';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
-import { requestPasswordReset } from '@/features/auth/auth.api';
+import { requestPasswordReset, signOutUser } from '@/features/auth/auth.api';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
@@ -108,7 +108,8 @@ export default function Auth() {
   const onSubmit = async (values: z.infer<typeof loginSchema> | z.infer<typeof signupSchema>) => {
     try {
       if (isLogin) {
-        const { error } = await signIn(values.email, values.password);
+        const { data, error } = await signIn(values.email, values.password);
+        
         if (error) {
           let message = t('auth.error.loginGeneric');
           if (error.message.includes('Invalid login credentials')) {
@@ -119,14 +120,30 @@ export default function Auth() {
           toast.error(t('auth.error.loginGeneric'), {
             description: message,
           });
-        } else {
-          toast.success(t('auth.success.welcomeBack'), {
-            description: t('auth.success.loginSuccess')
-          });
+          return;
         }
+
+        // CRITICAL SECURITY CHECK: Check if email is confirmed
+        if (data?.session?.user && !data.session.user.email_confirmed_at) {
+          // If session exists but email is not confirmed, sign out immediately
+          await signOutUser();
+          toast.error(t('auth.error.emailNotConfirmed'), { 
+            description: t('auth.error.confirmBeforeLogin') 
+          });
+          // Redirect to verification page to allow resend
+          navigate(`/auth/verify-email?email=${encodeURIComponent(values.email)}`);
+          return;
+        }
+
+        toast.success(t('auth.success.welcomeBack'), {
+          description: t('auth.success.loginSuccess')
+        });
+        reset(); // Clear form on successful login
+        
       } else {
         const signupValues = values as z.infer<typeof signupSchema>;
-        const { error } = await signUp(signupValues.email, signupValues.password, signupValues.username || undefined);
+        const { data, error } = await signUp(signupValues.email, signupValues.password, signupValues.username || undefined);
+        
         if (error) {
           let message = t('auth.error.signupGeneric');
           if (error.message.includes('already registered')) {
@@ -135,11 +152,23 @@ export default function Auth() {
           toast.error(t('auth.error.signupGeneric'), {
             description: message,
           });
-        } else {
-          toast.success(t('auth.success.accountCreated'), {
-            description: t('auth.success.confirmEmail')
-          });
+          return;
         }
+
+        // If signup is successful, ensure no session is active (if Supabase created one)
+        if (data?.session) {
+          await signOutUser();
+        }
+
+        toast.success(t('auth.success.accountCreated'), {
+          description: t('auth.success.confirmEmail')
+        });
+        
+        reset(); // Clear form on successful signup
+        setIsLogin(true); // Switch to login mode
+        
+        // Redirect to dedicated verification page
+        navigate(`/auth/verify-email?email=${encodeURIComponent(signupValues.email)}`);
       }
     } catch (err) {
       console.error('Auth submission error:', err);

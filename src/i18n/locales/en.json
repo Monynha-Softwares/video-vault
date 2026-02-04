@@ -98,11 +98,18 @@
         "passwordMismatch": "Passwords do not match"
       }
     },
+    "verifyEmail": {
+      "title": "Verify Your Email",
+      "description": "We sent a confirmation link to your email. Please check your inbox (and spam folder) to activate your account.",
+      "sentTo": "Link sent to",
+      "goToLogin": "Go to Login"
+    },
     "error": {
       "validationTitle": "Validation Error",
       "loginGeneric": "Error logging in",
       "invalidCredentials": "Incorrect email or password",
-      "emailNotConfirmed": "Please confirm your email before logging in",
+      "emailNotConfirmed": "Email not confirmed",
+      "confirmBeforeLogin": "Please confirm your email before logging in.",
       "signupGeneric": "Error creating account",
       "emailRegistered": "This email is already registered",
       "forgotPasswordGeneric": "Error sending reset link",

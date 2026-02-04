@@ -16,6 +16,7 @@ import CreateEditPlaylist from "./pages/CreateEditPlaylist";
 import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
 import AccountSettings from "./pages/AccountSettings";
+import VerifyEmail from "./pages/VerifyEmail"; // Import the new page
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -30,6 +31,7 @@ const App = () => (
     <Routes>
       <Route path="/" element={<Index />} />
       <Route path="/auth" element={<Auth />} />
+      <Route path="/auth/verify-email" element={<VerifyEmail />} /> {/* New route */}
       <Route path="/submit" element={<Submit />} />
       <Route path="/videos/:videoId" element={<VideoDetails />} />
       <Route path="/videos" element={<Videos />} />
