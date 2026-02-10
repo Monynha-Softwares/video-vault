@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
@@ -164,7 +166,7 @@ export const SocialAccountsManager: React.FC<SocialAccountsManagerProps> = ({ us
         <h3 className="text-lg font-semibold">{t('profile.social.title')}</h3>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button variant="outline" size="sm" onClick={() => setEditingAccount(null)}> {/* Set editingAccount to null for new */}
+            <Button type="button" variant="outline" size="sm" onClick={() => setEditingAccount(null)}>
               <Plus className="w-4 h-4 mr-2" />
               {t('profile.social.addAccount')}
             </Button>
@@ -266,6 +268,7 @@ export const SocialAccountsManager: React.FC<SocialAccountsManagerProps> = ({ us
                 </div>
                 <div className="flex gap-2">
                   <Button
+                    type="button"
                     variant="ghost"
                     size="icon"
                     className="w-8 h-8"
@@ -277,6 +280,7 @@ export const SocialAccountsManager: React.FC<SocialAccountsManagerProps> = ({ us
                     <Edit className="w-4 h-4" />
                   </Button>
                   <Button
+                    type="button"
                     variant="ghost"
                     size="icon"
                     className="w-8 h-8 text-destructive hover:text-destructive"

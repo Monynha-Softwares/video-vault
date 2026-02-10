@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/features/auth/useAuth';
@@ -15,7 +17,7 @@ import { Footer } from '@/components/layout/Footer';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AvatarUpload } from '@/components/profile/AvatarUpload';
-import { SocialAccountsManager } from '@/components/profile/SocialAccountsManager'; // Import the new component
+import { SocialAccountsManager } from '@/components/profile/SocialAccountsManager';
 
 const editProfileSchema = z.object({
   display_name: z.string().min(3, 'profile.edit.error.displayNameMinLength').max(50, 'profile.edit.error.displayNameMaxLength'),
@@ -118,6 +120,7 @@ export default function EditProfile() {
       <header className="p-4 border-b border-border/50">
         <div className="container flex items-center gap-4">
           <Button
+            type="button"
             variant="ghost"
             onClick={() => navigate(`/profile/${profile.username}`)}
             className="text-muted-foreground hover:text-foreground"
@@ -146,8 +149,8 @@ export default function EditProfile() {
             </p>
           </div>
 
-          <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div className="bg-card border border-border rounded-2xl p-6 shadow-sm space-y-8">
+            <form id="edit-profile-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* Avatar Upload */}
               <div className="mb-6">
                 <AvatarUpload
@@ -196,16 +199,19 @@ export default function EditProfile() {
                   <p role="alert" className="text-sm text-destructive">{t(errors.bio.message as string)}</p>
                 )}
               </div>
+            </form>
 
-              {/* Social Accounts Manager */}
-              {user && (
-                <div className="border-t border-border/50 pt-6 mt-6">
-                  <SocialAccountsManager userId={user.id} />
-                </div>
-              )}
+            {/* Social Accounts Manager - Moved outside the form to prevent nested form submission */}
+            {user && (
+              <div className="border-t border-border/50 pt-6">
+                <SocialAccountsManager userId={user.id} />
+              </div>
+            )}
 
-              {/* Submit Button */}
+            {/* Submit Button - Linked to the form via id */}
+            <div className="pt-4">
               <Button
+                form="edit-profile-form"
                 type="submit"
                 className="w-full"
                 size="lg"
@@ -223,7 +229,7 @@ export default function EditProfile() {
                   </>
                 )}
               </Button>
-            </form>
+            </div>
           </div>
         </div>
       </main>
